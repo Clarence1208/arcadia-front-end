@@ -1,23 +1,18 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import '../styles/App.css';
-import Header from "./Header";
+import {Home} from "../routes/Home";
+
 
 function App() {
 
     return (
-      <body>
-          <Header />
-      </body>
-    /*<div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h2>Arcadia Solutions - Back office template </h2>
-        <p>Why is the logo animated ? Good question.</p>
-      </header>
-    </div>*/
-
-
-  );
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
