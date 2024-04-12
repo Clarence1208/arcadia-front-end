@@ -1,0 +1,15 @@
+/*Import colors file */
+@import url('./colors.css');
+
+
+.main-header {
+    background-color: var(--white-background);
+    min-height: 10vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    color: var(--admin-green);
+  }
+  
