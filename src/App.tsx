@@ -18,8 +18,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<LogIn />} />
                 <Route path="/logout" element={<Logout />} />
-                <Route path='*' element={<NotFound />}/>
                 <Route path='/users' element={<UsersDashboard />}/>
+
+                <Route path='*' element={<NotFound />}/>
             </Routes>
             </UserSessionProvider>
         </BrowserRouter>

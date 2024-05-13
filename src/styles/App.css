@@ -1,3 +1,18 @@
+/*Import colors file */
+@import url('./colors.css');
+
 h1{
   color: var(--dark-grey-text);
+}
+
+.green{
+  color: var(--dark-green);
+}
+.alert{
+  max-width: 30vw;
+}
+
+.main{
+  margin: 8vh;
+  min-height: 60vh;
 }

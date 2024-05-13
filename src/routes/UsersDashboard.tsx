@@ -1,6 +1,7 @@
 import {Footer} from "../components/Footer";
 import Header from "../components/Header";
 import {Link, TableContainer, TableCell, Table, TableRow, TableHead, TableBody, Button, Paper} from "@mui/material";
+import {AddCircleOutline, Edit, Delete} from '@mui/icons-material';
 import {useEffect, useState} from "react";
 
 type User = {
@@ -24,7 +25,7 @@ export function UsersDashboard() {
             if (userToken && userId) {
                 const getUsers = async (filters?: Filters): Promise<User[]> => {
                     const bearer = "Bearer " + userToken;
-                    const response: Response = await fetch(`http://localhost:3000/websites?userId=${userId}`, {
+                    const response: Response = await fetch(`http://localhost:3003/users`, {
                         headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"

@@ -4,12 +4,52 @@
 
 .main-header {
     background-color: var(--white-background);
-    min-height: 10vh;
+    min-height: 4vh;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     font-size: calc(10px + 2vmin);
-    color: var(--admin-green);
-  }
-  
+    color: var(--dark-grey-text);
+}
+
+.nav-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 40vw;
+    margin-right: 2vw;
+}
+
+.header-logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin-left: 2vw;
+    min-width: 20vw;
+}
+.header-logo img{
+    max-height: 6vh;
+}
+
+.navItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 600;
+}
+
+.main-header .icon{
+    margin-left: 20vw;
+}
+
+.nav-header a{
+    font-size: 0.6em;
+}
+
+.footer-header{
+    height: 0.25vh;
+    width: 100vw;
+    background-color: var(--placeholder-grey);
+}

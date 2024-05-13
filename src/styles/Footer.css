@@ -1,0 +1,37 @@
+footer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.green-line{
+    width: 100vw;
+    height: 0.25vh;
+    background-color: var(--admin-green);
+}
+
+.footer-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 15vh;
+}
+
+.raccourcis{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-height: 100%;
+    margin-left: 5vw;
+}
+
+.raccourcis a{
+   text-decoration: none;
+}
+
+.footer-content p{
+    width: 30vw;
+}
+
+
