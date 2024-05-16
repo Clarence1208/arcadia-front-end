@@ -25,7 +25,7 @@ export function UsersDashboard() {
             if (userToken && userId) {
                 const getUsers = async (filters?: Filters): Promise<User[]> => {
                     const bearer = "Bearer " + userToken;
-                    const response: Response = await fetch(`http://localhost:3003/users`, {
+                    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
                         headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"

@@ -28,7 +28,7 @@ function LogInForm() {
     }
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
-        const response: Response = await fetch("http://localhost:3000/users/login", {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}});
+        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/users/login", {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur : " + await error.message);
