@@ -1,0 +1,13 @@
+.panels-tabs{
+    height: 80vh;
+    margin-right: 4vw;
+}
+
+.active{
+    font-weight: bold;
+}
+
+#dahsboard-main{
+    display: flex;
+    flex-direction: row;
+}

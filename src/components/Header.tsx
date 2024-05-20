@@ -49,9 +49,11 @@ export default function Header() {
             <a href="/"><img src={logo} alt="logo" /></a>
         </div>
           <div className="nav-header">
-             <CustomNavItem link="/users" text="Gestion des utilisateurs" expand={true} />
-              <CustomNavItem link="/general-settings" text="Paramètres du site" />
-                <CustomNavItem link="/events" text="Gestion des événements" />
+             <CustomNavItem link="/" text="Accueil" expand={true} />
+              <CustomNavItem link="/blog" text="Se renseigner(blog)" />
+                <CustomNavItem link="/donate" text="Nous soutenir" />
+                <CustomNavItem link="/dashboard" text="Espace adhérent" />
+                <CustomNavItem link="/adminDashboard" text="Espace admin" />
               {/*{userSession?.isLoggedIn && <CustomNavItem link="/dashboard" text="Tableau de bord" />}*/}
           </div>
 

@@ -40,7 +40,13 @@ function LogInForm() {
             sessionContext.updateUserSession({ userId: res.id, loginToken: res.loginToken,
                 fullName: res.firstName + " " + res.surname, isLoggedIn: true})
         }
-        navigate('/')
+        console.log(res)
+        if (res.roles === "admin") {
+            navigate('/adminDashboard')
+        }else {
+            navigate('/')
+
+        }
 
     }
 

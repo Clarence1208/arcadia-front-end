@@ -2,14 +2,15 @@ import {Footer} from "../components/Footer";
 import Header from "../components/Header";
 import {Link, TableContainer, TableCell, Table, TableRow, TableHead, TableBody, Button, Paper} from "@mui/material";
 import {AddCircleOutline, Edit, Delete} from '@mui/icons-material';
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {UserSessionContext} from "../contexts/user-session";
 
 type User = {
     id: number,
     firstName: string,
     surname: string,
     email: string,
-    role: string,
+    roles: string,
 }
 type Filters ={
     page?: number,
@@ -18,8 +19,9 @@ type Filters ={
 export function UsersDashboard() {
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [users, setUsers] = useState<User[]>([])
-    const userId = 1
-    const userToken= "lhi"
+    const userSession = useContext(UserSessionContext)?.userSession
+    const userToken = userSession?.loginToken
+    const userId = userSession?.userId
 
     useEffect(() => {
             if (userToken && userId) {
@@ -52,14 +54,13 @@ export function UsersDashboard() {
         return <div>Loading...</div>
     } else {
         return (
-            <div>
-                <Header/>
+
                 <div>
-                    <h2>Vos sites web</h2>
+                    <h2>Gestion des utilisateurs</h2>
                     <div style={{display: "flex", alignItems: "center"}}>
-                        <p>Vous pouvez gérer les sites web d'ici</p>
-                        <Link href={"/websites/new"} style={{marginLeft: "3vw"}}
-                              title={"Ajouter un site"}><AddCircleOutline/></Link>
+                        <p>Vous pouvez gérer les utilisateurs d'ici</p>
+                        <Link href={"/users/new"} style={{marginLeft: "3vw"}}
+                              title={"Ajouter un utilisateur"}><AddCircleOutline/></Link>
                     </div>
                     {errorMessage && <div className="error">{errorMessage}</div>}
 
@@ -85,7 +86,9 @@ export function UsersDashboard() {
                                         <TableCell component="th" scope="row">
                                             {user.email}
                                         </TableCell>
-
+                                        <TableCell align="right">
+                                            {user.roles}
+                                        </TableCell>
                                         <TableCell align="right">
                                             <Button title={"Modifier"}><Edit/></Button>
                                             <Button title={"Supprimer"}>{<Delete/>}</Button>
@@ -96,7 +99,6 @@ export function UsersDashboard() {
                         </Table>
                     </TableContainer>
                 </div>
-                <Footer/>
-            </div>)
+        )
     }
 }
