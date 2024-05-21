@@ -9,6 +9,7 @@ import {UserSessionProvider} from "./contexts/user-session";
 import {UsersDashboard} from "./routes/UsersDashboard";
 import {UserProfilePage} from "./routes/UserProfilePage";
 import {Dashboard} from "./routes/Dashboard";
+import {Blog} from "./routes/Blog";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/adminDashboard" element={<Dashboard />} />
                 <Route path="/login" element={<LogIn />} />
                 <Route path="/logout" element={<Logout />} />
+                <Route path="/blog" element={<Blog />} />
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
 
