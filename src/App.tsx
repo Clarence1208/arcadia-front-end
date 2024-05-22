@@ -7,7 +7,7 @@ import {Logout} from "./routes/Logout";
 import {NotFound} from "./routes/NotFound";
 import {UserSessionProvider} from "./contexts/user-session";
 import {UsersDashboard} from "./routes/UsersDashboard";
-import {UserProfilePage} from "./routes/UserProfilePage";
+import {CreateArticle} from "./routes/CreateArticle";
 import {Dashboard} from "./routes/Dashboard";
 import {Blog} from "./routes/Blog";
 
@@ -25,6 +25,8 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
+                <Route path='/createArticle' element={<CreateArticle />}/>
+                {/* <Route path='/article/:id' element={<Article />}/> */}
 
                 <Route path='*' element={<NotFound />}/>
             </Routes>

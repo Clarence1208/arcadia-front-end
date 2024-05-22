@@ -37,8 +37,12 @@ function LogInForm() {
         setErrorMessage("");
         const res = await response.json();
         if (sessionContext){
+            const roles : string[] = []
+            for(const role of res.roles.split(",")){
+                roles.push(role)
+            }
             sessionContext.updateUserSession({ userId: res.id, loginToken: res.loginToken,
-                fullName: res.firstName + " " + res.surname, isLoggedIn: true})
+                fullName: res.firstName + " " + res.surname, isLoggedIn: true, roles: roles})
         }
         console.log(res)
         if (res.roles === "admin") {

@@ -3,7 +3,9 @@ import Header from "../components/Header";
 import React, {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 import {ArticlesPage} from "./features/ArticlesPage";
-import {Pagination} from "@mui/material";
+import {Pagination, List, Button} from "@mui/material";
+import '../styles/Blog.css';
+import { Add } from "@mui/icons-material";
 
 interface Article {
     id: number,
@@ -41,7 +43,8 @@ const getArticles = async (filters?: Filters): Promise<Article[]> => {
 }
 export function Blog(){
 
-    //const userSession = useContext(UserSessionContext)?.userSession
+    const userSession = useContext(UserSessionContext)?.userSession
+    console.log(userSession)
     const [articles, setArticles] = useState<Article[]>([])
     const [page, setPage] = useState(1);
 
@@ -57,10 +60,26 @@ export function Blog(){
         <div>
           <Header />
 
+
             <div className={"main"}>
-                {articles.length === 0 ? <div>Loading or no articles...</div> :
-                    <ArticlesPage articles={articles}/>
+                <h1>Nos Articles :</h1>
+                {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
+                <div className={"create-article"}>
+                    <Button 
+                    href={"/createArticle"}
+                    variant="outlined" 
+                    startIcon={<Add />}>
+                        Create a new article
+                    </Button>
+                </div> : null
                 }
+                <div className={"list-articles"}>
+                    {articles.length === 0 ? <div>Loading or no articles...</div> :
+                        <List>
+                            <ArticlesPage articles={articles}/>
+                        </List>
+                    }
+                </div>
                 <Pagination count={10} page={page} onChange={handleChangePage} />
 
             </div>
