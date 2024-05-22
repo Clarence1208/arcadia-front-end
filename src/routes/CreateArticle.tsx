@@ -6,14 +6,23 @@ import { useNavigate } from "react-router-dom";
 import {UserSessionContext} from "../contexts/user-session";
 import Header from "../components/Header";
 import { Footer } from "../components/Footer";
+import { FileUpload } from "@mui/icons-material";
 
 type CreateArticleData = {
     title: string,
-    text: string
+    text: string,
 }
+type CreateArticleFile = {
+    file: File | null
+}
+
 const body : CreateArticleData = {
     title: "",
-    text: ""
+    text: "",
+}
+
+const file : CreateArticleFile = {
+    file: null
 }
 
 function CreateArticleForm() {
@@ -22,6 +31,7 @@ function CreateArticleForm() {
 
     const [ErrorMessage, setErrorMessage] = useState("")
     const [data, setData] = useState(body)
+    const [fileData, setFileData] = useState(file)
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')
@@ -36,6 +46,11 @@ function CreateArticleForm() {
             return { ...prev, ...fields }
         })
     }
+    function updateFile(fields: Partial<CreateArticleFile>) {
+        setFileData(prev => {
+            return { ...prev, ...fields }
+        })
+    }
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const response: Response = await fetch( process.env.REACT_APP_API_URL+"/articles?currentUserId="+userSession?.userId, {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}});
@@ -44,9 +59,18 @@ function CreateArticleForm() {
             setErrorMessage("Erreur : " + await error.message);
             return
         }
+        if (fileData.file) {
+            const formData = new FormData();
+            formData.append("file", fileData.file);
+            const responseFile: Response = await fetch( process.env.REACT_APP_API_URL+"/articles/"+(await response.json()).id+"/media", {method: "POST", body: formData});
+            if (!responseFile.ok) {
+                const error =  await responseFile.json()
+                setErrorMessage("Erreur : " + await error.message);
+                return
+            }
+        }
         setErrorMessage("");
-        const res = await response.json();
-        navigate('/blog')
+        // navigate('/blog')
     }
 
     return (
@@ -69,6 +93,18 @@ function CreateArticleForm() {
                     InputProps={{ style: { height: "50vh" } }}  // Ensures height takes priority
                     onChange={e => updateFields({ text: e.target.value })} 
                 />
+                <Button
+                    variant="contained"
+                    component="label"
+                    startIcon={<FileUpload />}
+                >
+                Upload File
+                <input
+                    type="file"
+                    hidden
+                    onChange={e => updateFile({ file: e.target.files?.item(0) })}
+                />
+                </Button>
                 <Button 
                 type="submit" 
                 variant="contained" 
