@@ -1,5 +1,5 @@
-import Header from "../components/Header";
-import {Footer} from "../components/Footer";
+import Header from "./components/Header";
+import {Footer} from "./components/Footer";
 import {SyntheticEvent, useContext, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 /*import {WebsitesPanel} from "../components/features/dashboard/WebsitesPanel";

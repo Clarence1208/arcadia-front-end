@@ -16,6 +16,8 @@ import {Dashboard} from "./routes/Dashboard";
 import {MemberDashboard} from "./routes/MemberDashboard";
 import {Blog} from "./routes/Blog";
 import {Register} from "./routes/Register";
+import {MeetingVotesList} from "./routes/MeetingVotesList";
+import {CreateMeetingVote} from "./routes/CreateMeetingVote";
 
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
                 <Route path='/createArticle' element={<CreateArticle />}/>
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
                 {/* <Route path='/article/:id' element={<Article />}/> */}
+                <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
+                <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
 
                 <Route path='*' element={<NotFound />}/>
             </Routes>

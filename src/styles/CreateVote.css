@@ -1,11 +1,11 @@
-#create-meeting {
+#create-vote {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 2vh;
 }
 
-#create-meeting-form {
+#create-vote-form {
     display: flex;
     flex-direction: column;
     justify-content: space-between;   
@@ -14,19 +14,18 @@
     min-height: 35vw;
 }
 
-#create-meeting-title {
+#create-vote-title {
     margin-bottom: 1vh;
 }
 
-#create-meeting-text {
+#create-vote-text {
     margin-bottom: 1vh;
 }
 
-.select-hours-div {
+.add-choice {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
-    min-width: 20vw;
-    margin-bottom: 2vh;
+    align-items: center;
+    margin-bottom: 1vh;
 }

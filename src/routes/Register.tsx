@@ -1,7 +1,7 @@
-import {UserRegisterForm} from "./features/UserRegisterForm"
+import {UserRegisterForm} from "./components/UserRegisterForm"
 import {useState} from "react";
-import Header from "../components/Header";
-import {Footer} from "../components/Footer";
+import Header from "./components/Header";
+import {Footer} from "./components/Footer";
 import {Button} from "@mui/material";
 import {Dayjs} from "dayjs";
 import { useNavigate } from "react-router-dom";

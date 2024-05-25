@@ -10,7 +10,6 @@ import {UsersDashboard} from "./UsersDashboard";
 import { MeetingsList } from "./components/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
-
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
     return {

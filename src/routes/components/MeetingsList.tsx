@@ -56,9 +56,7 @@ export function MeetingsList() {
             {meetings.length === 0 ? <div>Chargement ou pas d'assemblée générale...</div> :
                 <div>
                     {meetings.map((meeting) => (
-                        <a href={`/meeting/${meeting.id}`} key={meeting.id} className="meeting-link">
-                            <Meeting meeting={meeting} />
-                        </a>
+                        <Meeting meeting={meeting} />
                     ))}
                 </div>
             }

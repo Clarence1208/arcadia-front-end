@@ -68,7 +68,7 @@ export function Blog(){
                     href={"/createArticle"}
                     variant="outlined" 
                     startIcon={<Add />}>
-                        Create a new article
+                        Créer un article
                     </Button>
                 </div> : null
                 }

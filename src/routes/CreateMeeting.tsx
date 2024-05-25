@@ -1,4 +1,4 @@
-import {Alert, Button, Input, Link, TextField} from "@mui/material";
+import {Alert, Button, Input, InputLabel, Link, MenuItem, Select, TextField} from "@mui/material";
 import '../styles/CreateMeeting.css';
 import '../styles/App.css';
 import {FormEvent, useContext, useEffect, useState} from "react";
@@ -7,6 +7,8 @@ import {UserSessionContext} from "../contexts/user-session";
 import Header from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
+import { DatePicker } from "@mui/x-date-pickers";
+import { Dayjs, isDayjs } from "dayjs";
 
 type CreateMeetingData = {
     name: string,
@@ -14,6 +16,13 @@ type CreateMeetingData = {
     startDate: Date,
     endDate: Date,
     capacity: number,
+}
+
+type TempMeetingData = {
+    tempDate: Dayjs | null,
+    startHour: number,
+    endHour: number,
+
 }
 
 const body : CreateMeetingData = {
@@ -24,12 +33,19 @@ const body : CreateMeetingData = {
     capacity: 0,
 }
 
+const tempBody : TempMeetingData = {
+    tempDate: null,
+    startHour: 0,
+    endHour: 0,
+}
+
 function CreateMeetingForm() {
     const userSession = useContext(UserSessionContext)?.userSession
     const navigate = useNavigate();
 
     const [ErrorMessage, setErrorMessage] = useState("")
     const [data, setData] = useState(body)
+    const [tempData, setTempData] = useState(tempBody)
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')
@@ -45,16 +61,32 @@ function CreateMeetingForm() {
         })
     }
 
+    function updateTempFields(fields: Partial<TempMeetingData>) {
+        setTempData(prev => {
+            return { ...prev, ...fields }
+        })
+    }
+
+    function transformToCreateData(temp: TempMeetingData, data: CreateMeetingData): CreateMeetingData {
+        const { tempDate, startHour, endHour } = temp;
+        data.startDate = tempDate ? tempDate.hour(startHour).toDate() : new Date();
+        data.endDate = tempDate ? tempDate.hour(endHour).toDate() : new Date();
+        
+        return data;
+    }
+
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings", {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}});
+        const req = transformToCreateData(tempData, data);
+        console.log(req);
+        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur : " + await error.message);
             return
         }
         setErrorMessage("");
-        navigate('/blog')
+        navigate('/adminDashboard')
     }
 
     return (
@@ -71,6 +103,7 @@ function CreateMeetingForm() {
                 <Input
                     id="create-meeting-start-date"
                     type="number"
+                    placeholder="Capacité maximale" // Lui aide le Steupléééé
                     onChange={e => updateFields({ capacity: parseInt(e.target.value) })}
                 />
                 <TextField 
@@ -78,10 +111,90 @@ function CreateMeetingForm() {
                     variant="outlined"
                     multiline
                     rows={10}
-                    style={{ width: "50vh", margin: "8px 0", padding: "8px", height: "25vh" }}
-                    InputProps={{ style: { height: "25vh" } }}  // Ensures height takes priority
+                    style={{ width: "50vh", margin: "8px 0", height: "20vh" }}
+                    InputProps={{ style: { height: "20vh" } }}  // Ensures height takes priority
                     onChange={e => updateFields({ description: e.target.value })} 
                 />
+                <DatePicker
+                    label="Date de l'assemblée générale"
+                    onChange={(newValue) => {
+                        if (isDayjs(newValue) || newValue === null) {
+                            updateTempFields({ tempDate: newValue });
+                        }
+                    }}
+                />
+                <div className="select-hours-div">
+                    <div>
+                        <InputLabel id="select-label">Heure de début</InputLabel>
+                            <Select
+                                labelId="select-label"
+                                id="select-début"
+                                value={tempData.startHour}
+                                label="Heure de début"
+                                onChange={(e) => updateTempFields({ startHour: e.target.value as number })}
+                            >
+                                <MenuItem value={0}>0:00</MenuItem>
+                                <MenuItem value={1}>1:00</MenuItem>
+                                <MenuItem value={2}>2:00</MenuItem>
+                                <MenuItem value={3}>3:00</MenuItem>
+                                <MenuItem value={4}>4:00</MenuItem>
+                                <MenuItem value={5}>5:00</MenuItem>
+                                <MenuItem value={6}>6:00</MenuItem>
+                                <MenuItem value={7}>7:00</MenuItem>
+                                <MenuItem value={8}>8:00</MenuItem>
+                                <MenuItem value={9}>9:00</MenuItem>
+                                <MenuItem value={10}>10:00</MenuItem>
+                                <MenuItem value={11}>11:00</MenuItem>
+                                <MenuItem value={12}>12:00</MenuItem>
+                                <MenuItem value={13}>13:00</MenuItem>
+                                <MenuItem value={14}>14:00</MenuItem>
+                                <MenuItem value={15}>15:00</MenuItem>
+                                <MenuItem value={16}>16:00</MenuItem>
+                                <MenuItem value={17}>17:00</MenuItem>
+                                <MenuItem value={18}>18:00</MenuItem>
+                                <MenuItem value={19}>19:00</MenuItem>
+                                <MenuItem value={20}>20:00</MenuItem>
+                                <MenuItem value={21}>21:00</MenuItem>
+                                <MenuItem value={22}>22:00</MenuItem>
+                                <MenuItem value={23}>23:00</MenuItem>
+                            </Select>
+                        </div>
+                        <div>
+                            <InputLabel id="select-label">Heure de fin</InputLabel>
+                            <Select
+                                labelId="select-label"
+                                id="select-fin"
+                                value={tempData.endHour}
+                                label="Heure de début"
+                                onChange={(e) => updateTempFields({ endHour: e.target.value as number })}
+                            >
+                                <MenuItem value={0}>0:00</MenuItem>
+                                <MenuItem value={1}>1:00</MenuItem>
+                                <MenuItem value={2}>2:00</MenuItem>
+                                <MenuItem value={3}>3:00</MenuItem>
+                                <MenuItem value={4}>4:00</MenuItem>
+                                <MenuItem value={5}>5:00</MenuItem>
+                                <MenuItem value={6}>6:00</MenuItem>
+                                <MenuItem value={7}>7:00</MenuItem>
+                                <MenuItem value={8}>8:00</MenuItem>
+                                <MenuItem value={9}>9:00</MenuItem>
+                                <MenuItem value={10}>10:00</MenuItem>
+                                <MenuItem value={11}>11:00</MenuItem>
+                                <MenuItem value={12}>12:00</MenuItem>
+                                <MenuItem value={13}>13:00</MenuItem>
+                                <MenuItem value={14}>14:00</MenuItem>
+                                <MenuItem value={15}>15:00</MenuItem>
+                                <MenuItem value={16}>16:00</MenuItem>
+                                <MenuItem value={17}>17:00</MenuItem>
+                                <MenuItem value={18}>18:00</MenuItem>
+                                <MenuItem value={19}>19:00</MenuItem>
+                                <MenuItem value={20}>20:00</MenuItem>
+                                <MenuItem value={21}>21:00</MenuItem>
+                                <MenuItem value={22}>22:00</MenuItem>
+                                <MenuItem value={23}>23:00</MenuItem>
+                            </Select>
+                        </div>
+                </div>
                 <Button 
                 type="submit" 
                 variant="contained" 
