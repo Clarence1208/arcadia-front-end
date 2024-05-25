@@ -1,11 +1,11 @@
-import '../styles/Header.css';
-import logo from '../images/logo.png';
+import '../../styles/Header.css';
+import logo from '../../images/logo.png';
 import {Link} from "@mui/material";
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useContext} from "react";
-import {UserSessionContext} from "../contexts/user-session";
+import {UserSessionContext} from "../../contexts/user-session";
 
 interface CustomNavItemProps {
     link: string;

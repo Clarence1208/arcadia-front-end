@@ -1,12 +1,14 @@
-import Header from "../components/Header";
-import {Footer} from "../components/Footer";
+import Header from "./components/Header";
+import {Footer} from "./components/Footer";
 import {SyntheticEvent, useContext, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 /*import {WebsitesPanel} from "../components/features/dashboard/WebsitesPanel";
 import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";*/
-import {Tab, Tabs} from "@mui/material";
+import {Button, Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {UsersDashboard} from "./UsersDashboard";
+import { MeetingsList } from "./components/MeetingsList";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
@@ -67,11 +69,9 @@ export function Dashboard(){
 
                 <div className={"board"}>
                     <h1>Tableau de bord de {userSession?.fullName || "l'administrateur"}</h1>
-
-                    {/*TABS PANEL: */}
-                    <TabPanel value={tabsValue} index={0}>
-                        <h1>0</h1>
-                        {/*<WebsitesPanel userId={userSession?.userId} userToken={userSession?.loginToken} />*/}
+                    <TabPanel value={tabsValue} index={0} className={"tab-panel"}>
+                        <Button href="/createMeeting" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle assemblée générale</Button>
+                            <MeetingsList />
                     </TabPanel>
                     <TabPanel value={tabsValue} index={1}>
                         <UsersDashboard />

@@ -19,3 +19,11 @@
     text-decoration: none;
     color: var(--dark-grey-text);
 }
+
+.article-date {
+    color: var(--dark-grey-text);
+    font-size: 0.8rem;
+    display: flex;
+    justify-self: flex-end;
+
+}

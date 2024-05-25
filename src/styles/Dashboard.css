@@ -10,4 +10,18 @@
 #dahsboard-main{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+}
+
+.board{
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    margin: 0 auto;
+}
+
+.tab-panel{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }

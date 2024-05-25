@@ -1,8 +1,8 @@
-import {Footer} from "../components/Footer";
-import Header from "../components/Header";
+import {Footer} from "./components/Footer";
+import Header from "./components/Header";
 import React, {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
-import {ArticlesPage} from "./features/ArticlesPage";
+import {ArticlesPage} from "./components/ArticlesPage";
 import {Pagination, List, Button} from "@mui/material";
 import '../styles/Blog.css';
 import { Add } from "@mui/icons-material";
@@ -44,7 +44,6 @@ const getArticles = async (filters?: Filters): Promise<Article[]> => {
 export function Blog(){
 
     const userSession = useContext(UserSessionContext)?.userSession
-    console.log(userSession)
     const [articles, setArticles] = useState<Article[]>([])
     const [page, setPage] = useState(1);
 
@@ -81,7 +80,6 @@ export function Blog(){
                     }
                 </div>
                 <Pagination count={10} page={page} onChange={handleChangePage} />
-
             </div>
 
           <Footer />

@@ -1,0 +1,21 @@
+#create-meeting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+#create-meeting-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+#create-meeting-title {
+    margin-bottom: 1vh;
+}
+
+#create-meeting-text {
+    margin-bottom: 1vh;
+}

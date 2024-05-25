@@ -11,6 +11,7 @@ import {NotFound} from "./routes/NotFound";
 import {UserSessionProvider} from "./contexts/user-session";
 import {UsersDashboard} from "./routes/UsersDashboard";
 import {CreateArticle} from "./routes/CreateArticle";
+import {CreateMeeting} from "./routes/CreateMeeting";
 import {Dashboard} from "./routes/Dashboard";
 import {MemberDashboard} from "./routes/MemberDashboard";
 import {Blog} from "./routes/Blog";
@@ -35,6 +36,7 @@ function App() {
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
                 <Route path='/createArticle' element={<CreateArticle />}/>
+                <Route path='/createMeeting' element={<CreateMeeting />}/>
                 {/* <Route path='/article/:id' element={<Article />}/> */}
 
                 <Route path='*' element={<NotFound />}/>

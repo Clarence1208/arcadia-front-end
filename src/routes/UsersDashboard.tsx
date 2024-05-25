@@ -1,5 +1,5 @@
-import {Footer} from "../components/Footer";
-import Header from "../components/Header";
+import {Footer} from "./components/Footer";
+import Header from "./components/Header";
 import {Link, TableContainer, TableCell, Table, TableRow, TableHead, TableBody, Button, Paper} from "@mui/material";
 import {AddCircleOutline, Edit, Delete} from '@mui/icons-material';
 import {useContext, useEffect, useState} from "react";

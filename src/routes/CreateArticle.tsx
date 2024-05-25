@@ -4,8 +4,8 @@ import '../styles/App.css';
 import {FormEvent, useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {UserSessionContext} from "../contexts/user-session";
-import Header from "../components/Header";
-import { Footer } from "../components/Footer";
+import Header from "./components/Header";
+import { Footer } from "./components/Footer";
 import { FileUpload } from "@mui/icons-material";
 
 type CreateArticleData = {
@@ -59,22 +59,22 @@ function CreateArticleForm() {
             setErrorMessage("Erreur : " + await error.message);
             return
         }
-        if (fileData.file) {
-            const formData = new FormData();
-            formData.append("file", fileData.file);
-            const responseFile: Response = await fetch( process.env.REACT_APP_API_URL+"/articles/"+(await response.json()).id+"/media", {method: "POST", body: formData});
-            if (!responseFile.ok) {
-                const error =  await responseFile.json()
-                setErrorMessage("Erreur : " + await error.message);
-                return
-            }
-        }
+        // if (fileData.file) {
+        //     const formData = new FormData();
+        //     formData.append("file", fileData.file);
+        //     const responseFile: Response = await fetch( process.env.REACT_APP_API_URL+"/articles/"+(await response.json()).id+"/media", {method: "POST", body: formData});
+        //     if (!responseFile.ok) {
+        //         const error =  await responseFile.json()
+        //         setErrorMessage("Erreur : " + await error.message);
+        //         return
+        //     }
+        // }
         setErrorMessage("");
-        // navigate('/blog')
+        navigate('/blog')
     }
 
     return (
-        <div id="create-article">
+        <div id="create-article" className="main">
             <h1>Créer un article</h1>
             <form id="create-article-form" onSubmit={onSubmit}>
                 <TextField 
@@ -93,7 +93,7 @@ function CreateArticleForm() {
                     InputProps={{ style: { height: "50vh" } }}  // Ensures height takes priority
                     onChange={e => updateFields({ text: e.target.value })} 
                 />
-                <Button
+                {/* <Button
                     variant="contained"
                     component="label"
                     startIcon={<FileUpload />}
@@ -104,7 +104,7 @@ function CreateArticleForm() {
                     hidden
                     onChange={e => updateFile({ file: e.target.files?.item(0) })}
                 />
-                </Button>
+                </Button> */}
                 <Button 
                 type="submit" 
                 variant="contained" 
