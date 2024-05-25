@@ -69,6 +69,7 @@ function LogInForm() {
             <div id="form-footer">
                 <Button id="login-button" color="primary" variant="contained" type="submit" disableElevation >Se connecter</Button>
                 <Link href="/" onClick={handlePasswordChange}>Mot de passe oublié ?</Link>
+                <Link href={"/register"}>Créer un compte ?</Link>
             </div>
 
 

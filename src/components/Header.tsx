@@ -52,7 +52,7 @@ export default function Header() {
              <CustomNavItem link="/" text="Accueil" expand={true} />
               <CustomNavItem link="/blog" text="Se renseigner(blog)" />
                 <CustomNavItem link="/donate" text="Nous soutenir" />
-                <CustomNavItem link="/dashboard" text="Espace adhérent" />
+                <CustomNavItem link="/memberdashboard" text="Espace adhérent" />
                 <CustomNavItem link="/adminDashboard" text="Espace admin" />
               {/*{userSession?.isLoggedIn && <CustomNavItem link="/dashboard" text="Tableau de bord" />}*/}
           </div>
