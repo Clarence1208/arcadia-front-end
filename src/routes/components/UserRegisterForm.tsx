@@ -21,8 +21,7 @@ type UserFormProps = UserData & {
     updateFields: (fields: Partial<UserData>) => void
 }
 
-export function UserRegisterForm(props: UserFormProps) {
-
+export function UserRegisterForm(props: UserFormProps){
     const [open, setOpen] = useState(true);
 
     return (
@@ -50,12 +49,6 @@ export function UserRegisterForm(props: UserFormProps) {
                             props.updateFields({ birthDate: newValue });
                         }
                     }}
-                    slotProps={{
-                        textField: {
-                            helperText: 'Format: DD/MM/YYYY',
-                        },
-                    }}
-
                 />
             </div>
         </div>

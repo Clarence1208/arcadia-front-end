@@ -42,7 +42,7 @@ export function Register(){
             setErrorMessage("Erreur lors de la création du compte: " + await error.message);
             return
         }
-        navigate("/login")
+        navigate("/login?successMessage=true")
     }
     async function handleSubmit(){
         await createUser(data);
