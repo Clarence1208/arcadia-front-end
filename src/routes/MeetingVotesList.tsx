@@ -17,46 +17,39 @@ type Filters = {
     limit?: number,
 }
 
-
-const getMeetings = async (meetingId: string, filters?: Filters): Promise<Vote[]> => {
-    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/votes/${meetingId}${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
-        headers: {
-            //"Authorization": bearer,
-            "Content-Type": "application/json"
-        }
-    });
-    if (!response.ok) {
-        const error = await response.json()
-        // setErrorMessage("Erreur : " + await error.message);
-        return []
-    }
-    const res = await response.json();
-    if (res.length === 0) {
-        console.log("Aucun site web trouvé")
-        //setErrorMessage("Aucun site web trouvé")
-    }
-    return res;
-}
-
 export function MeetingVotesList() {
 
     const userSession = useContext(UserSessionContext)?.userSession
     const [votes, setVotes] = useState<Vote[]>([])
-    const [page, setPage] = useState(1);
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
-    };
-
     useEffect(() => {
-        if(id === null || id === undefined || id === ""){
-            navigate('/meetings')
-            return
+        if (userSession?.loginToken) {
+            const getVotes = async (filters?: Filters): Promise<Vote[]> => {
+                const bearer = "Bearer " + userSession?.loginToken;
+                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/meetings/${id}/votes`, {method: "GET",
+                    headers: {
+                        "Authorization": bearer,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (!response.ok) {
+                    const error = await response.json()
+                    // setErrorMessage("Erreur : " + await error.message);
+                    return []
+                }
+                const res = await response.json();
+                if (res.length === 0) {
+                    console.log("Aucun site web trouvé")
+                    //setErrorMessage("Aucun site web trouvé")
+                }
+                return res;
+            }
+            getVotes().then(setVotes)
         }
-        getMeetings(id, { page: page}).then(setVotes)
-    }, [page]);
+    }, [userSession?.loginToken, id]);
+    
 
     return (
         <div>
@@ -82,9 +75,6 @@ export function MeetingVotesList() {
                                     ))}
                                 </div>
                             }
-                            <div style={{marginTop: "2vh"}}>
-                                <Pagination count={10} page={page} onChange={handleChangePage}/>
-                            </div>
                         </div>
                 </div>
             <Footer />

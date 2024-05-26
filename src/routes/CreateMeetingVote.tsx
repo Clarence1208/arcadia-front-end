@@ -88,6 +88,28 @@ function CreateMeetingVoteForm() {
             setErrorMessage("Erreur : Il doit y avoir au moins 2 choix")
             return false
         }
+        if (data.nbWinners < 1) {
+            setErrorMessage("Erreur : Il doit y avoir au moins 1 gagnant")
+            return false
+        }
+        if (data.nbPossibleVotes < 1) {
+            setErrorMessage("Erreur : Il doit y avoir au moins 1 choix possible par votant")
+            return false
+        }
+        if (data.quorum && data.quorum < 1) {
+            setErrorMessage("Erreur : Il doit y avoir au moins 1 personne pour le quorum")
+            return false
+        }
+        if (data.eliminationPerRound) {
+            if (data.eliminationPerRound < 1) {
+                setErrorMessage("Erreur : Il doit y avoir au moins 1 élimination par tour")
+                return false
+            }
+            if ((votes.length % data.eliminationPerRound !== data.nbWinners) && data.nbWinners !== 1) {
+                    setErrorMessage("Erreur : Le nombre de gagnants n'est pas compatible avec le nombre d'élimination par tour")
+                    return false
+                }
+            }
         return true
     }
 
@@ -97,13 +119,19 @@ function CreateMeetingVoteForm() {
         if (!isValid) {
             return
         }
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings", {method: "POST", body: JSON.stringify(body), headers: {"Content-Type": "application/json"}});
-        if (!response.ok) {
-            const error =  await response.json()
-            setErrorMessage("Erreur : " + await error.message);
-            return
+        if (userSession?.loginToken) {
+            const bearer = "Bearer " + userSession?.loginToken;
+            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings/" + id + "/votes", {method: "POST", body: JSON.stringify(data),                     headers: {
+                    "Authorization": bearer,
+                    "Content-Type": "application/json"
+                }});
+            if (!response.ok) {
+                const error =  await response.json()
+                setErrorMessage("Erreur : " + await error.message);
+                return
+            }
+            navigate('/meeting/' + id + '/votes')
         }
-        navigate('/meetings' + id + '/votes')
     }
 
     return (
