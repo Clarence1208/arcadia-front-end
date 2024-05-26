@@ -1,21 +1,28 @@
-.main {
-    margin: 8vh;
-    min-height: 60vh;
+#title-blog{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2vh;
+}
+
+.article-page{
     display: flex;
     flex-direction: column;
-    align-items: center;
+}
+
+#title-blog h1{
+    margin: 0;
 }
 
 .create-article {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin-bottom: 2vh;
 }
-
-.list-articles {
+.articles-list{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 2vh;
+    min-height: 70vh;
+    max-width: 84vw;
+    flex-wrap: wrap;
 }

@@ -33,7 +33,7 @@ export function Blog(){
         if (userSession?.loginToken) {
             const getArticles = async (filters?: Filters): Promise<Article[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
+                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles${filters?.page ? "?limit=6&page=" + filters?.page : ""}`, {
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -61,26 +61,27 @@ export function Blog(){
           <Header />
 
 
-            <div className={"main"}>
-                <h1>Nos Articles :</h1>
-                {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
-                <div className={"create-article"}>
-                    <Button 
-                    href={"/createArticle"}
-                    variant="outlined" 
-                    startIcon={<Add />}>
-                        Créer un article
-                    </Button>
-                </div> : null
-                }
-                <div className={"list-articles"}>
-                    {articles.length === 0 ? <div>Loading or no articles...</div> :
-                        <List>
-                            <ArticlesPage articles={articles}/>
-                        </List>
+            <div className={"main article-page"}>
+                <div id={"title-blog"}>
+                    <h1>Actualités</h1>
+                    {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
+                        <div className={"create-article"}>
+                            <Button
+                                href={"/createArticle"}
+                                variant="outlined"
+                                startIcon={<Add />}>
+                                Créer un article
+                            </Button>
+                        </div> : null
                     }
                 </div>
-                <Pagination count={10} page={page} onChange={handleChangePage} />
+
+                    {
+                        articles.length === 0 ?
+                        <div>Loading or no articles...</div> :
+                        <ArticlesPage articles={articles}/>
+                    }
+                <Pagination style={{alignSelf: "center"}} count={10} page={page} onChange={handleChangePage} />
             </div>
 
           <Footer />
