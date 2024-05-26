@@ -19,28 +19,6 @@ type Filters = {
     page?: number,
     limit?: number,
 }
-
-const getArticles = async (filters?: Filters): Promise<Article[]> => {
-    //const bearer = "Bearer " + userToken;
-    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles${filters?.page ? "?limit=10&page="+filters?.page : ""}`, {
-        headers: {
-            //"Authorization": bearer,
-            "Content-Type": "application/json"
-        }
-    });
-    if (!response.ok) {
-        const error = await response.json()
-        console.log(error)
-        //setErrorMessage("Erreur : " + await error.message);
-        return []
-    }
-    const res = await response.json();
-    if (res.length === 0) {
-        console.log("Aucun site web trouvé")
-        //setErrorMessage("Aucun site web trouvé")
-    }
-    return res;
-}
 export function Blog(){
 
     const userSession = useContext(UserSessionContext)?.userSession
@@ -52,8 +30,29 @@ export function Blog(){
     };
 
     useEffect(() => {
+        const getArticles = async (filters?: Filters): Promise<Article[]> => {
+            const bearer = "Bearer " + userSession?.loginToken;
+            const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles${filters?.page ? "?limit=10&page="+filters?.page : ""}`, {
+                headers: {
+                    "Authorization": bearer,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!response.ok) {
+                const error = await response.json()
+                console.log(error)
+                //setErrorMessage("Erreur : " + await error.message);
+                return []
+            }
+            const res = await response.json();
+            if (res.length === 0) {
+                console.log("Aucun article trouvé")
+                //setErrorMessage("Aucun site web trouvé")
+            }
+            return res;
+        }
         getArticles({page: page}).then(setArticles)
-    }, [page]);
+    }, [page, userSession?.loginToken]);
 
     return (
         <div>

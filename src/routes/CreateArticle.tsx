@@ -53,7 +53,15 @@ function CreateArticleForm() {
     }
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/articles?currentUserId="+userSession?.userId, {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}});
+        const bearer = "Bearer " + userSession?.loginToken;
+        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/articles?currentUserId="+userSession?.userId, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": bearer,
+            }
+        });
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur : " + await error.message);
