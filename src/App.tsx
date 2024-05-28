@@ -20,6 +20,7 @@ import {MeetingVotesList} from "./routes/MeetingVotesList";
 import {CreateMeetingVote} from "./routes/CreateMeetingVote";
 import {ShowArticle} from "./routes/articles/ShowArticle";
 import {EditArticle} from "./routes/articles/EditArticle";
+import {TermsOfServices} from "./routes/TermsOfServices";
 
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/termsOfServices" element={<TermsOfServices />} />
+
 
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
@@ -45,6 +48,7 @@ function App() {
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
+
 
                 <Route path='*' element={<NotFound />}/>
             </Routes>
