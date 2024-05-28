@@ -111,7 +111,7 @@ export function Blog(){
                         <div className={"create-article"}>
                             <Button
                                 href={"/createArticle"}
-                                variant="outlined"
+                                variant="contained"
                                 startIcon={<Add />}>
                                 Créer un article
                             </Button>

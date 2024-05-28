@@ -1,12 +1,14 @@
 import {Alert, Button, Link, TextField} from "@mui/material";
 import '../../styles/CreateArticle.css';
 import '../../styles/App.css';
-import {FormEvent, useContext, useEffect, useState} from "react";
+import React, {FormEvent, useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {UserSessionContext} from "../../contexts/user-session";
 import Header from "../components/Header";
 import { Footer } from "../components/Footer";
-import { FileUpload } from "@mui/icons-material";
+import FeedIcon from '@mui/icons-material/Feed';
+import {ArrowBack, FileUpload} from "@mui/icons-material";
+import Paper from "@mui/material/Paper";
 
 type CreateArticleData = {
     title: string,
@@ -83,9 +85,14 @@ function CreateArticleForm() {
 
     return (
         <div id="create-article" className="main">
-            <h1>Créer un article</h1>
+            <div onClick={() => window.history.back()} style={{ alignItems:"center" ,display: "flex", cursor: "pointer", width:"20vw"}}>
+                <ArrowBack />
+                <p style={{marginLeft:"1em"}}>Retour</p>
+            </div>
+            <Paper elevation={1} className={"paper"} >
+            <h1><FeedIcon />  Créer un article </h1>
             <form id="create-article-form" onSubmit={onSubmit}>
-                <TextField 
+                <TextField
                     id="create-article-title" 
                     label="Titre" 
                     variant="outlined"
@@ -96,23 +103,24 @@ function CreateArticleForm() {
                     label="Texte" 
                     variant="outlined"
                     multiline
-                    rows={20}
-                    style={{ width: "100vh", margin: "8px 0", padding: "8px", height: "50vh" }}
-                    InputProps={{ style: { height: "50vh" } }}  // Ensures height takes priority
+                    rows={10}
+                    style={{ width: "60vw"}}
                     onChange={e => updateFields({ text: e.target.value })} 
                 />
-                {/* <Button
-                    variant="contained"
+                 <Button
+                    variant="outlined"
                     component="label"
                     startIcon={<FileUpload />}
+                    style={{ width: "20vw", marginBottom: "2vh"}}
                 >
-                Upload File
+                Ajouter un média(wip)
                 <input
                     type="file"
                     hidden
                     onChange={e => updateFile({ file: e.target.files?.item(0) })}
                 />
-                </Button> */}
+                </Button>
+
                 <Button 
                 type="submit" 
                 variant="contained" 
@@ -122,6 +130,7 @@ function CreateArticleForm() {
                     Soumettre
                 </Button>
             </form>
+            </Paper>
         </div>
     );
 }
