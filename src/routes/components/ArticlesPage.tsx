@@ -20,7 +20,7 @@ export function ArticlesPage({articles}: {articles: Article[]}){
         <div className={"articles-list"}>
             {articles.map((article) => (
 
-                <a href={`/article/${article.id}`} key={article.id} className="article-link">
+                <a href={`/articles/${article.id}`} key={article.id} className="article-link">
                     <div>
                         {isAdmin && <Delete color={"primary"}/>}
                         {isAdmin && <Edit color={"primary"}/>}

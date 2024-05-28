@@ -18,6 +18,7 @@ import {Blog} from "./routes/Blog";
 import {Register} from "./routes/Register";
 import {MeetingVotesList} from "./routes/MeetingVotesList";
 import {CreateMeetingVote} from "./routes/CreateMeetingVote";
+import {ShowArticle} from "./routes/ShowArticle";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/articles/:articleId" element={<ShowArticle />} />
 
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
