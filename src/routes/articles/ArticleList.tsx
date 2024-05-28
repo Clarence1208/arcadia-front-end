@@ -1,8 +1,9 @@
-import { ListItemButton, ListItemText } from "@mui/material";
+import {Alert, Button, ListItemButton, ListItemText} from "@mui/material";
 import '../../styles/Article.css';
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
 import {Delete, Edit} from "@mui/icons-material";
+import Snackbar from "@mui/material/Snackbar";
 
 interface Article {
     id: number,
@@ -12,19 +13,21 @@ interface Article {
     user: string,
 }
 
-export function ArticlesPage({articles}: {articles: Article[]}){
-
+export function ArticleList({articles, deleteItem}: {articles: Article[], deleteItem: (id: number) => void}){
     const userSession = useContext(UserSessionContext)?.userSession
     const isAdmin = userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")
+
+
     return (
         <div className={"articles-list"}>
             {articles.map((article) => (
 
-                <a href={`/articles/${article.id}`} key={article.id} className="article-link">
-                    <div>
-                        {isAdmin && <Delete color={"primary"}/>}
-                        {isAdmin && <Edit color={"primary"}/>}
+                <div key={article.id}>
+                    <div className={"action-icons"}>
+                        {isAdmin && <Button className={"icons"} onClick={() => deleteItem(article.id)}><Delete color={"primary"}/></Button>}
+                        {isAdmin && <Button className={"icons"} href={`/articles/${article.id}/edit`}><Edit color={"primary"}/></Button>}
                     </div>
+                <a href={`/articles/${article.id}`} className="article-link">
                     <div className="article-div" >
                         <div className="article-date">
                             <span className="article-date">Publié le {new Date(article.createdAt).toLocaleDateString()}</span>
@@ -37,6 +40,7 @@ export function ArticlesPage({articles}: {articles: Article[]}){
                         </div>
                     </div>
                 </a>
+                </div>
             ))}
         </div>
     )

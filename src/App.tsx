@@ -10,7 +10,7 @@ import {Logout} from "./routes/Logout";
 import {NotFound} from "./routes/NotFound";
 import {UserSessionProvider} from "./contexts/user-session";
 import {UsersDashboard} from "./routes/UsersDashboard";
-import {CreateArticle} from "./routes/CreateArticle";
+import {CreateArticle} from "./routes/articles/CreateArticle";
 import {CreateMeeting} from "./routes/CreateMeeting";
 import {Dashboard} from "./routes/Dashboard";
 import {MemberDashboard} from "./routes/MemberDashboard";
@@ -18,7 +18,8 @@ import {Blog} from "./routes/Blog";
 import {Register} from "./routes/Register";
 import {MeetingVotesList} from "./routes/MeetingVotesList";
 import {CreateMeetingVote} from "./routes/CreateMeetingVote";
-import {ShowArticle} from "./routes/ShowArticle";
+import {ShowArticle} from "./routes/articles/ShowArticle";
+import {EditArticle} from "./routes/articles/EditArticle";
 
 
 function App() {
@@ -35,13 +36,13 @@ function App() {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<Blog />} />
-                <Route path="/articles/:articleId" element={<ShowArticle />} />
 
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
                 <Route path='/createArticle' element={<CreateArticle />}/>
+                <Route path="/articles/:articleId" element={<ShowArticle />} />
+                <Route path="/articles/:articleId/edit" element={<EditArticle />} />
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
-                {/* <Route path='/article/:id' element={<Article />}/> */}
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
 
