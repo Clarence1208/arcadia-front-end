@@ -54,6 +54,7 @@ export default function Header() {
                 <CustomNavItem link="/donate" text="Nous soutenir" />
                 <CustomNavItem link="/memberdashboard" text="Espace adhérent" />
                 <CustomNavItem link="/adminDashboard" text="Espace admin" />
+                <CustomNavItem link="/meetings" text="Assemblée Générale" />
               {/*{userSession?.isLoggedIn && <CustomNavItem link="/dashboard" text="Tableau de bord" />}*/}
           </div>
 

@@ -9,7 +9,16 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Vote } from "./components/Vote";
 
 interface Vote {
+    id: number,
     name: string,
+    isAbsoluteMajority: boolean,
+    isAnonymous: boolean,
+    eliminationPerRound?: number,
+    nbWinners: number,
+    nbPossibleVotes: number,
+    quorum?: number,
+    currentRound?: number,
+    meetingId: number,  
 }
 
 type Filters = {
@@ -47,6 +56,11 @@ export function MeetingVotesList() {
                 return res;
             }
             getVotes().then(setVotes)
+            if(id !== undefined) {
+                votes.forEach(vote => {
+                    vote.meetingId = parseInt(id);
+                });
+            }
         }
     }, [userSession?.loginToken, id]);
     
@@ -71,7 +85,7 @@ export function MeetingVotesList() {
                             {votes.length === 0 ? <div>Chargement ou pas de votes...</div> :
                                 <div>
                                     {votes.map((vote) => (
-                                        <Vote vote={vote} />
+                                        <Vote vote={vote} meetingId={id !== undefined ? parseInt(id) : undefined} />
                                     ))}
                                 </div>
                             }

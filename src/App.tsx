@@ -19,6 +19,7 @@ import {Register} from "./routes/Register";
 import {MeetingVotesList} from "./routes/MeetingVotesList";
 import {CreateMeetingVote} from "./routes/CreateMeetingVote";
 import {ShowArticle} from "./routes/ShowArticle";
+import { MeetingsListUser } from './routes/components/MeetingsListUser';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
                 <Route path='/createArticle' element={<CreateArticle />}/>
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
                 {/* <Route path='/article/:id' element={<Article />}/> */}
+                <Route path='/meetings' element={<MeetingsListUser />} />
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
 
