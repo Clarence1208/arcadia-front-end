@@ -1,12 +1,12 @@
 import {useParams} from "react-router-dom";
-import Header from "./components/Header";
+import Header from "../components/Header";
 import React, {useContext, useEffect, useState} from "react";
-import {Footer} from "./components/Footer";
+import {Footer} from "../components/Footer";
 import Paper from '@mui/material/Paper';
-import catBanner from "../images/cat-banner.jpg";
-import theme from "../utils/theme";
-import {UserSessionContext} from "../contexts/user-session";
-import LoadingSpinner from "./components/LoadingSpinner";
+import catBanner from "../../images/cat-banner.jpg";
+import theme from "../../utils/theme";
+import {UserSessionContext} from "../../contexts/user-session";
+import LoadingSpinner from "../components/LoadingSpinner";
 import {ArrowBack} from "@mui/icons-material";
 
 type Article = {

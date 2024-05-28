@@ -16,3 +16,17 @@ h1{
   margin: 8vh 8vw;
   min-height: 70vh;
 }
+
+.icons{
+  padding: 0 0.5em;
+  cursor: pointer;
+}
+
+.action-icons{
+  display: flex;
+  justify-content: end;
+}
+
+.paper {
+  padding: 4vh;
+}

@@ -26,8 +26,8 @@ function LogInOutButton() {
     const userIsLoggedIn = userSession?.userSession.isLoggedIn;
     if (userIsLoggedIn) {
         return (
-            <a href={"/logout"}>
-                <PersonRemoveAlt1Icon className="icon" fontSize={"large"} />
+            <a className="icon" href={"/logout"}>
+                <PersonRemoveAlt1Icon  fontSize={"large"} />
             </a>
         )
     }else{
