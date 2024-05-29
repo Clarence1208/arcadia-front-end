@@ -20,6 +20,12 @@ type CreateVoteData = {
     quorum?: number | null,
 }
 
+type VoteChoice = {
+    name: string,
+    type: string,
+}
+
+
 const body : CreateVoteData = {
     name: "",
     eliminationPerRound: null,
@@ -129,6 +135,22 @@ function CreateMeetingVoteForm() {
                 const error =  await response.json()
                 setErrorMessage("Erreur : " + await error.message);
                 return
+            }
+            const vote = await response.json()
+            for(let i = 0; i < votes.length; i++) {
+                const voteChoice : VoteChoice = {
+                    name: votes[i],
+                    type: "Vote"
+                }
+                const responseVoteChoices: Response = await fetch(process.env.REACT_APP_API_URL+"/votes/" + vote.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice), headers: {
+                        "Authorization": bearer,
+                        "Content-Type": "application/json"
+                    }});
+                if (!responseVoteChoices.ok) {
+                    const error =  await responseVoteChoices.json()
+                    setErrorMessage("Erreur : " + await error.message);
+                    return
+                }
             }
             navigate('/meeting/' + id + '/votes')
         }

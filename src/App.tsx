@@ -18,14 +18,11 @@ import {Blog} from "./routes/Blog";
 import {Register} from "./routes/Register";
 import {MeetingVotesList} from "./routes/MeetingVotesList";
 import {CreateMeetingVote} from "./routes/CreateMeetingVote";
-<<<<<<< HEAD
-import {ShowArticle} from "./routes/ShowArticle";
-import { MeetingsListUser } from './routes/components/MeetingsListUser';
-=======
 import {ShowArticle} from "./routes/articles/ShowArticle";
+import { MeetingsListUser } from './routes/components/MeetingsListUser';
 import {EditArticle} from "./routes/articles/EditArticle";
 import {TermsOfServices} from "./routes/TermsOfServices";
->>>>>>> d0ad29eeda2db56fd91341b14411be0c95192705
+import { MeetingVoteApply } from './routes/MeetingVoteApply';
 
 
 function App() {
@@ -51,13 +48,11 @@ function App() {
                 <Route path="/articles/:articleId" element={<ShowArticle />} />
                 <Route path="/articles/:articleId/edit" element={<EditArticle />} />
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
-<<<<<<< HEAD
                 {/* <Route path='/article/:id' element={<Article />}/> */}
                 <Route path='/meetings' element={<MeetingsListUser />} />
-=======
->>>>>>> d0ad29eeda2db56fd91341b14411be0c95192705
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
+                <Route path='/meeting/:id/vote/:voteId' element={<MeetingVoteApply />}/>
 
 
                 <Route path='*' element={<NotFound />}/>
