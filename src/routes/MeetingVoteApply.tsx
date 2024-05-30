@@ -1,5 +1,5 @@
-import { Button, Pagination } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { Button, InputLabel, MenuItem, Pagination, Select, Switch } from "@mui/material";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import '../styles/VoteChoiceList.css';
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "./components/Footer";
@@ -21,6 +21,10 @@ interface Vote {
     meetingId: number,  
 }
 
+interface VoteParams {
+    isWhiteVote: boolean,
+}
+
 interface VoteChoice {
     id: number,
     name: string,
@@ -34,10 +38,20 @@ type Filters = {
 export function MeetingVoteApply() {
 
     const userSession = useContext(UserSessionContext)?.userSession
+    const [ErrorMessage, setErrorMessage] = useState("")
     const [vote, setVote] = useState<Vote>();
+    const [data, setData] = useState<VoteParams>({ isWhiteVote: false });
     const [voteChoices, setVoteChoices] = useState<VoteChoice[]>([]);
+    const [results, setResults] = useState<VoteChoice[]>(Array.from({ length: vote?.nbPossibleVotes || 0 }, () => ({ id: 0, name: '' })));
+
     const navigate = useNavigate();
     const { voteId } = useParams();
+
+    function changeWhiteVote() {
+        setData(prev => {
+            return { ...prev, isWhiteVote: !prev.isWhiteVote }
+        })
+    }
 
     useEffect(() => {
         if(!userSession?.roles) {
@@ -95,6 +109,24 @@ export function MeetingVoteApply() {
            return;
         }
     }, [userSession, voteId]);
+
+
+    async function onSubmit(e: FormEvent) {
+        e.preventDefault()
+        if (userSession?.loginToken) {
+            // TO DO : Ajouter user au vote et si pas voteBlanc alors ajouter les choix
+            // const bearer = "Bearer " + userSession?.loginToken;
+            // const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings/" + id + "/votes", {method: "POST", body: JSON.stringify(data),                     headers: {
+            //         "Authorization": bearer,
+            //         "Content-Type": "application/json"
+            //     }});
+            // if (!response.ok) {
+            //     const error =  await response.json()
+            //     setErrorMessage("Erreur : " + await error.message);
+            //     return
+            // }
+        }
+    }
     
 
     return (
@@ -103,17 +135,41 @@ export function MeetingVoteApply() {
                 <div className={"main"}>
                     <div>
                         <h1>{vote?.name}</h1><br />
-                        <h2>Choix :</h2><h3>(nombre de choix possible : {vote?.nbPossibleVotes})    </h3>
+                        <h2>Choix :</h2><h3>(Nombre de choix possible max : {vote?.nbPossibleVotes})    </h3>
                     </div>
                     <div className={"vote-choice-list"}>
                         <div>
-                            {voteChoices.map((choice) => (
-                                <div>
-                                    <input type="checkbox" id={choice.id.toString()} name={choice.name} value={choice.name} />
-                                    <label htmlFor={choice.id.toString()}>{choice.name}</label><br />
-                                </div>
-                            ))}
+                        {Array.from({ length: vote?.nbPossibleVotes || 0 }).map((_, i) => {
+                            return <div><InputLabel id="select-label">Choix n°{i+1}</InputLabel>
+                            <Select
+                                labelId="select-label"
+                                id="select-vote-choice"
+                                value={results[i]?.name}
+                                onChange={(e) => {
+                                    const newResults = [...results];
+                                    if (newResults[i]) {
+                                        newResults[i].name = e.target.value;
+                                    }
+                                    setResults(newResults);
+                                }}
+                            >
+                                {voteChoices.map((voteChoice) => {
+                                    return <MenuItem value={voteChoice.name}>{voteChoice.name}</MenuItem>
+                                })}
+                            </Select>
                         </div>
+                        })}
+                        </div>
+                        <div>
+                            <InputLabel>Vote Blanc</InputLabel>
+                            <Switch checked={data.isWhiteVote} onChange={e => changeWhiteVote()} color="primary" />
+                        </div>
+                        <Button 
+                        type="submit" 
+                        variant="contained" 
+                        color="primary"
+                        onClick={onSubmit}
+                        >Soumettre</Button>
                     </div>
                 </div>
             <Footer />

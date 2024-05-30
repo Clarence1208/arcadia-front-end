@@ -198,7 +198,7 @@ function CreateMeetingVoteForm() {
                         id="create-vote-nbPossibleVotes"
                         type="number"
                         placeholder="Nombre de choix possibles"
-                        onChange={e => updateFields({ nbWinners: parseInt(e.target.value) })}
+                        onChange={e => updateFields({ nbPossibleVotes: parseInt(e.target.value) })}
                     />
                     <Tooltip title="Nombre de choix possible par votant (par défault : 1)">
                         <IconButton>
