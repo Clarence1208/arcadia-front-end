@@ -22,6 +22,7 @@ import {ShowArticle} from "./routes/articles/ShowArticle";
 import { MeetingsListUser } from './routes/components/MeetingsListUser';
 import {EditArticle} from "./routes/articles/EditArticle";
 import {TermsOfServices} from "./routes/TermsOfServices";
+import {Chatbot} from "./routes/components/Chatbot";
 import { MeetingVoteApply } from './routes/MeetingVoteApply';
 
 
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/termsOfServices" element={<TermsOfServices />} />
+                <Route path="/chatBot" element={<Chatbot />} />
 
 
                 {/*Below needs to be inside admin dashboard*/}
@@ -48,7 +50,6 @@ function App() {
                 <Route path="/articles/:articleId" element={<ShowArticle />} />
                 <Route path="/articles/:articleId/edit" element={<EditArticle />} />
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
-                {/* <Route path='/article/:id' element={<Article />}/> */}
                 <Route path='/meetings' element={<MeetingsListUser />} />
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
