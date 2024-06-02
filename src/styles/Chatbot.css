@@ -28,6 +28,12 @@
 .chatbot-box Button {
 }
 
+.chatbot-icon{
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
+
 .message{
     padding: 2em;
     border-radius: 8px;

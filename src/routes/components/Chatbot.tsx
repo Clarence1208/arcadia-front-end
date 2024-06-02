@@ -3,14 +3,12 @@ import {Alert, Button, IconButton, TextField, Tooltip} from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import "../../styles/Chatbot.css"
 import HelpIcon from "@mui/icons-material/Help";
+import OpenAI from "openai";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ChatIcon from '@mui/icons-material/Chat';
 
-
-type Prompt ={
-    role: string,
-    content: string,
-}
-
-const initialMessages = [
+type PromptMessages =  OpenAI.Chat.Completions.ChatCompletionMessageParam[];
+const initialMessages : PromptMessages = [
     {
         role: "assistant",
         content: "Bonjour, comment puis-je t'aider aujourd'hui ?",
@@ -18,15 +16,36 @@ const initialMessages = [
     ]
 export function Chatbot() {
     const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
-    const [messages, setMessages] = useState<Prompt[]>(initialMessages);
+    const [messages, setMessages] = useState<PromptMessages>(initialMessages);
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")
+    const [showChatBot, setShowChatBot] = useState(false)
 
     const handleClose = () => {
         setOpen(false)
     }
-    const chat = async (messages: Prompt[]) => {
-        const response = await fetch(
+    const handleShowChatBot = () => {
+        setShowChatBot(!showChatBot)
+    }
+    const chat = async (messages: PromptMessages) => {
+
+        try{
+            const client = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser:true});
+
+            const response = await client.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: messages,
+            })
+            return response
+        }catch (error){
+            console.error(error);
+            setErrorMessage("Erreur de l'API OpenAI");
+            setOpen(true)
+        }
+
+
+
+       /* const response = await fetch(
             "https://api.openai.com/v1/chat/completions",
             {
                 method: "POST",
@@ -40,16 +59,14 @@ export function Chatbot() {
                     temperature: 0.5,
                 }),
             }
-        );
+        );*/
 
-        if (!response.ok) {
+        /*if (!response) {
             console.error(response);
             setErrorMessage("Erreur de l'API OpenAI");
             setOpen(true)
             return;
-        }
-        const data = await response.json();
-        return data;
+        }*/
     }
 
     function handleSubmit(e: SyntheticEvent) {
@@ -79,41 +96,59 @@ export function Chatbot() {
         target.userMessage.value = "";
     }
 
-        return (
-            <div className={"chatbot-box"}>
-                <Snackbar
-                    open={open}
-                    autoHideDuration={3000}
-                    onClose={handleClose}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                    <Alert
-                        onClose={handleClose}
-                        severity="error"
-                        variant="filled"
-                        sx={{ width: '100%' }}
-                    >{ErrorMessage}</Alert>
-                </Snackbar>
-
-                <div>
-                    <h1>Arcadia Chatbot
+        if (!showChatBot) {
+            return (
+                <div onClick={handleShowChatBot} className={"chatbot-icon"}>
                     <Tooltip title="Posez une question à l'assistant IA (service externe OPENAI).">
                         <IconButton>
-                            <HelpIcon />
+                            <ChatIcon fontSize={"large"} color={"primary"}/>
                         </IconButton>
-                    </Tooltip></h1>
+                    </Tooltip>
                 </div>
-                <div>
-                    {messages.map((message, index) => (
-                        message.role === "assistant" ?
-                            <div key={index} className={"message assistant"}>{message.content}</div> :
-                            <div key={index} className={"message user"}>{message.content}</div>
-                    ))}
+            );
+        }else {
+            return (
+                showChatBot &&
+                <div className={"chatbot-box"}>
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={3000}
+                        onClose={handleClose}
+                        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                    >
+                        <Alert
+                            onClose={handleClose}
+                            severity="error"
+                            variant="filled"
+                            sx={{width: '100%'}}
+                        >{ErrorMessage}</Alert>
+                    </Snackbar>
+
+                    <div onClick={handleShowChatBot}><HighlightOffIcon/></div>
+                    <div>
+                        <h1>Arcadia Chatbot
+                            <Tooltip title="Posez une question à l'assistant IA (service externe OPENAI).">
+                                <IconButton>
+                                    <HelpIcon/>
+                                </IconButton>
+                            </Tooltip></h1>
+                    </div>
+                    <div>
+                        {messages.map((message, index) => (
+                            message.role === "assistant" ?
+                                <div key={index}
+                                     className={"message assistant"}>{typeof message.content === 'string' ? message.content : ""}</div> :
+                                <div key={index}
+                                     className={"message user"}>{typeof message.content === 'string' ? message.content : ""}</div>
+                        ))}
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <TextField name={"userMessage"} variant={"filled"} label={"Message"}
+                                   placeholder={"Ex: Qu'est ce qu'un adhérent ?"}/>
+                        <Button variant={"contained"} type={"submit"}>Envoyer</Button>
+                    </form>
+
                 </div>
-                <form onSubmit={handleSubmit}>
-                    <TextField name={"userMessage"} variant={"filled"} label={"Message"} placeholder={"Ex: Qu'est ce qu'un adhérent ?"} />
-                    <Button variant={"contained"} type={"submit"} >Envoyer</Button>
-                </form>
-            </div>
-        );
+            );
+        }
     }
