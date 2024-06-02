@@ -8,11 +8,10 @@
     width: 30vw;
     overflow-y:scroll;
     background-color: #F5F5F5 ;
-    border: #074032 solid;
+    border: #074032 solid 0.15em;
     color: #252120;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 .chatbot-box form {
@@ -23,28 +22,68 @@
     justify-content: space-between;
     margin-top: 5vh;
 }
+
+.chatbot-box h1 {
+    align-self: center;
+}
 .chatbot-box TextField {
+    height:40%;
+    width: 80% !important;
 }
 .chatbot-box Button {
+    height:40%;
 }
 
 .chatbot-icon{
-    position: absolute;
+    position: fixed;
     bottom: 10px;
     right: 20px;
+    background-color: rgba(213, 207, 207, 0.48);
+    padding: 1em;
+    border-radius: 50%;
+}
+.close-icon{
+    width: 10%;
+    align-self: end;
+    margin: 1em;
+    display: flex;
+    justify-content: end;
+    cursor: pointer;
 }
 
+.message-box-assistant{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1em 2em;
+}
+
+.message-box-user{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin: 1em 2em;
+}
+.message-box-user > p{
+    font-size: 12px;
+}
+.message-box-assistant> p{
+    font-size: 12px;
+}
+
+
 .message{
-    padding: 2em;
+    padding: 0.5em 1em;
     border-radius: 8px;
+    min-width: 50%;
 
 }
 .assistant{
-    background-color: #074032;
-    color: #F5F5F5;
+    background-color: rgba(152, 148, 148, 0.27);
+    color: #074032;
 }
 
 .user{
-    background-color: #AFA8A6;
-    color: #074032;
+    background-color: #074032;
+    color: #F5F5F5;
 }

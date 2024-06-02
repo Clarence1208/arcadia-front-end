@@ -6,6 +6,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import OpenAI from "openai";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ChatIcon from '@mui/icons-material/Chat';
+import SendIcon from '@mui/icons-material/Send';
 
 type PromptMessages =  OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 const initialMessages : PromptMessages = [
@@ -42,31 +43,6 @@ export function Chatbot() {
             setErrorMessage("Erreur de l'API OpenAI");
             setOpen(true)
         }
-
-
-
-       /* const response = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: messages,
-                    temperature: 0.5,
-                }),
-            }
-        );*/
-
-        /*if (!response) {
-            console.error(response);
-            setErrorMessage("Erreur de l'API OpenAI");
-            setOpen(true)
-            return;
-        }*/
     }
 
     function handleSubmit(e: SyntheticEvent) {
@@ -108,7 +84,6 @@ export function Chatbot() {
             );
         }else {
             return (
-                showChatBot &&
                 <div className={"chatbot-box"}>
                     <Snackbar
                         open={open}
@@ -124,31 +99,51 @@ export function Chatbot() {
                         >{ErrorMessage}</Alert>
                     </Snackbar>
 
-                    <div onClick={handleShowChatBot}><HighlightOffIcon/></div>
-                    <div>
+                    <div className={"close-icon"} onClick={handleShowChatBot}><HighlightOffIcon/></div>
                         <h1>Arcadia Chatbot
                             <Tooltip title="Posez une question à l'assistant IA (service externe OPENAI).">
                                 <IconButton>
                                     <HelpIcon/>
                                 </IconButton>
                             </Tooltip></h1>
-                    </div>
                     <div>
                         {messages.map((message, index) => (
-                            message.role === "assistant" ?
-                                <div key={index}
-                                     className={"message assistant"}>{typeof message.content === 'string' ? message.content : ""}</div> :
-                                <div key={index}
-                                     className={"message user"}>{typeof message.content === 'string' ? message.content : ""}</div>
-                        ))}
+                            MessageBox({
+                                message: typeof message.content === 'string' ? message.content : "",
+                                role: message.role,
+                                key: index
+                            })
+                        ))
+                        }
                     </div>
                     <form onSubmit={handleSubmit}>
                         <TextField name={"userMessage"} variant={"filled"} label={"Message"}
-                                   placeholder={"Ex: Qu'est ce qu'un adhérent ?"}/>
-                        <Button variant={"contained"} type={"submit"}>Envoyer</Button>
+                                   placeholder={"Ex: Qu'est ce qu'un adhérent ?"}
+                                   fullWidth multiline/>
+                        <Button variant={"contained"} type={"submit"}>
+                            <SendIcon/>
+                        </Button>
                     </form>
 
                 </div>
             );
         }
+    }
+
+    function MessageBox({message, role, key}: {message: string, role: string, key: number}) {
+
+    let sender = "";
+    if (role === "assistant") {
+        sender = "Arcadia Bot";
+    }else {
+        sender = "Vous";
+    }
+    return (
+            <div key={key} className={`message-box-${role}`}>
+                <p>{sender}</p>
+                <div className={`message ${role}`}>
+                    <p>{message}</p>
+                </div>
+            </div>
+            )
     }

@@ -8,6 +8,7 @@ import '../styles/Blog.css';
 import { Add } from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
 import {useNavigate} from "react-router-dom";
+import {Chatbot} from "./components/Chatbot";
 
 interface Article {
     id: number,
@@ -127,6 +128,7 @@ export function Blog(){
                 <Pagination style={{alignSelf: "center"}} count={10} page={page} onChange={handleChangePage} />
             </div>
 
+            <Chatbot />
           <Footer />
         </div>
     )

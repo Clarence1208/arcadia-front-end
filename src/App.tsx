@@ -41,8 +41,6 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/termsOfServices" element={<TermsOfServices />} />
-                <Route path="/chatBot" element={<Chatbot />} />
-
 
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
