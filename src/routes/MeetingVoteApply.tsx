@@ -27,7 +27,7 @@ interface VoteParams {
 
 interface VoteChoice {
     id: number,
-    name: string,
+    name?: string,
 }
 
 type Filters = {
@@ -42,10 +42,10 @@ export function MeetingVoteApply() {
     const [vote, setVote] = useState<Vote>();
     const [data, setData] = useState<VoteParams>({ isWhiteVote: false });
     const [voteChoices, setVoteChoices] = useState<VoteChoice[]>([]);
-    const [results, setResults] = useState<VoteChoice[]>(Array.from({ length: vote?.nbPossibleVotes || 0 }, () => ({ id: 0, name: '' })));
+    const [results, setResults] = useState<VoteChoice[]>([]);
 
     const navigate = useNavigate();
-    const { voteId } = useParams();
+    const { voteId, id } = useParams();
 
     function changeWhiteVote() {
         setData(prev => {
@@ -110,22 +110,54 @@ export function MeetingVoteApply() {
         }
     }, [userSession, voteId]);
 
+    function checkFields() {
+        const uniqueValues = new Set();
+        return !results.some(result => {
+            if (uniqueValues.has(result.id)) {
+                setErrorMessage("Les choix doivent être uniques");
+                return true;
+            }
+            uniqueValues.add(result.id);
+            return false;
+        });
+    }
+
 
     async function onSubmit(e: FormEvent) {
+        const isValid = checkFields()
+        console.log(isValid)
+        if (!isValid) {
+            return
+        }
         e.preventDefault()
         if (userSession?.loginToken) {
-            // TO DO : Ajouter user au vote et si pas voteBlanc alors ajouter les choix
-            // const bearer = "Bearer " + userSession?.loginToken;
-            // const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings/" + id + "/votes", {method: "POST", body: JSON.stringify(data),                     headers: {
-            //         "Authorization": bearer,
-            //         "Content-Type": "application/json"
-            //     }});
-            // if (!response.ok) {
-            //     const error =  await response.json()
-            //     setErrorMessage("Erreur : " + await error.message);
-            //     return
-            // }
+            const bearer = "Bearer " + userSession?.loginToken;
+            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/votes/" + voteId + "/join", {method: "POST",
+                headers: {
+                    "Authorization": bearer,
+                    "Content-Type": "application/json"
+                }});
+            if (!response.ok) {
+                const error =  await response.json()
+                setErrorMessage("Erreur : " + await error.message);
+                return
+            }
+
+            if(!data.isWhiteVote) {
+                let voteChoicesIds = results.map((result) => result.id);
+                const response: Response = await fetch( process.env.REACT_APP_API_URL+"/votes/" + voteId + "/voteChoices/apply", {method: "POST", body: JSON.stringify(voteChoicesIds),
+                    headers: {
+                    "Authorization": bearer,
+                    "Content-Type": "application/json"
+                }});
+                if (!response.ok) {
+                    const error =  await response.json()
+                    setErrorMessage("Erreur : " + await error.message);
+                    return
+                }
+            }
         }
+        navigate("/meeting/" + id + "/votes");
     }
     
 
@@ -148,13 +180,15 @@ export function MeetingVoteApply() {
                                 onChange={(e) => {
                                     const newResults = [...results];
                                     if (newResults[i]) {
-                                        newResults[i].name = e.target.value;
+                                        newResults[i].id = parseInt(e.target.value);
+                                    } else {
+                                        newResults[i] = { id: parseInt(e.target.value) }
                                     }
                                     setResults(newResults);
                                 }}
                             >
                                 {voteChoices.map((voteChoice) => {
-                                    return <MenuItem value={voteChoice.name}>{voteChoice.name}</MenuItem>
+                                    return <MenuItem value={voteChoice.id}>{voteChoice.name}</MenuItem>
                                 })}
                             </Select>
                         </div>
