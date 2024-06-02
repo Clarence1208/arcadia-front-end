@@ -1,0 +1,16 @@
+#settings-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-bottom: 2vh;
+height: 50vh;
+}
+
+.paper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+}
