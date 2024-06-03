@@ -1,4 +1,4 @@
-import {Alert, Button, IconButton, Link, TextField} from "@mui/material";
+import {Alert, Button, IconButton, Link, TextField, useTheme} from "@mui/material";
 import '../styles/LogIn.css';
 import '../styles/App.css';
 import {FormEvent, Fragment, useContext, useState} from "react";
@@ -88,6 +88,7 @@ export function LogIn() {
 
     const [queryParameters] = useSearchParams();
     const [open, setOpen] = useState(queryParameters.get('successMessage') === "true");
+    const theme = useTheme();
 
     const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -98,8 +99,8 @@ export function LogIn() {
 
     return (
         <div className="containerRow">
-            <div className="rotated-text">ADMIN</div>
-            <div className="green-separator" />
+            <div className="rotated-text" style={{color: theme.palette.primary.main}}>ADMIN</div>
+            <div className="green-separator" style={{backgroundColor: theme.palette.primary.main}} />
             <div className="containerCol">
                 <Snackbar
                     open={open}

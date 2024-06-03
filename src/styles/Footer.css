@@ -7,7 +7,6 @@ footer{
 .green-line{
     width: 100vw;
     height: 0.25vh;
-    background-color: var(--admin-green);
 }
 
 .footer-content{
