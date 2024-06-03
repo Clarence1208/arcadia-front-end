@@ -6,7 +6,7 @@ import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {UserSessionContext} from "../contexts/user-session";
 import Collapse from "@mui/material/Collapse";
 import Snackbar from '@mui/material/Snackbar';
-import CloseIcon from '@mui/icons-material/Close';
+import heart from "../images/heartHealth.png";
 
 
 type LogInData = {
@@ -66,7 +66,7 @@ function LogInForm() {
     }
 
     return (
-        <form id="formLogin" onSubmit={onSubmit}>
+        <form id="formLogin" onSubmit={onSubmit} style={{maxWidth: "40vw"}}>
             <h1>Portail d'accès à l'administration de {process.env.REACT_APP_ASSOCIATION_NAME} </h1>
             {ErrorMessage && <Collapse in={open}><Alert className={"alert"} severity="error"  onClose={() => setOpen(false)}>{ErrorMessage}</Alert></Collapse>}
 
@@ -99,6 +99,7 @@ export function LogIn() {
 
     return (
         <div className="containerRow">
+            {/*<div style={{backgroundImage: `url(${heart})`,backgroundPosition:"center", backgroundSize: "50px 50px",opacity:0.2, backgroundRepeat: "repeat", position:"absolute", top:0,left:0, height:"100vh", width:"20vw"}}></div>*/}
             <div className="rotated-text" style={{color: theme.palette.primary.main}}>ADMIN</div>
             <div className="green-separator" style={{backgroundColor: theme.palette.primary.main}} />
             <div className="containerCol">

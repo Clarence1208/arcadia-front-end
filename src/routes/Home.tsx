@@ -1,13 +1,19 @@
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
 import {Chatbot} from "./components/Chatbot";
+import mainPic from "../images/template_home_pic.jpg";
+import "../styles/Home.css";
 export function Home() {
 
         return (
             <div>
                 <Header />
-                    <div className={"main"}>
-                        <h1>Test {process.env.REACT_APP_ASSOCIATION_NAME}</h1>
+                    <div className={"main home"}>
+                        <div>
+                            <h1>Association française des personnes malades</h1>
+                            <h3>Vous nous avez vu mais nous avez vous regardé ?</h3>
+                        </div>
+                        <img src={mainPic}/>
                     </div>
                 <Chatbot />
                 <Footer/>
