@@ -9,6 +9,7 @@ import "../styles/Dashboard.css";
 import {UsersDashboard} from "./UsersDashboard";
 import { MeetingsList } from "./components/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import {WebsiteSettings} from "./WebsiteSettings";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -63,7 +64,7 @@ export function Dashboard(){
                     <Tab label="Gestion des Assemblées Générales" {...a11yProps(0)}/>
                     <Tab label="Gestion des utilisateurs" {...a11yProps(1)}/>
                     <Tab label="Gestions des événements" {...a11yProps(2)}/>
-                    <Tab label="Gestions des paramètres du site" {...a11yProps(3)}/>
+                    <Tab label="Gestions des paramètres globaux du site" {...a11yProps(3)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -80,7 +81,7 @@ export function Dashboard(){
                         <h1>2</h1>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={3}>
-                        <h1>3</h1>
+                        <WebsiteSettings />
                     </TabPanel>
                 </div>
 

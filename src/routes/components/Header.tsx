@@ -6,6 +6,7 @@ import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useContext} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
+import Theme from "../../utils/theme";
 
 interface CustomNavItemProps {
     link: string;
@@ -54,8 +55,6 @@ export default function Header() {
                 <CustomNavItem link="/donate" text="Nous soutenir" />
                 <CustomNavItem link="/memberdashboard" text="Espace adhérent" />
                 <CustomNavItem link="/adminDashboard" text="Espace admin" />
-                <CustomNavItem link="/meetings" text="Assemblée Générale" />
-              {/*{userSession?.isLoggedIn && <CustomNavItem link="/dashboard" text="Tableau de bord" />}*/}
           </div>
 
           <LogInOutButton />

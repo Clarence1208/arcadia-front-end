@@ -2,10 +2,10 @@ import Header from "./components/Header";
 import {Footer} from "./components/Footer";
 import {SyntheticEvent, useContext, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
-/*import {WebsitesPanel} from "../components/features/dashboard/WebsitesPanel";
-import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";*/
+// import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";
 import {Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
+import {MeetingsListUser} from "./components/MeetingsListUser";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -57,7 +57,7 @@ export function MemberDashboard(){
                     aria-label="Vertical tabs for member"
                     sx={{ borderRight: 1, borderColor: 'divider' }}
                 >
-                    <Tab label="Mes prochaines assemblées générales" {...a11yProps(0)}/>
+                    <Tab label="Mes assemblées générales" {...a11yProps(0)}/>
                     <Tab label="Mes informations personnelles" {...a11yProps(1)}/>
                     <Tab label="Mes paiements" {...a11yProps(2)}/>
                     <Tab label="To be defined" {...a11yProps(3)}/>
@@ -68,7 +68,7 @@ export function MemberDashboard(){
 
                     {/*TABS PANEL: */}
                     <TabPanel value={tabsValue} index={0}>
-                        <h1>0</h1>
+                       <MeetingsListUser />
                     </TabPanel>
                     <TabPanel value={tabsValue} index={1}>
                        <h1>1</h1>

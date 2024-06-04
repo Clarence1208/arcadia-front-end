@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -22,12 +22,49 @@ import {ShowArticle} from "./routes/articles/ShowArticle";
 import { MeetingsListUser } from './routes/components/MeetingsListUser';
 import {EditArticle} from "./routes/articles/EditArticle";
 import {TermsOfServices} from "./routes/TermsOfServices";
+import {Chatbot} from "./routes/components/Chatbot";
 import { MeetingVoteApply } from './routes/MeetingVoteApply';
+import { createTheme } from '@mui/material/styles';
+import {ThemeProvider} from "@mui/material";
 
 
 function App() {
+    const [theme, setTheme] = React.useState(createTheme());
+
+//API CALL TO GET THE THEME FROM WEBSITE SETTINGS
+    async function getConfiguration(){
+       try{
+           const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+           const data = await response.json();
+           return data[2].value
+       }catch (e) {
+           console.warn(e)
+           return '#074032'
+       }
+    }
+
+// Define your custom theme
+    useEffect(() => {
+        const theme = createTheme({
+            palette: {
+                primary: {
+                    main: '#074032', // DEFAULT COLOR
+                },
+                secondary: {
+                    main: '#f5f5f5',
+                },
+                // Add more customizations as needed
+            },
+        });
+        getConfiguration().then(data => {
+            theme.palette.primary.main = data;
+            setTheme(theme)
+        });
+
+    }, []);
 
     return (
+        <ThemeProvider theme={theme}>
         <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
             <UserSessionProvider>
@@ -41,14 +78,12 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/termsOfServices" element={<TermsOfServices />} />
 
-
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
                 <Route path='/createArticle' element={<CreateArticle />}/>
                 <Route path="/articles/:articleId" element={<ShowArticle />} />
                 <Route path="/articles/:articleId/edit" element={<EditArticle />} />
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
-                {/* <Route path='/article/:id' element={<Article />}/> */}
                 <Route path='/meetings' element={<MeetingsListUser />} />
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
@@ -60,6 +95,7 @@ function App() {
             </UserSessionProvider>
             </LocalizationProvider>
         </BrowserRouter>
+        </ThemeProvider>
     );
 }
 

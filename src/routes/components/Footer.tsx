@@ -1,9 +1,13 @@
 import "../../styles/Footer.css";
 import Logo from "../../images/logo.png";
+import theme from "../../utils/theme";
+import {useTheme} from "@mui/material";
 export function Footer() {
+
+    const theme = useTheme();
     return (
         <footer>
-            <div className="green-line"></div>
+            <div className="green-line" style={{backgroundColor: theme.palette.primary.main}}></div>
             <div className="footer-content">
                 <img src={Logo} alt={"logo"} />
                 <div className="raccourcis">

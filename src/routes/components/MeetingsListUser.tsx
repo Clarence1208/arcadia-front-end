@@ -1,4 +1,4 @@
-import { Pagination } from "@mui/material";
+import {Button, Pagination} from "@mui/material";
 import { Meeting } from "./Meeting";
 import { useContext, useEffect, useState } from "react";
 import '../../styles/MeetingsList.css';
@@ -69,50 +69,83 @@ export function MeetingsListUser() {
         });
     }
 
+    const [showMeetings, setShowMeetings] = useState([{
+        past: false,
+        current: true,
+        future: false,
+    }])
+    const changeDisplayedMeetings = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const button = event.currentTarget;
+
+        if (button.textContent === "Passées") {
+            setShowMeetings([{
+                past: true,
+                current: false,
+                future: false
+            }])
+        } else if (button.textContent === "En cours") {
+            setShowMeetings([{
+                past: false,
+                current: true,
+                future: false
+            }])
+        } else {
+            setShowMeetings([{
+                past: false,
+                current: false,
+                future: true
+            }])
+        }
+
+    }
+
     useEffect(() => {
         getMeetings({ page: page }).then(setDateMeetings)
     }, [page]);
 
     return (
-        <div>
-            <Header />
-            <div className={"main"}>
-                    <div className={"meetings-list"}>
-                        <h1 className={"title"}>Liste des assemblées générales :</h1>
-                        {meetings.length === 0 ? <div>Chargement ou pas d'assemblée générale...</div> :
-                            <div>
-                                {futureMeetings.length !== 0 ?
-                                    <div>
-                                        <h2>Assemblées générales à venir :</h2>
-                                            {futureMeetings.map((meeting) => (
-                                                <Meeting meeting={meeting} />
-                                            ))}
-                                    </div>
-                                    : null}
-                                {currentMeetings.length !== 0 ?
-                                <div>
-                                    <h2>Assemblées générales en cours :</h2>
-                                        {currentMeetings.map((meeting) => (
-                                            <Meeting meeting={meeting} />
-                                        ))}
-                                </div>
-                                : null}
-                                {pastMeetings.length !== 0 ?
-                                <div>
-                                    <h2>Assemblées générales passées :</h2>
-                                        {pastMeetings.map((meeting) => (
-                                            <Meeting meeting={meeting} />
-                                        ))}
-                                </div>
-                                : null}
-                            </div>
-                        }
-                        <div style={{marginTop: "2vh"}}>
-                            <Pagination count={10} page={page} onChange={handleChangePage}/>
+            <div className={""}>
+                    <div className={"meetings-list-user"}>
+                        <h2 className={""}>Liste des assemblées générales :</h2>
+                        <div>
+                            <Button className={"active"} onClick={changeDisplayedMeetings}>En cours</Button>
+                            <Button onClick={changeDisplayedMeetings}>Passées</Button>
+                            <Button onClick={changeDisplayedMeetings}>Futures</Button>
                         </div>
+
+                        {
+                            showMeetings[0].past ?
+                                <div style={{minHeight: "50vh"}}>
+                                <h3>Assemblées générales passées :</h3>
+                                    {pastMeetings.map((meeting) => (
+                                        <Meeting meeting={meeting} />
+                                    ))}
+                                    <Pagination style={{marginTop: "10vh"}} count={10} page={page} onChange={handleChangePage}/>
+                            </div> : null
+                        }
+
+                        {
+                            showMeetings[0].current ?
+                                <div style={{minHeight: "50vh"}}>
+                                <h3>Assemblées générales en cours :</h3>
+                                    {currentMeetings.map((meeting) => (
+                                        <Meeting meeting={meeting} />
+                                    ))}
+                                    <Pagination style={{marginTop: "10vh"}} count={10} page={page} onChange={handleChangePage}/>
+                            </div> : null
+                        }
+
+                        {
+                            showMeetings[0].future ?
+                                <div style={{minHeight: "50vh"}}>
+                                <h3>Assemblées générales à venir :</h3>
+                                    {futureMeetings.map((meeting) => (
+                                        <Meeting meeting={meeting} />
+                                    ))}
+                                    <Pagination style={{marginTop: "10vh"}} count={10} page={page} onChange={handleChangePage}/>
+                            </div> : null
+                        }
                     </div>
             </div>
-            <Footer />
-        </div>
     )
 }

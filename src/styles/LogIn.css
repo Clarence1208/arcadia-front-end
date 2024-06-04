@@ -1,14 +1,13 @@
 .green-separator{
     width: 3vw;
     height: 100vh;
-    background-color: var(--admin-green);
 }
+
 .rotated-text{
     transform: rotate(180deg);
     writing-mode: vertical-lr;
     text-align: center;
     font-size: 8em;
-    color: var(--admin-green);
     margin-top: 4vh;
     padding-right: 25vw;
 }
