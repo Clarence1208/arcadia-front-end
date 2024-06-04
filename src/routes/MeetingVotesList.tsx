@@ -13,12 +13,23 @@ interface Vote {
     name: string,
     isAbsoluteMajority: boolean,
     isAnonymous: boolean,
+    isClosed: boolean,
     eliminationPerRound?: number,
     nbWinners: number,
     nbPossibleVotes: number,
     quorum?: number,
     currentRound?: number,
     meetingId: number,  
+}
+
+interface Meeting {
+    id: number,
+    name: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    capacity: number,
+
 }
 
 type Filters = {
@@ -32,6 +43,7 @@ export function MeetingVotesList() {
     const [votes, setVotes] = useState<Vote[]>([])
     const navigate = useNavigate();
     const { id } = useParams();
+    const [meeting, setMeeting] = useState<Meeting>();
 
     useEffect(() => {
         if (userSession?.loginToken) {
@@ -61,6 +73,27 @@ export function MeetingVotesList() {
                     vote.meetingId = parseInt(id);
                 });
             }
+            const getMeeting = async (filters?: Filters): Promise<Meeting> => {
+                const bearer = "Bearer " + userSession?.loginToken;
+                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/meetings/${id}`, {method: "GET",
+                    headers: {
+                        "Authorization": bearer,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (!response.ok) {
+                    const error = await response.json()
+                    // setErrorMessage("Erreur : " + await error.message);
+                    return {} as Meeting
+                }
+                const res = await response.json();
+                if (res.length === 0) {
+                    console.log("Aucun site web trouvé")
+                    //setErrorMessage("Aucun site web trouvé")
+                }
+                return res;
+            }
+            getMeeting().then(setMeeting)
         }
     }, [userSession?.loginToken, id]);
     
@@ -69,18 +102,18 @@ export function MeetingVotesList() {
         <div>
             <Header />
                 <div className={"main"}>
-                    <h1>Votes :</h1>
-                        {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
-                            <div>
-                                <Button 
-                                href={"/meeting/"+id+"/createVote"}
-                                variant="contained"
-                                color="primary"
-                                endIcon={<AddBoxIcon />}>
-                                    Créez un vote
-                                </Button>
-                            </div> : null
-                        }
+                        <h1>Votes :</h1>
+                            {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
+                                <div>
+                                    <Button 
+                                    href={"/meeting/"+id+"/createVote"}
+                                    variant="contained"
+                                    color="primary"
+                                    endIcon={<AddBoxIcon />}>
+                                        Créez un vote
+                                    </Button>
+                                </div> : null
+                            }
                         <div className={"votes-list"}>
                             {votes.length === 0 ? <div>Chargement ou pas de votes...</div> :
                                 <div>

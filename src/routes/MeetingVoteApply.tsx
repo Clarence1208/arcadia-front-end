@@ -125,7 +125,6 @@ export function MeetingVoteApply() {
 
     async function onSubmit(e: FormEvent) {
         const isValid = checkFields()
-        console.log(isValid)
         if (!isValid) {
             return
         }

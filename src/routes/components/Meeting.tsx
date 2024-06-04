@@ -45,7 +45,7 @@ export function Meeting({meeting}: {meeting: Meeting}){
                 :<Button 
                 variant="contained" 
                 color="primary" 
-                href={`/meeting/${meeting.id}/votes/results`}
+                href={`/meeting/${meeting.id}/votes`}
                 endIcon={ <HowToVoteIcon></HowToVoteIcon>}
                 >Voir les résultats des votes</Button>
                 }
