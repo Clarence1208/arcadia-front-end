@@ -61,7 +61,7 @@ function App() {
             setTheme(theme)
         });
 
-    }, [theme]);
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>
