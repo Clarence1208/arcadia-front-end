@@ -1,6 +1,5 @@
 import "../../styles/Footer.css";
 import Logo from "../../images/logo.png";
-import theme from "../../utils/theme";
 import {useTheme} from "@mui/material";
 export function Footer() {
 

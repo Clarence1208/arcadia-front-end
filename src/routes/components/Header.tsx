@@ -6,7 +6,6 @@ import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useContext} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
-import Theme from "../../utils/theme";
 
 interface CustomNavItemProps {
     link: string;

@@ -4,10 +4,10 @@ import React, {useContext, useEffect, useState} from "react";
 import {Footer} from "../components/Footer";
 import Paper from '@mui/material/Paper';
 import catBanner from "../../images/cat-banner.jpg";
-import theme from "../../utils/theme";
 import {UserSessionContext} from "../../contexts/user-session";
 import LoadingSpinner from "../components/LoadingSpinner";
 import {ArrowBack} from "@mui/icons-material";
+import { useTheme } from "@mui/material";
 
 type Article = {
     id: number,
@@ -21,6 +21,7 @@ export function ShowArticle(){
     const [article, setArticle] = useState<Article>();
     const [errorMessage, setErrorMessage] = useState(null);
     const userSession = useContext(UserSessionContext)?.userSession
+    const theme = useTheme();
 
     useEffect(() => {
     const getArticle = async (): Promise<Article> => {
