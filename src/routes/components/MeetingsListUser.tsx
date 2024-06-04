@@ -115,7 +115,7 @@ export function MeetingsListUser() {
 
                         {
                             showMeetings[0].past ?
-                                <div>
+                                <div style={{minHeight: "50vh"}}>
                                 <h3>Assemblées générales passées :</h3>
                                     {pastMeetings.map((meeting) => (
                                         <Meeting meeting={meeting} />
@@ -126,7 +126,7 @@ export function MeetingsListUser() {
 
                         {
                             showMeetings[0].current ?
-                                <div style={{height: "50vh"}}>
+                                <div style={{minHeight: "50vh"}}>
                                 <h3>Assemblées générales en cours :</h3>
                                     {currentMeetings.map((meeting) => (
                                         <Meeting meeting={meeting} />
@@ -137,7 +137,7 @@ export function MeetingsListUser() {
 
                         {
                             showMeetings[0].future ?
-                                <div>
+                                <div style={{minHeight: "50vh"}}>
                                 <h3>Assemblées générales à venir :</h3>
                                     {futureMeetings.map((meeting) => (
                                         <Meeting meeting={meeting} />
