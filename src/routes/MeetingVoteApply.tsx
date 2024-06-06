@@ -168,14 +168,16 @@ export function MeetingVoteApply() {
                     <Paper elevation={1} className={"content"}>
                     <div>
                         <h1>{vote?.name}</h1><br />
-                        <h2>Choix :</h2><h3>(Nombre de choix possible max : {vote?.nbPossibleVotes})    </h3>
+                        <h2>Veuillez faire votre choix :</h2>
+                        <p>(Il est possible de choisir jusqu'à : {vote?.nbPossibleVotes} choix maximum)</p>
                     </div>
                     <div className={"vote-choice-list"}>
+                        <div className={"custom-choice"}>
                             {Array.from({ length: vote?.nbPossibleVotes || 0 }).map((_, i) => {
-                                return <div><InputLabel id="select-label">Choix n°{i+1}</InputLabel>
+                                return (<div><InputLabel id="select-label">Choix n°{i+1}</InputLabel>
                                 <Select
                                     labelId="select-label"
-                                    id="select-vote-choice"
+                                    className="select-vote-choice"
                                     value={results[i]?.name}
                                     onChange={(e) => {
                                         const newResults = [...results];
@@ -191,8 +193,9 @@ export function MeetingVoteApply() {
                                         return <MenuItem value={voteChoice.id}>{voteChoice.name}</MenuItem>
                                     })}
                                 </Select>
-                            </div>
+                            </div>)
                             })}
+                        </div>
                             <p>OU</p>
                             <div>
                                 <InputLabel>Vote Blanc</InputLabel>
