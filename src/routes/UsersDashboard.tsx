@@ -1,9 +1,21 @@
 import {Footer} from "./components/Footer";
 import Header from "./components/Header";
-import {Link, TableContainer, TableCell, Table, TableRow, TableHead, TableBody, Button, Paper} from "@mui/material";
+import {
+    Link,
+    TableContainer,
+    TableCell,
+    Table,
+    TableRow,
+    TableHead,
+    TableBody,
+    Button,
+    Paper,
+    Alert
+} from "@mui/material";
 import {AddCircleOutline, Edit, Delete} from '@mui/icons-material';
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
+import Snackbar from "@mui/material/Snackbar";
 
 type User = {
     id: number,
@@ -18,10 +30,32 @@ type Filters ={
 }
 export function UsersDashboard() {
     const [errorMessage, setErrorMessage] = useState<string>("")
+    const [open, setOpen] = useState(false)
     const [users, setUsers] = useState<User[]>([])
     const userSession = useContext(UserSessionContext)?.userSession
     const userToken = userSession?.loginToken
     const userId = userSession?.userId
+
+    async function deleteItem(id: number) {
+        const bearer = "Bearer " + userSession?.loginToken;
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": bearer,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!response.ok) {
+            const error = await response.json()
+            setErrorMessage("Erreur : " + await error.message);
+            setOpen(true)
+            return
+        }
+        const res = await response.json();
+        setUsers(users.filter((user) => user.id !== id))
+        setErrorMessage("Utilisateur supprimé")
+        setOpen(true)
+    }
 
     useEffect(() => {
             if (userToken && userId) {
@@ -35,13 +69,14 @@ export function UsersDashboard() {
                     });
                     if (!response.ok) {
                         const error = await response.json()
-                        console.log(error)
                         setErrorMessage("Erreur : " + await error.message);
+                        setOpen(true);
                         return []
                     }
                     const res = await response.json();
                     if (res.length === 0) {
-                        setErrorMessage("Aucun site web trouvé")
+                        setErrorMessage("Aucun utilisateur trouvé")
+                        setOpen(true)
                     }
                     return res;
                 }
@@ -56,13 +91,25 @@ export function UsersDashboard() {
         return (
 
                 <div>
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={3000}
+                        onClose={() => setOpen(false)}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    >
+                        <Alert
+                            onClose={() => setOpen(false)}
+                            severity="error"
+                            variant="filled"
+                            sx={{ width: '100%' }}
+                        >{errorMessage}</Alert>
+                    </Snackbar>
                     <h2>Gestion des utilisateurs</h2>
                     <div style={{display: "flex", alignItems: "center"}}>
                         <p>Vous pouvez gérer les utilisateurs d'ici</p>
-                        <Link href={"/users/new"} style={{marginLeft: "3vw"}}
+                        <Link href={"/register"} style={{marginLeft: "3vw"}}
                               title={"Ajouter un utilisateur"}><AddCircleOutline/></Link>
                     </div>
-                    {errorMessage && <div className="error">{errorMessage}</div>}
 
                     <TableContainer component={Paper}>
                         <Table sx={{minWidth: 650}} aria-label="simple table">
@@ -91,7 +138,7 @@ export function UsersDashboard() {
                                         </TableCell>
                                         <TableCell align="right">
                                             <Button title={"Modifier"}><Edit/></Button>
-                                            <Button title={"Supprimer"}>{<Delete/>}</Button>
+                                            <Button title={"Supprimer"} onClick={()=>deleteItem(user.id)}>{<Delete/>}</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}

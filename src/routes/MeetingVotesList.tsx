@@ -7,6 +7,8 @@ import Header from "./components/Header";
 import {UserSessionContext} from "../contexts/user-session";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Vote } from "./components/Vote";
+import Clock from 'react-clock'
+import 'react-clock/dist/Clock.css';
 
 interface Vote {
     id: number,
@@ -44,6 +46,7 @@ export function MeetingVotesList() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [meeting, setMeeting] = useState<Meeting>();
+    const [time, setTime] = useState(new Date());
 
     useEffect(() => {
         if (userSession?.loginToken) {
@@ -96,33 +99,48 @@ export function MeetingVotesList() {
             getMeeting().then(setMeeting)
         }
     }, [userSession?.loginToken, id]);
-    
+
+    useEffect(() => {
+        const interval = setInterval(() => setTime(new Date()), 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
 
     return (
         <div>
             <Header />
                 <div className={"main"}>
-                        <h1>Votes :</h1>
+                    {meeting && <h1>Votes de l'assemblée générale {meeting.name} :</h1>}
+
                             {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
                                 <div>
                                     <Button 
                                     href={"/meeting/"+id+"/createVote"}
                                     variant="contained"
                                     color="primary"
+                                    style={{marginBottom: "3em"}}
                                     endIcon={<AddBoxIcon />}>
-                                        Créez un vote
+                                        Créer un vote
                                     </Button>
                                 </div> : null
                             }
+                    <div style={{display:"flex", justifyContent:"space-between"}}>
                         <div className={"votes-list"}>
                             {votes.length === 0 ? <div>Chargement ou pas de votes...</div> :
-                                <div>
-                                    {votes.map((vote) => (
-                                        <Vote vote={vote} meetingId={id !== undefined ? parseInt(id) : undefined} />
-                                    ))}
-                                </div>
+                                votes.map(vote => {
+                                    return <Vote key={vote.id} vote={vote} meetingId={id !== undefined ? parseInt(id) : undefined} />
+                                })
                             }
                         </div>
+
+
+                        <div>
+                            {meeting && <p>Fin de l'assemblée générale prévue à {new Date(meeting.endDate).getHours() + " h 0" + new Date(meeting.endDate).getMinutes()}</p>}
+                            <Clock value={time} renderNumbers={true}/>
+                        </div>
+                    </div>
                 </div>
             <Footer />
         </div>

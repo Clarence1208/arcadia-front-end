@@ -1,17 +1,20 @@
 import {UserRegisterForm} from "./components/UserRegisterForm"
-import {useState} from "react";
+import React, {useState} from "react";
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
-import {Button} from "@mui/material";
+import {Alert, Button, Snackbar} from "@mui/material";
 import {Dayjs} from "dayjs";
 import { useNavigate } from "react-router-dom";
+import Paper from "@mui/material/Paper";
 
 type FormData = {
     firstName: string
     surname: string
     email: string
     password: string,
+    confirmPassword?: string,
     birthDate: Dayjs | null,
+    roles?: string
 }
 
 const body: FormData = {
@@ -36,6 +39,12 @@ export function Register(){
 
     async function createUser(userData: FormData) {
 
+        if (userData.password !== userData.confirmPassword) {
+            setErrorMessage("Les mots de passe ne correspondent pas");
+            return
+        }
+
+        delete userData.confirmPassword;
         const response: Response = await fetch(process.env.REACT_APP_API_URL+"/users/register", {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
@@ -52,8 +61,10 @@ export function Register(){
         <div>
             <Header />
             <div className="main">
-                <UserRegisterForm {...data} formTitle={"Créer un compte"} formDescription={"Création de compte adhérent"} formError={errorMessage} updateFields={updateFields} />
-                <Button variant="contained" type={"submit"} onClick={handleSubmit} >Valider</Button>
+                <Paper elevation={1} className={"paper"} style={{width: "40vw"}}>
+                    <UserRegisterForm {...data} formTitle={"Créer un compte"} formDescription={"Accéder aux actualités, vos historiques de paiements et participer aux assemblées générales"} formError={errorMessage} updateFields={updateFields}  />
+                    <Button variant="contained" type={"submit"} onClick={handleSubmit} style={{width: "10vw"}}>Valider</Button>
+                </Paper>
             </div>
             <Footer />
         </div>

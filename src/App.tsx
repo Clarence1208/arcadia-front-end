@@ -26,6 +26,7 @@ import {Chatbot} from "./routes/components/Chatbot";
 import { MeetingVoteApply } from './routes/MeetingVoteApply';
 import { createTheme } from '@mui/material/styles';
 import {ThemeProvider} from "@mui/material";
+import {Contact} from "./routes/Contact";
 import { VoteResults } from './routes/VoteResults';
 
 
@@ -78,6 +79,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/termsOfServices" element={<TermsOfServices />} />
+                <Route path='/contact' element={<Contact />}/>
 
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
@@ -90,6 +92,7 @@ function App() {
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
                 <Route path='/meeting/:id/vote/:voteId' element={<MeetingVoteApply />}/>
                 <Route path='/meeting/:id/vote/:voteId/results' element={<VoteResults />}/>
+
 
 
                 <Route path='*' element={<NotFound />}/>

@@ -6,6 +6,7 @@ import {UserSessionContext} from "../contexts/user-session";
 import {Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {MeetingsListUser} from "./components/MeetingsListUser";
+import {EditUser} from "./users/EditUser";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -60,7 +61,7 @@ export function MemberDashboard(){
                     <Tab label="Mes assemblées générales" {...a11yProps(0)}/>
                     <Tab label="Mes informations personnelles" {...a11yProps(1)}/>
                     <Tab label="Mes paiements" {...a11yProps(2)}/>
-                    <Tab label="To be defined" {...a11yProps(3)}/>
+                    {/*<Tab label="To be defined" {...a11yProps(3)}/>*/}
                 </Tabs>
 
                 <div className={"board"}>
@@ -71,15 +72,14 @@ export function MemberDashboard(){
                        <MeetingsListUser />
                     </TabPanel>
                     <TabPanel value={tabsValue} index={1}>
-                       <h1>1</h1>
-                        {/*<UserAccountPanel userId={userSession?.userId} userToken={userSession?.loginToken} />*/}
+                        {userSession && <EditUser userId={userSession?.userId} userToken={userSession?.loginToken}/>}
                     </TabPanel>
                     <TabPanel value={tabsValue} index={2}>
-                        <h1>2</h1>
+                        <h1>Mes paiements </h1>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={3}>
-                        <h1>To be defined</h1>
-                    </TabPanel>
+                    {/*<TabPanel value={tabsValue} index={3}>*/}
+                    {/*    <h1>To be defined</h1>*/}
+                    {/*</TabPanel>*/}
                 </div>
 
             </div>
