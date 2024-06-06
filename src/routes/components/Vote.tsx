@@ -76,6 +76,7 @@ export function Vote({vote, meetingId}: VoteProps){
                 <Button
                     variant="contained"
                     color="primary"
+                    href={`/meeting/${meetingId}/vote/${vote.id}/results`}
                     endIcon={<HowToVoteIcon></HowToVoteIcon>}
                 >
                     Voir les résultats du vote

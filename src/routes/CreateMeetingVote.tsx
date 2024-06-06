@@ -111,9 +111,13 @@ function CreateMeetingVoteForm() {
                 setErrorMessage("Erreur : Il doit y avoir au moins 1 élimination par tour")
                 return false
             }
-            if ((votes.length % data.eliminationPerRound !== data.nbWinners) && data.nbWinners !== 1) {
-                    setErrorMessage("Erreur : Le nombre de gagnants n'est pas compatible avec le nombre d'élimination par tour")
-                    return false
+            let i = votes.length
+            while (i > data.nbWinners) {
+                i -= data.eliminationPerRound
+            }
+            if (i !== data.nbWinners) {
+                setErrorMessage("Erreur : Le nombre de gagnants n'est pas compatible avec le nombre d'élimination par tour")
+                return false
                 }
             }
         return true

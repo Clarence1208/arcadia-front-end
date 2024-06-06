@@ -26,6 +26,7 @@ import {Chatbot} from "./routes/components/Chatbot";
 import { MeetingVoteApply } from './routes/MeetingVoteApply';
 import { createTheme } from '@mui/material/styles';
 import {ThemeProvider} from "@mui/material";
+import { VoteResults } from './routes/VoteResults';
 
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>
                 <Route path='/meeting/:id/vote/:voteId' element={<MeetingVoteApply />}/>
+                <Route path='/meeting/:id/vote/:voteId/results' element={<VoteResults />}/>
 
 
                 <Route path='*' element={<NotFound />}/>
