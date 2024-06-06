@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import {UserSessionContext} from "../contexts/user-session";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Vote } from "./components/Vote";
+import Paper from "@mui/material/Paper";
 
 interface Vote {
     id: number,
@@ -164,46 +165,49 @@ export function MeetingVoteApply() {
         <div>
             <Header />
                 <div className={"main"}>
+                    <Paper elevation={1} className={"content"}>
                     <div>
                         <h1>{vote?.name}</h1><br />
                         <h2>Choix :</h2><h3>(Nombre de choix possible max : {vote?.nbPossibleVotes})    </h3>
                     </div>
                     <div className={"vote-choice-list"}>
-                        <div>
-                        {Array.from({ length: vote?.nbPossibleVotes || 0 }).map((_, i) => {
-                            return <div><InputLabel id="select-label">Choix n°{i+1}</InputLabel>
-                            <Select
-                                labelId="select-label"
-                                id="select-vote-choice"
-                                value={results[i]?.name}
-                                onChange={(e) => {
-                                    const newResults = [...results];
-                                    if (newResults[i]) {
-                                        newResults[i].id = parseInt(e.target.value);
-                                    } else {
-                                        newResults[i] = { id: parseInt(e.target.value) }
-                                    }
-                                    setResults(newResults);
-                                }}
-                            >
-                                {voteChoices.map((voteChoice) => {
-                                    return <MenuItem value={voteChoice.id}>{voteChoice.name}</MenuItem>
-                                })}
-                            </Select>
-                        </div>
-                        })}
-                        </div>
-                        <div>
-                            <InputLabel>Vote Blanc</InputLabel>
-                            <Switch checked={data.isWhiteVote} onChange={e => changeWhiteVote()} color="primary" />
-                        </div>
-                        <Button 
-                        type="submit" 
-                        variant="contained" 
-                        color="primary"
-                        onClick={onSubmit}
-                        >Soumettre</Button>
+                            {Array.from({ length: vote?.nbPossibleVotes || 0 }).map((_, i) => {
+                                return <div><InputLabel id="select-label">Choix n°{i+1}</InputLabel>
+                                <Select
+                                    labelId="select-label"
+                                    id="select-vote-choice"
+                                    value={results[i]?.name}
+                                    onChange={(e) => {
+                                        const newResults = [...results];
+                                        if (newResults[i]) {
+                                            newResults[i].id = parseInt(e.target.value);
+                                        } else {
+                                            newResults[i] = { id: parseInt(e.target.value) }
+                                        }
+                                        setResults(newResults);
+                                    }}
+                                >
+                                    {voteChoices.map((voteChoice) => {
+                                        return <MenuItem value={voteChoice.id}>{voteChoice.name}</MenuItem>
+                                    })}
+                                </Select>
+                            </div>
+                            })}
+                            <p>OU</p>
+                            <div>
+                                <InputLabel>Vote Blanc</InputLabel>
+                                <Switch checked={data.isWhiteVote} onChange={e => changeWhiteVote()} color="primary" />
+                            </div>
                     </div>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size={"large"}
+                            style={{width: "20vw", alignSelf:"center", height: "5vh"}}
+                            onClick={onSubmit}
+                        >Soumettre</Button>
+                    </Paper>
                 </div>
             <Footer />
         </div>

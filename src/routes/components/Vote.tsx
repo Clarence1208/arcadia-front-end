@@ -1,10 +1,11 @@
-import { Button, ListItemText } from "@mui/material";
+import {Alert, Button, ListItemText} from "@mui/material";
 import '../../styles/Vote.css';
 import {UserSessionContext} from "../../contexts/user-session";
-import { FormEvent, useContext, useState } from "react";
+import React, { FormEvent, useContext, useState } from "react";
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import TaskIcon from '@mui/icons-material/Task';
 import { useNavigate, useParams } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
 
 interface VoteProps {
     vote: Vote;
@@ -35,6 +36,7 @@ interface Vote {
 
 export function Vote({vote, meetingId}: VoteProps){
     const [ErrorMessage, setErrorMessage] = useState("")
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const userSession = useContext(UserSessionContext)?.userSession
     if(vote.users === undefined){
@@ -62,15 +64,30 @@ export function Vote({vote, meetingId}: VoteProps){
         navigate("/meeting/" + id + "/vote/" + vote.id + "/results");
     }
 
+    function displayError(message: string) {
+        setErrorMessage(message);
+        setOpen(true);
+    }
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div className="vote-div" >
-            { vote.currentRound == 1 ?
-                <ListItemText
-                    primary={vote.name}
-                />
-            :   <ListItemText
-                    primary={vote.name + " - Tour " + vote.currentRound} 
-                />
+            <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >{ErrorMessage}</Alert>
+            </Snackbar>
+            { vote.currentRound === 1 ? <h3>{vote.name}</h3> : <h3>{vote.name} - Tour {vote.currentRound}</h3>
             }
             {vote.isClosed ? (
                 <Button
@@ -104,7 +121,7 @@ export function Vote({vote, meetingId}: VoteProps){
                             endIcon={<TaskIcon></TaskIcon>}
                             disabled
                         >
-                            Vote Fait
+                            A voté
                         </Button>
                     )}
                     <br />
@@ -114,7 +131,7 @@ export function Vote({vote, meetingId}: VoteProps){
                                 Mettre fin au Vote
                             </Button>
                         ) : (
-                            <Button variant="contained" color="primary" onClick={(e) => { onSubmit(e, vote) }} disabled>
+                            <Button variant="contained" color="primary" onClick={(e) => { displayError("Le quorum n\'a pas été atteint")}}>
                                 Mettre fin au Vote
                             </Button>
                         )
