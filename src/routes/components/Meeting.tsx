@@ -49,7 +49,7 @@ export function Meeting({meeting}: {meeting: Meeting}){
                                 endIcon={ <AddBoxIcon></AddBoxIcon>}
                                 disableElevation={true}
 
-                            >Ajouter un vote</Button>
+                            >Voir les votes</Button>
                             :<Button
                                 variant="contained"
                                 color="primary"
