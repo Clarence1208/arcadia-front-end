@@ -206,11 +206,14 @@ function CreateMeetingVoteForm() {
                     />
                     <div  className={"row"}>
                         <div>
+
+                            <InputLabel>Nombre d'élimination par tour</InputLabel>
                             <Input
                                 id="create-vote-elimination"
                                 type="number"
                                 placeholder="Élimination par tour"
                                 onChange={e => updateFields({ eliminationPerRound: parseInt(e.target.value) })}
+
                             />
                             <Tooltip title="Entrer une valeur ici fera de votre vote un vote à tour multiple">
                                 <IconButton>
@@ -219,6 +222,7 @@ function CreateMeetingVoteForm() {
                             </Tooltip>
                         </div>
                         <div>
+                            <InputLabel>Nombre de gagnants</InputLabel>
                             <Input
                                 id="create-vote-nbWinners"
                                 type="number"
@@ -235,6 +239,8 @@ function CreateMeetingVoteForm() {
 
                     <div  className={"row"}>
                     <div>
+
+                        <InputLabel>Nombre maximum de choix possible</InputLabel>
                         <Input
                             id="create-vote-nbPossibleVotes"
                             type="number"
@@ -248,6 +254,8 @@ function CreateMeetingVoteForm() {
                         </Tooltip>
                     </div>
                     <div>
+
+                        <InputLabel>Quorum</InputLabel>
                         <Input
                             id="create-vote-quorum"
                             type="number"

@@ -62,7 +62,7 @@ export function Register(){
             <Header />
             <div className="main">
                 <Paper elevation={1} className={"paper"} style={{width: "40vw"}}>
-                    <UserRegisterForm {...data} formTitle={"Créer un compte"} formDescription={"Création de compte adhérent"} formError={errorMessage} updateFields={updateFields}  />
+                    <UserRegisterForm {...data} formTitle={"Créer un compte"} formDescription={"Accéder aux actualités, vos historiques de paiements et participer aux assemblées générales"} formError={errorMessage} updateFields={updateFields}  />
                     <Button variant="contained" type={"submit"} onClick={handleSubmit} style={{width: "10vw"}}>Valider</Button>
                 </Paper>
             </div>

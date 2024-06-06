@@ -1,4 +1,4 @@
-import {Alert, IconButton, MenuItem, Select, TextField, Tooltip} from "@mui/material";
+import {Alert, IconButton, InputLabel, MenuItem, Select, TextField, Tooltip} from "@mui/material";
 import Collapse from '@mui/material/Collapse';
 import HelpIcon from '@mui/icons-material/Help';
 import "../../styles/Form.css"
@@ -49,12 +49,15 @@ export function UserRegisterForm(props: UserFormProps){
                 <TextField variant="outlined" label="Confirmation du mot de passe" required type="password" onChange={e => props.updateFields({confirmPassword: e.target.value})}/>
 
                 {userSession?.roles.includes("admin") &&
-                    <Select variant="outlined" label="Role" value={props.roles} style={{width: "13vw"}} onChange={e => props.updateFields({roles: e.target.value})}>
-                        <MenuItem value="adherent">Adhérent</MenuItem>
-                        <MenuItem value="admin">Admin</MenuItem>
-                        {userSession?.roles.includes("superAdmin") && <MenuItem value="superAdmin">Super admin</MenuItem> }
-                        <MenuItem value="servicesManager">Gestionnaire de contenus</MenuItem>
-                    </Select>}
+                    <div>
+                        <InputLabel id="role-select-label">Rôle</InputLabel>
+                        <Select variant="outlined" label="Role" value={props.roles} style={{width: "13vw"}} onChange={e => props.updateFields({roles: e.target.value})}>
+                            <MenuItem value="adherent">Adhérent</MenuItem>
+                            <MenuItem value="admin">Admin</MenuItem>
+                            {userSession?.roles.includes("superAdmin") && <MenuItem value="superAdmin">Super admin</MenuItem> }
+                            <MenuItem value="servicesManager">Gestionnaire de contenus</MenuItem>
+                        </Select>
+                    </div>}
 
                 <DatePicker
                     label="Birthdate"
