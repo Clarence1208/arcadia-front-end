@@ -111,7 +111,7 @@ export function UsersDashboard() {
                               title={"Ajouter un utilisateur"}><AddCircleOutline/></Link>
                     </div>
 
-                    <TableContainer component={Paper}>
+                    <TableContainer component={Paper} style={{maxHeight: "70vh", overflowY:"scroll"}}>
                         <Table sx={{minWidth: 650}} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
