@@ -179,69 +179,69 @@ export function VoteResults() {
         }
         setWinners(updatedWinners);
     }
-    
+
+    // Determine the winners heading based on vote state
+    const winnersHeading = isLastVote
+    ? winners.length !== vote?.nbWinners
+        ? "Gagnants (avec égalité) :"
+        : "Gagnants :"
+    : winners.length !== vote?.nbWinners
+        ? "Choix passant au tour suivant (avec égalité) : (Un nouveau vote est disponible !)"
+        : "Choix passant au tour suivant : (Un nouveau vote est disponible !)";
+
 
     return (
         <div>
             <Header />
-                <div className={"main"}>
-                    <h1>Résultats du vote : {vote?.name}</h1>
-                    {winners.length > 0 && (
+            <div className="main">
+                {vote?.users.length === 0 ? (
+                    <h1>Pas de participant</h1>
+                ) : (
+                    <>
+                        <h1>Résultats du vote : {vote?.name}</h1>
+                        {winners.length > 0 && (
+                            <div>
+                                <h2>{winnersHeading}</h2>
+                                <ul>
+                                    {winners.map((winner, index) => (
+                                        <li key={index}>{winner.name} : {winner.users.length}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        {loosers.length > 0 && (
+                            <div>
+                                <h2>Eliminées à ce tour :</h2>
+                                <ul>
+                                    {loosers.map((looser, index) => (
+                                        <li key={index}>{looser.name} : {looser.users.length}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                         <div>
-                            <h2>
-                            {isLastVote ? (
-                                winners.length !== vote?.nbWinners ? (
-                                "Gagnants (avec égalité) :"
-                                ) : (
-                                "Gagnants :"
-                                )
-                            ) : (
-                                winners.length !== vote?.nbWinners ? (
-                                "Choix passant au tour suivant (avec égalité) : (Un nouveau vote est disponible !)"
-                                ) : (
-                                "Choix passant au tour suivant : (Un nouveau vote est disponible !)"
-                            ))}
-                            </h2>
-                            <ul>
-                                {winners.map((winner, index) => (
-                                    <li key={index}>{winner.name} : {winner.users.length}</li>
-                                ))}
-                            </ul>
+                            <PieChart
+                                series={[
+                                    {
+                                        data: voteChoices.map((voteChoice) => ({
+                                            id: voteChoice.id,
+                                            value: voteChoice.users?.length,
+                                            label: voteChoice.name,
+                                        })),
+                                        arcLabel: (item) => `${item.label} (${item.value})`,
+                                        arcLabelMinAngle: 20,
+                                        highlightScope: { faded: 'global', highlighted: 'item' },
+                                        faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                    },
+                                ]}
+                                width={600}
+                                height={400}
+                            />
                         </div>
-                    )}
-                    {loosers.length > 0 && (
-                        <div>
-                            <h2>Eliminées à ce tour :</h2>
-                            <ul>
-                                {loosers.map((looser, index) => (
-                                    <li key={index}>{looser.name} : {looser.users.length}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                <div>
-                    <PieChart
-                        series={[
-                            {
-                            data: voteChoices.map((voteChoice) => {
-                                return {
-                                id: voteChoice.id,
-                                value: voteChoice.users?.length,
-                                label: voteChoice.name,
-                                };
-                            }),
-                            arcLabel: (item) => `${item.label} (${item.value})`,
-                            arcLabelMinAngle: 20,
-                            highlightScope: { faded: 'global', highlighted: 'item' },
-                            faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                            },
-                        ]}
-                        width={600}
-                        height={400}
-                    />
-                </div>
-                </div>
+                    </>
+                )}
+            </div>
             <Footer />
         </div>
-    )
+    );
 }

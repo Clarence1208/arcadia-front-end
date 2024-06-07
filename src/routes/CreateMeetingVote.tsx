@@ -57,6 +57,11 @@ function CreateMeetingVoteForm() {
     }
 
     function updateFields(fields: Partial<CreateVoteData>) {
+        if(fields.nbWinners && fields.nbWinners > 1 && data.isAbsoluteMajority) {
+            setErrorMessage("Erreur : Un vote à majorité absolue ne peut avoir qu'un seul gagnant")
+            setOpen(true);
+            fields.nbWinners = 1
+        }
         setData(prev => {
             return { ...prev, ...fields }
         })
@@ -70,6 +75,7 @@ function CreateMeetingVoteForm() {
         }
         if (!votes.includes(name)) {
             setVotes([...votes, name]);
+            setName("")
         } else {
             setErrorMessage("Erreur : Ce choix existe déjà");
             setOpen(true);
@@ -82,6 +88,11 @@ function CreateMeetingVoteForm() {
     }
 
     function changeAbsoluteMajority() {
+        if (data.nbWinners > 1) {
+            setErrorMessage("Erreur : Un vote à majorité absolue ne peut avoir qu'un seul gagnant")
+            setOpen(true);
+            return
+        }
         setData(prev => {
             return { ...prev, isAbsoluteMajority: !prev.isAbsoluteMajority }
         })
@@ -214,6 +225,7 @@ function CreateMeetingVoteForm() {
                             <Input
                                 id="create-vote-elimination"
                                 type="number"
+                                value={data.eliminationPerRound}
                                 placeholder="Élimination par tour"
                                 onChange={e => updateFields({ eliminationPerRound: parseInt(e.target.value) })}
 
@@ -230,6 +242,7 @@ function CreateMeetingVoteForm() {
                                 id="create-vote-nbWinners"
                                 type="number"
                                 placeholder="Nombre de gagnants"
+                                value={data.nbWinners}
                                 onChange={e => updateFields({ nbWinners: parseInt(e.target.value) })}
                             />
                             <Tooltip title="Plusieurs gagnants dans un vote à majorité absolue relancera un vote pour chaque gagnants sans les précédents (par défault : 1)">
@@ -247,6 +260,7 @@ function CreateMeetingVoteForm() {
                         <Input
                             id="create-vote-nbPossibleVotes"
                             type="number"
+                            value={data.nbPossibleVotes}
                             placeholder="Nombre de choix possibles"
                             onChange={e => updateFields({ nbPossibleVotes: parseInt(e.target.value) })}
                         />
@@ -262,6 +276,7 @@ function CreateMeetingVoteForm() {
                         <Input
                             id="create-vote-quorum"
                             type="number"
+                            value={data.quorum}
                             placeholder="Quorum"
                             onChange={e => updateFields({ quorum: parseInt(e.target.value) })}
                         />
@@ -293,6 +308,7 @@ function CreateMeetingVoteForm() {
                             label="Nom"
                             variant="outlined"
                             size="small"
+                            value={name}
                             onChange={e => setName(e.target.value)}
                         />
                         <Button variant="contained" color="primary" endIcon={<AddBoxIcon />} sx={{marginLeft: 2}} onClick={addVoteChoice}>Ajouter</Button>
