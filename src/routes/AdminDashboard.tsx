@@ -7,7 +7,7 @@ import {UserAccountPanel} from "../components/features/dashboard/UserAccountPane
 import {Button, Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {UsersDashboard} from "./UsersDashboard";
-import { MeetingsList } from "./meetings/MeetingsList";
+import {MeetingsList} from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
 import {PollList} from "./polls/PollList";
@@ -16,15 +16,15 @@ import { DocumentList } from "../documents/DocumentList";
 import { DocumentListAdmin } from "../documents/DocumentListAdmin";
 import { ChatBotConfig } from "./components/ChatBotConfig";
 
-//tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
     return {
         id: `vertical-tab-${index}`,
         'aria-controls': `vertical-tabpanel-${index}`,
     };
 }
+
 function TabPanel(props: any) {
-    const { children, value, index, ...other } = props;
+    const {children, value, index, ...other} = props;
 
     return (
         <div
@@ -43,7 +43,7 @@ function TabPanel(props: any) {
     );
 }
 
-export function Dashboard(){
+export function Dashboard() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
@@ -62,7 +62,7 @@ export function Dashboard(){
         <div>
             <Header />
             {isPageLoaded &&
-            <div> 
+            <div>
 
             <div id="dahsboard-main" className="main">
 
@@ -82,27 +82,29 @@ export function Dashboard(){
                     <Tab label="Gestions des sondages" {...a11yProps(4)}/>
                     <Tab label="Gestions des documents" {...a11yProps(5)}/>
                     <Tab label="Gestion du ChatBot" {...a11yProps(6)}/>
+                    <Tab label="Gestions des dons" {...a11yProps(7)}/>
                 </Tabs>
 
                 <div className={"board"}>
                     <h1>Tableau de bord de {userSession?.fullName || "l'administrateur"}</h1>
                     <TabPanel value={tabsValue} index={0} className={"tab-panel"}>
-                        <Button href="/createMeeting" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle assemblée générale</Button>
-                            <MeetingsList />
+                        <Button href="/createMeeting" variant="contained" color="primary"
+                                endIcon={<AddBoxIcon></AddBoxIcon>}>Créer une nouvelle assemblée générale</Button>
+                        <MeetingsList/>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={1}>
-                        <UsersDashboard />
-                        {/*<UserAccountPanel userId={userSession?.userId} userToken={userSession?.loginToken} />*/}
+                        <UsersDashboard/>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={2}>  
+                    <TabPanel value={tabsValue} index={2}>
                         <Button href="/createPremise" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle salle</Button>
                             <PremisesList />
-                    </TabPanel>                    
+                    </TabPanel>
                     <TabPanel value={tabsValue} index={3}>
-                        <WebsiteSettings />
+                        <WebsiteSettings/>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={4}>
-                    <Button href="/createPoll" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
+                        <Button href="/createPoll" variant="contained" color="primary"
+                                endIcon={<AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
                         <div className={"board"}>
                             <PollList />
                         </div>
@@ -117,10 +119,13 @@ export function Dashboard(){
                             <ChatBotConfig />
                         </div>
                     </TabPanel>
+                    <TabPanel value={tabsValue} index={7}>
+                        <h2>Lien à Stripe: </h2>
+                        <p>Vous pouvez gérer le lien de paiement Stripe d'ici</p>
+                    </TabPanel>
+
                 </div>
-
             </div>
-
             </div>
             }
             <Footer />
