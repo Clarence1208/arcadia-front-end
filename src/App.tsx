@@ -35,6 +35,7 @@ import {ConfigContext} from "./index";
 import {CreatePremise} from './routes/premises/CreatePremise';
 import ReturnStripeAccountPage from "./routes/stripe/ReturnStripeAccountPage";
 import {RefreshStripe} from "./routes/stripe/RefreshStripe";
+import {Donate} from "./routes/Donate";
 
 
 function App() {
@@ -92,6 +93,7 @@ function App() {
                             <Route path="/blog" element={<Blog/>}/>
                             <Route path="/termsOfServices" element={<TermsOfServices/>}/>
                             <Route path='/contact' element={<Contact/>}/>
+                            <Route path='/donate' element={<Donate />}/>
 
                             {/*Below needs to be inside admin dashboard*/}
                             <Route path='/users' element={<UsersDashboard/>}/>
