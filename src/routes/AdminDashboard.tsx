@@ -15,6 +15,7 @@ import {PremisesList} from "./premises/PremisesList";
 import { DocumentList } from "../documents/DocumentList";
 import { DocumentListAdmin } from "../documents/DocumentListAdmin";
 import { ChatBotConfig } from "./components/ChatBotConfig";
+import StripeSettings from "./stripe/StripeSettings";
 
 function a11yProps(index: number) {
     return {
@@ -120,8 +121,7 @@ export function Dashboard() {
                         </div>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={7}>
-                        <h2>Lien à Stripe: </h2>
-                        <p>Vous pouvez gérer le lien de paiement Stripe d'ici</p>
+                        <StripeSettings />
                     </TabPanel>
 
                 </div>
