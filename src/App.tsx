@@ -36,6 +36,8 @@ import {CreatePremise} from './routes/premises/CreatePremise';
 import ReturnStripeAccountPage from "./routes/stripe/ReturnStripeAccountPage";
 import {RefreshStripe} from "./routes/stripe/RefreshStripe";
 import {Donate} from "./routes/Donate";
+import {loadStripe} from "@stripe/stripe-js";
+import {Elements} from "@stripe/react-stripe-js";
 
 
 function App() {
