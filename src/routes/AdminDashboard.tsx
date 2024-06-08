@@ -9,6 +9,7 @@ import {MeetingsList} from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
 import {PollList} from "./polls/PollList";
+import StripeSettings from "./stripe/StripeSettings";
 
 function a11yProps(index: number) {
     return {
@@ -92,8 +93,7 @@ export function Dashboard() {
                         </div>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={4}>
-                        <h2>Lien à Stripe: </h2>
-                        <p>Vous pouvez gérer le lien de paiement Stripe d'ici</p>
+                        <StripeSettings />
                     </TabPanel>
 
                 </div>
