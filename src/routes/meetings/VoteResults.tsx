@@ -1,12 +1,12 @@
 import { Button, InputLabel, Pagination, Switch } from "@mui/material";
 import { SetStateAction, useContext, useEffect, useState } from "react";
-import '../styles/VoteResults.css';
+import '../../styles/VoteResults.css';
 import { useNavigate, useParams } from "react-router-dom";
-import { Footer } from "./components/Footer";
-import Header from "./components/Header";
-import {UserSessionContext} from "../contexts/user-session";
+import { Footer } from "../components/Footer";
+import Header from "../components/Header";
+import {UserSessionContext} from "../../contexts/user-session";
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import { Vote } from "./components/Vote";
+import { Vote } from "./Vote";
 import { PieChart } from '@mui/x-charts';
 
 
@@ -209,6 +209,7 @@ export function VoteResults() {
                     <>
                         <div className={"vote-result-header"}>
                             <h1>Résultats du vote : {vote?.name}</h1>
+                            <h2>Nombre de participants : {vote?.users.length}</h2>
                             {!vote?.isAnonymous && (
                                 <div>
                                     <InputLabel>Voir les votes des utilisateurs</InputLabel>

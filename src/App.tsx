@@ -11,23 +11,23 @@ import {NotFound} from "./routes/NotFound";
 import {UserSessionProvider} from "./contexts/user-session";
 import {UsersDashboard} from "./routes/UsersDashboard";
 import {CreateArticle} from "./routes/articles/CreateArticle";
-import {CreateMeeting} from "./routes/CreateMeeting";
-import {Dashboard} from "./routes/Dashboard";
+import {CreateMeeting} from "./routes/meetings/CreateMeeting";
+import {Dashboard} from "./routes/AdminDashboard";
 import {MemberDashboard} from "./routes/MemberDashboard";
 import {Blog} from "./routes/Blog";
 import {Register} from "./routes/Register";
-import {MeetingVotesList} from "./routes/MeetingVotesList";
-import {CreateMeetingVote} from "./routes/CreateMeetingVote";
+import {MeetingVotesList} from "./routes/meetings/MeetingVotesList";
+import {CreateMeetingVote} from "./routes/meetings/CreateMeetingVote";
 import {ShowArticle} from "./routes/articles/ShowArticle";
-import { MeetingsListUser } from './routes/components/MeetingsListUser';
+import { MeetingsListUser } from './routes/meetings/MeetingsListUser';
 import {EditArticle} from "./routes/articles/EditArticle";
 import {TermsOfServices} from "./routes/TermsOfServices";
 import {Chatbot} from "./routes/components/Chatbot";
-import { MeetingVoteApply } from './routes/MeetingVoteApply';
+import { MeetingVoteApply } from './routes/meetings/MeetingVoteApply';
 import { createTheme } from '@mui/material/styles';
 import {ThemeProvider} from "@mui/material";
 import {Contact} from "./routes/Contact";
-import { VoteResults } from './routes/VoteResults';
+import { VoteResults } from './routes/meetings/VoteResults';
 
 
 function App() {
@@ -84,6 +84,7 @@ function App() {
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
                 <Route path='/createArticle' element={<CreateArticle />}/>
+                {/* <Route path='/createSondage' element={<CreateSondage />}/> */}
                 <Route path="/articles/:articleId" element={<ShowArticle />} />
                 <Route path="/articles/:articleId/edit" element={<EditArticle />} />
                 <Route path='/createMeeting' element={<CreateMeeting />}/>

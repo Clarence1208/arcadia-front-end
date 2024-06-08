@@ -5,7 +5,7 @@ import {UserSessionContext} from "../contexts/user-session";
 // import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";
 import {Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
-import {MeetingsListUser} from "./components/MeetingsListUser";
+import {MeetingsListUser} from "./meetings/MeetingsListUser";
 import {EditUser} from "./users/EditUser";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/

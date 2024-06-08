@@ -1,12 +1,12 @@
 import { Button, Pagination } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import '../styles/VotesList.css';
+import '../../styles/VotesList.css';
 import { useNavigate, useParams } from "react-router-dom";
-import { Footer } from "./components/Footer";
-import Header from "./components/Header";
-import {UserSessionContext} from "../contexts/user-session";
+import { Footer } from "./../components/Footer";
+import Header from "./../components/Header";
+import {UserSessionContext} from "../../contexts/user-session";
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import { Vote } from "./components/Vote";
+import { Vote } from "./Vote";
 import Clock from 'react-clock'
 import 'react-clock/dist/Clock.css';
 

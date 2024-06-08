@@ -1,11 +1,11 @@
 import {Alert, Button, IconButton, Input, InputLabel, Link, MenuItem, Select, Switch, TextField, Tooltip, Paper} from "@mui/material";
-import '../styles/CreateVote.css';
-import '../styles/App.css';
+import '../../styles/CreateVote.css';
+import '../../styles/App.css';
 import React, {FormEvent, useContext, useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {UserSessionContext} from "../contexts/user-session";
-import Header from "./components/Header";
-import { Footer } from "./components/Footer";
+import {UserSessionContext} from "../../contexts/user-session";
+import Header from "./../components/Header";
+import { Footer } from "./../components/Footer";
 import HelpIcon from '@mui/icons-material/Help';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';

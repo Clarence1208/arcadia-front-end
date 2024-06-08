@@ -1,11 +1,11 @@
 import {Alert, Button, Input, InputLabel, Link, MenuItem, Select, TextField} from "@mui/material";
-import '../styles/CreateMeeting.css';
-import '../styles/App.css';
+import '../../styles/CreateMeeting.css';
+import '../../styles/App.css';
 import React, {FormEvent, useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import {UserSessionContext} from "../contexts/user-session";
-import Header from "./components/Header";
-import { Footer } from "./components/Footer";
+import {UserSessionContext} from "../../contexts/user-session";
+import Header from "./../components/Header";
+import { Footer } from "./../components/Footer";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Dayjs, isDayjs } from "dayjs";
 import Paper from "@mui/material/Paper";

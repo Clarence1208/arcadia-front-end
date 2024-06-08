@@ -1,12 +1,11 @@
 import { Button, InputLabel, MenuItem, Pagination, Select, Switch } from "@mui/material";
 import { FormEvent, useContext, useEffect, useState } from "react";
-import '../styles/VoteChoiceList.css';
+import '../../styles/VoteChoiceList.css';
 import { useNavigate, useParams } from "react-router-dom";
-import { Footer } from "./components/Footer";
-import Header from "./components/Header";
-import {UserSessionContext} from "../contexts/user-session";
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import { Vote } from "./components/Vote";
+import { Footer } from "./../components/Footer";
+import Header from "./../components/Header";
+import {UserSessionContext} from "../../contexts/user-session";
+import { Vote } from "./Vote";
 import Paper from "@mui/material/Paper";
 
 interface Vote {

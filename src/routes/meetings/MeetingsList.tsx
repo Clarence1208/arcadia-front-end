@@ -1,5 +1,5 @@
 import { Pagination } from "@mui/material";
-import { Meeting } from "./Meeting";
+import { Meeting } from "../meetings/Meeting";
 import { useEffect, useState } from "react";
 import '../../styles/MeetingsList.css';
 

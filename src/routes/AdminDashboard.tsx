@@ -7,7 +7,7 @@ import {UserAccountPanel} from "../components/features/dashboard/UserAccountPane
 import {Button, Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {UsersDashboard} from "./UsersDashboard";
-import { MeetingsList } from "./components/MeetingsList";
+import { MeetingsList } from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
 
@@ -65,6 +65,7 @@ export function Dashboard(){
                     <Tab label="Gestion des utilisateurs" {...a11yProps(1)}/>
                     <Tab label="Gestions des événements" {...a11yProps(2)}/>
                     <Tab label="Gestions des paramètres globaux du site" {...a11yProps(3)}/>
+                    <Tab label="Gestions des sondages" {...a11yProps(4)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -82,6 +83,10 @@ export function Dashboard(){
                     </TabPanel>
                     <TabPanel value={tabsValue} index={3}>
                         <WebsiteSettings />
+                    </TabPanel>
+                    <TabPanel value={tabsValue} index={4}>
+                    <Button href="/createPoll" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
+                        <h1>To do : Sondage List with 'see results' and 'end sondage'</h1>
                     </TabPanel>
                 </div>
 

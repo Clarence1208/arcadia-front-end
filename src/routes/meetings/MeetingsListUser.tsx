@@ -1,10 +1,7 @@
 import {Button, Pagination} from "@mui/material";
-import { Meeting } from "./Meeting";
-import { useContext, useEffect, useState } from "react";
+import { Meeting } from "../meetings/Meeting";
+import { useEffect, useState } from "react";
 import '../../styles/MeetingsList.css';
-import Header from "./Header";
-import { Footer } from "./Footer";
-import { UserSessionContext } from "../../contexts/user-session";
 
 interface Meeting {
     id: number,
