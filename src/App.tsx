@@ -28,6 +28,7 @@ import { createTheme } from '@mui/material/styles';
 import {ThemeProvider} from "@mui/material";
 import {Contact} from "./routes/Contact";
 import { VoteResults } from './routes/meetings/VoteResults';
+import { CreatePoll } from './routes/polls/CreatePoll';
 
 
 function App() {
@@ -84,7 +85,7 @@ function App() {
                 {/*Below needs to be inside admin dashboard*/}
                 <Route path='/users' element={<UsersDashboard />}/>
                 <Route path='/createArticle' element={<CreateArticle />}/>
-                {/* <Route path='/createSondage' element={<CreateSondage />}/> */}
+                <Route path='/createPoll' element={<CreatePoll />}/>
                 <Route path="/articles/:articleId" element={<ShowArticle />} />
                 <Route path="/articles/:articleId/edit" element={<EditArticle />} />
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
