@@ -1,0 +1,52 @@
+#create-vote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+#create-vote-form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    max-height: 50vh;
+    min-width: 70vw;
+}
+#create-vote-form >div {
+    display: flex;
+    flex-direction: row;
+    min-width: 65vw;
+    justify-content: space-between;
+}
+
+.choices-list{
+    max-height: 30vh;
+    overflow-y: auto;
+}
+
+#create-vote-title {
+    margin-bottom: 1vh;
+}
+
+#create-vote-text {
+    margin-bottom: 1vh;
+}
+
+
+.row{
+    display: flex;
+    flex-direction: row;
+    min-width: 30vw;
+    min-height: 10vh;
+    justify-content: space-between;
+}
+
+
+
+.add-choice {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1vh;
+}

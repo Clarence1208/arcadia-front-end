@@ -1,0 +1,50 @@
+.article-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vh;
+    border: 2px solid var(--dark-grey-text);
+    border-radius: 10px;
+    padding: 4vh;
+    height: 16vh;
+    width: 20vw;
+}
+
+.article-div h2{
+    margin: 0;
+    align-self: start;
+}
+.article-div-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+.article-link {
+    text-decoration: none;
+    color: var(--dark-grey-text);
+}
+
+.article-text{
+    display: flex;
+    align-self: start;
+    max-height: inherit;
+    max-width: inherit;
+    overflow: hidden;
+}
+
+.article-date {
+    color: var(--dark-grey-text);
+    font-size: 0.8rem;
+    display: flex;
+    align-self: flex-end;
+}
+
+.article-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 45vh;
+
+}

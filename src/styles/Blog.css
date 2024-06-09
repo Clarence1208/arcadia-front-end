@@ -1,0 +1,28 @@
+#title-blog{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2vh;
+}
+
+.article-page{
+    display: flex;
+    flex-direction: column;
+}
+
+#title-blog h1{
+    margin: 0;
+}
+
+.create-article {
+    margin-bottom: 2vh;
+}
+.articles-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 70vh;
+    max-width: 84vw;
+    flex-wrap: wrap;
+}

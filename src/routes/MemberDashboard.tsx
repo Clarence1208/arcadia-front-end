@@ -1,0 +1,90 @@
+import Header from "./components/Header";
+import {Footer} from "./components/Footer";
+import {SyntheticEvent, useContext, useState} from "react";
+import {UserSessionContext} from "../contexts/user-session";
+// import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";
+import {Tab, Tabs} from "@mui/material";
+import "../styles/Dashboard.css";
+import {MeetingsListUser} from "./meetings/MeetingsListUser";
+import {EditUser} from "./users/EditUser";
+
+//tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
+function a11yProps(index: number) {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
+    };
+}
+function TabPanel(props: any) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`vertical-tabpanel-${index}`}
+            aria-labelledby={`vertical-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <div>
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+}
+
+export function MemberDashboard(){
+    const userSession = useContext(UserSessionContext)?.userSession
+    const [tabsValue, setTabsValue] = useState(0);
+
+    const handleChange = (event: SyntheticEvent, newValue: number) => {
+        setTabsValue(newValue);
+        event.currentTarget.className = "active"; //doesn't seem to work as intended
+    };
+    return (
+        <div>
+            <Header />
+
+            <div id="dahsboard-main" className="main">
+
+                <Tabs
+                    className="panels-tabs"
+                    orientation="vertical"
+                    variant="scrollable"
+                    value={tabsValue}
+                    onChange={handleChange}
+                    aria-label="Vertical tabs for member"
+                    sx={{ borderRight: 1, borderColor: 'divider' }}
+                >
+                    <Tab label="Mes assemblées générales" {...a11yProps(0)}/>
+                    <Tab label="Mes informations personnelles" {...a11yProps(1)}/>
+                    <Tab label="Mes paiements" {...a11yProps(2)}/>
+                    {/*<Tab label="To be defined" {...a11yProps(3)}/>*/}
+                </Tabs>
+
+                <div className={"board"}>
+                    <h1>Tableau de bord de {userSession?.fullName || "l'adhérent"}</h1>
+
+                    {/*TABS PANEL: */}
+                    <TabPanel value={tabsValue} index={0}>
+                       <MeetingsListUser />
+                    </TabPanel>
+                    <TabPanel value={tabsValue} index={1}>
+                        {userSession && <EditUser userId={userSession?.userId} userToken={userSession?.loginToken}/>}
+                    </TabPanel>
+                    <TabPanel value={tabsValue} index={2}>
+                        <h1>Mes paiements </h1>
+                    </TabPanel>
+                    {/*<TabPanel value={tabsValue} index={3}>*/}
+                    {/*    <h1>To be defined</h1>*/}
+                    {/*</TabPanel>*/}
+                </div>
+
+            </div>
+
+            <Footer />
+        </div>
+    );
+}

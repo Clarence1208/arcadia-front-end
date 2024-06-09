@@ -6,7 +6,7 @@ export interface IUserSession {
     fullName: string;
     backPage: string;
     loginToken: string;
-    roles: [];
+    roles: string[];
 }
 
 interface IUserSessionContext {
@@ -41,7 +41,10 @@ export const UserSessionProvider: FC<IProps> = ({ children }) => {
 
     const updateUserSession = (newUserSession: Partial<IUserSession>) => {
         setUserSession(prevUserSession => {
-            const updatedUserSession = { ...prevUserSession, ...newUserSession };
+            const updatedUserSession = { 
+                ...prevUserSession, 
+                ...newUserSession,
+            };
             localStorage.setItem("userSession", JSON.stringify(updatedUserSession));
             return updatedUserSession;
         })

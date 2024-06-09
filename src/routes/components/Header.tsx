@@ -1,11 +1,11 @@
-import '../styles/Header.css';
-import logo from '../images/logo.png';
+import '../../styles/Header.css';
+import logo from '../../images/logo.png';
 import {Link} from "@mui/material";
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useContext} from "react";
-import {UserSessionContext} from "../contexts/user-session";
+import {UserSessionContext} from "../../contexts/user-session";
 
 interface CustomNavItemProps {
     link: string;
@@ -26,8 +26,8 @@ function LogInOutButton() {
     const userIsLoggedIn = userSession?.userSession.isLoggedIn;
     if (userIsLoggedIn) {
         return (
-            <a href={"/logout"}>
-                <PersonRemoveAlt1Icon className="icon" fontSize={"large"} />
+            <a className="icon" href={"/logout"}>
+                <PersonRemoveAlt1Icon  fontSize={"large"} />
             </a>
         )
     }else{
@@ -49,10 +49,12 @@ export default function Header() {
             <a href="/"><img src={logo} alt="logo" /></a>
         </div>
           <div className="nav-header">
-             <CustomNavItem link="/users" text="Gestion des utilisateurs" expand={true} />
-              <CustomNavItem link="/general-settings" text="Paramètres du site" />
-                <CustomNavItem link="/events" text="Gestion des événements" />
-              {/*{userSession?.isLoggedIn && <CustomNavItem link="/dashboard" text="Tableau de bord" />}*/}
+             <CustomNavItem link="/" text="Accueil" expand={true} />
+              <CustomNavItem link="/blog" text="Actualités" />
+                <CustomNavItem link="/donate" text="Nous soutenir" />
+
+              { userSession?.isLoggedIn && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
+              {userSession?.roles.includes("admin") && <CustomNavItem link="/adminDashboard" text="Espace admin" /> }
           </div>
 
           <LogInOutButton />

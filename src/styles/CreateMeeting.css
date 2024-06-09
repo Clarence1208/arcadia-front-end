@@ -1,0 +1,33 @@
+#create-meeting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+#create-meeting-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;   
+    align-items: start;
+    margin-bottom: 2vh;
+    height: 50vh;
+    min-width: 50vw;
+}
+
+#create-meeting-title {
+    margin-bottom: 1vh;
+}
+
+#create-meeting-text {
+    margin-bottom: 1vh;
+}
+
+.select-hours-div {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 2vh;
+    min-width: 30vw;
+}

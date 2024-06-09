@@ -1,0 +1,22 @@
+#create-article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+#create-article-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-bottom: 2vh;
+    height: 50vh
+}
+
+#create-article-title {
+    margin-bottom: 1vh;
+}
+
+#create-article-text {
+    margin-bottom: 1vh;
+}
