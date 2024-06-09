@@ -68,23 +68,18 @@ export function PollList() {
     }, [userSession?.loginToken, page]);
 
     return (
-        <div>
-            <div className={"main"}>
+            <div style={{display:"flex", flexDirection:"column"}}>
                 <h1>Sondages :</h1>
-                <div style={{display:"flex", justifyContent:"space-between"}}>
                     <div className={"polls-list"}>
-                        {polls.length === 0 ? <div>Chargement ou pas de sondages...</div> :
+                        {polls.length === 0 ? <div>Pas de sondages disponibles...</div> :
                             polls.map(poll => {
                                 return <Poll key={poll.id} poll={poll} />
                             })
                         }
                     </div>
-                </div>
-                <div style={{marginTop: "2vh"}}>
+                <div style={{marginTop: "2vh", alignSelf:"center"}}>
                     <Pagination count={10} page={page} onChange={handleChangePage}/>
                 </div>
             </div>
-
-        </div>
     )
 }

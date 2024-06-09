@@ -10,6 +10,7 @@ import Snackbar from "@mui/material/Snackbar";
 import {useNavigate} from "react-router-dom";
 import {Chatbot} from "./components/Chatbot";
 import { PollList } from "./polls/PollList";
+import theme from "../utils/theme";
 
 interface Article {
     id: number,
@@ -127,10 +128,12 @@ export function Blog(){
                         <ArticleList articles={articles} deleteItem={deleteItem}/>
                     }
                 <Pagination style={{alignSelf: "center"}} count={10} page={page} onChange={handleChangePage} />
+
+                <div style={{backgroundColor: "pink", height:"0.25em", width:"auto", margin:"6em 0"}}></div>
+                {/*TODO: CHANGE COLOR LA JE VAIS CHERCHER MA PIZZA*/}
+
+                <PollList />
             </div>
-
-            <PollList />
-
             <Chatbot />
           <Footer />
         </div>

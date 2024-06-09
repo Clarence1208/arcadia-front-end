@@ -2,7 +2,7 @@ import {FormEvent, useContext, useEffect, useState} from "react";
 import {useMultiStepForm} from "../components/MultipleStepForm";
 import Header from "../components/Header";
 import {Footer} from "../components/Footer";
-import {Alert, Button, CircularProgress, Snackbar} from "@mui/material";
+import {Alert, Button, Snackbar, Paper} from "@mui/material";
 import {UserSessionContext} from "../../contexts/user-session";
 import {useNavigate, useParams} from "react-router-dom";
 import { PollQuestionForm } from "./PollQuestionForm";
@@ -184,8 +184,8 @@ export function PollVoteApply() {
     return (
         <div>
             <Header />
-                <div id={"create-website-page"}>
-                    <div style={{ display: "flex", justifyContent: "center"}}>
+                <div id={"create-website-page"} className={"main"}>
+                    <div>
                         <h1>{poll?.name} :</h1>
                     </div>
                 <Snackbar
@@ -205,8 +205,7 @@ export function PollVoteApply() {
                             <span>{poll?.description}</span>
                         </div>
                     <div style={{ display: "flex", justifyContent: "center"}}>
-                        <div style={{ minWidth: "40vw", position: "relative", border: "1px solid black", padding: "2rem", margin: "1rem", borderRadius: ".5rem", maxWidth: "max-content" }}>
-
+                       <Paper className={"paper"} style={{ minWidth: "40vw", minHeight:"30vh"}}>
                             <form onSubmit={onSubmit}>
                                 <div style={{ position: "absolute", top: ".5rem", right: ".5rem" }}>
                                     Etape {currentStepIndex + 1} / {steps.length}
@@ -218,10 +217,7 @@ export function PollVoteApply() {
                                     gap: ".5rem",
                                     justifyContent: "flex-end"
                                 }}>
-                                    {/* {!isFirstStep && (
-                                        <Button id="back-button" color="primary" variant={"outlined"} disableElevation onClick={back}>Back</Button>
 
-                                    )} */}
                                     {!isFirstStep && (
                                         <Button id="back-button" color="primary" variant={"outlined"} disableElevation onClick={back}>Retour</Button>
 
@@ -233,8 +229,8 @@ export function PollVoteApply() {
                                     }
                                 </div>
                             </form>
+                        </Paper>
                         </div>
-                    </div>
                 </div>
             <Footer />
         </div>
