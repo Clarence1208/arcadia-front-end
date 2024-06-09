@@ -5,23 +5,27 @@
     margin-bottom: 2vh;
 }
 
-#create-vote-form {
+#create-poll-form {
     display: flex;
     flex-direction: column;
     align-items: start;
-    max-height: 50vh;
+    justify-content: space-between;
     min-width: 70vw;
+    min-height: 80vh;
 }
-#create-vote-form >div {
+#create-poll-form >div {
     display: flex;
     flex-direction: row;
     min-width: 65vw;
     justify-content: space-between;
 }
 
-.choices-list{
-    max-height: 30vh;
-    overflow-y: auto;
+.polls-choices-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 85vw;
 }
 
 #create-vote-title {
@@ -32,11 +36,10 @@
     margin-bottom: 1vh;
 }
 
-
 .row{
     display: flex;
     flex-direction: row;
-    min-width: 30vw;
+    min-width: 20vw;
     min-height: 10vh;
     justify-content: space-between;
 }
@@ -59,5 +62,8 @@
 }
 
 .answer {
-    margin-top: 21em;
+    margin-bottom: 4em;
+    background: rgba(213, 210, 209, 0.33);
+    padding: 2em;
+    border-radius: 8px;
 }

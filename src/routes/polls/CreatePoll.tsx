@@ -243,15 +243,16 @@ function CreatePollForm() {
                     sx={{ width: '100%' }}
                 >{ErrorMessage}</Alert>
             </Snackbar>
-            <Paper elevation={3} className="paper">
+
+            <Paper elevation={3}  style={{minHeight: "100vh", padding: "4em"}}>
             <h1>Créer un Sondage</h1>
-            <form id="create-vote-form" onSubmit={onSubmit}>
+            <form id="create-poll-form" onSubmit={onSubmit}>
                 <div>
                 <section>
                     <h3>Propriétés du sondage</h3>
                     <TextField
                         id="create-vote-title"
-                        label="Intitulé du vote"
+                        label="Intitulé du sondage"
                         variant="outlined"
                         size="small"
                         style={{marginBottom: "2em"}}
@@ -259,7 +260,7 @@ function CreatePollForm() {
                     />
                     <div className={"row"}>
                     <div>
-                        <InputLabel>Vote Anonyme</InputLabel>
+                        <InputLabel>Sondage Anonyme</InputLabel>
                         <Switch checked={data.isAnonymous}  onChange={e => changeAnonymous()} color="primary" />
                     </div>
                     </div>
@@ -282,63 +283,64 @@ function CreatePollForm() {
                 </section>
 
                 </div>
+
+
+                <div className={"polls-choices-list"}>
+                    {pollQuestions.map((pollQuestion, key) => (
+                        <div key={key} className={"answer"}>
+                            <div className="question-title">
+                                <h3>Etape {key+1} : {pollQuestions[key].name}</h3>
+                                <Button variant="outlined" color="secondary" endIcon={<DeleteIcon color="primary" />} onClick={() => {deletePollQuestion(pollQuestions, key)}}></Button>
+                            </div>
+                            <div className="add-answer">
+                                <TextField
+                                    id="create-vote-title"
+                                    label="Choix de réponse"
+                                    variant="outlined"
+                                    size="small"
+                                    value={names[key]}
+                                    onChange={e => setNamesPollQuestion(names, key, e.target.value)}
+                                />
+                                <Button variant="contained" color="primary" endIcon={<AddBoxIcon />} sx={{marginLeft: 2}} onClick={(e) => {addPollAnswer(e, key)}}>Ajouter</Button>
+                            </div>
+                            <div  className={"row"}>
+                                <div>
+
+                                    <InputLabel>Nombre maximum de choix possible</InputLabel>
+                                    <Input
+                                        id="create-vote-nbPossibleVotes"
+                                        type="number"
+                                        value={pollQuestions[key].nbPossibleVotes}
+                                        placeholder="Nombre de choix possibles"
+                                        onChange={e => updatePollQuestionFields({ nbPossibleVotes: parseInt(e.target.value) }, key)}
+                                    />
+                                    <Tooltip title="Nombre de choix possible par votant (par défault : 1)">
+                                        <IconButton>
+                                            <HelpIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            </div>
+                            <div className={"choices-list"}>
+                                {pollQuestions[key].voteChoices.map((voteChoice, keyVote) => (
+                                    <div key={keyVote}>
+                                        <li>{keyVote +1} : {voteChoice.name} <Button variant="outlined" color="secondary" endIcon={<DeleteIcon color="primary" />} onClick={() => {deleteVoteChoice(pollQuestions[key], voteChoice.name, keyVote)}}></Button></li>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
                 <Button
                     type="submit"
                     variant="contained"
                     color="primary"
                     onClick={onSubmit}
-                >Soumettre</Button>
+                >Créer ce sondage</Button>
 
             </form>
             </Paper>
-            <Paper elevation={3} className="paper answer">
-                <div className={"choices-list"}>
-                            {pollQuestions.map((pollQuestion, key) => (
-                                <div key={key}>
-                                    <div className="question-title">
-                                        <h3>Ajout de réponses à la question {pollQuestions[key].name}</h3>
-                                        <Button variant="outlined" color="secondary" endIcon={<DeleteIcon color="primary" />} onClick={() => {deletePollQuestion(pollQuestions, key)}}></Button>
-                                    </div>
-                                    <div className="add-answer">
-                                        <TextField
-                                            id="create-vote-title"
-                                            label="Choix de réponse"
-                                            variant="outlined"
-                                            size="small"
-                                            value={names[key]}
-                                            onChange={e => setNamesPollQuestion(names, key, e.target.value)}
-                                        />
-                                        <Button variant="contained" color="primary" endIcon={<AddBoxIcon />} sx={{marginLeft: 2}} onClick={(e) => {addPollAnswer(e, key)}}>Ajouter</Button>
-                                    </div>
-                                    <div  className={"row"}>
-                                        <div>
 
-                                            <InputLabel>Nombre maximum de choix possible</InputLabel>
-                                            <Input
-                                                id="create-vote-nbPossibleVotes"
-                                                type="number"
-                                                value={pollQuestions[key].nbPossibleVotes}
-                                                placeholder="Nombre de choix possibles"
-                                                onChange={e => updatePollQuestionFields({ nbPossibleVotes: parseInt(e.target.value) }, key)}
-                                            />
-                                            <Tooltip title="Nombre de choix possible par votant (par défault : 1)">
-                                                <IconButton>
-                                                    <HelpIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </div>
-                                        </div>
-                                    <div className={"choices-list"}>
-                                        {pollQuestions[key].voteChoices.map((voteChoice, keyVote) => (
-                                            <div key={keyVote}>
-                                                <li>{keyVote +1} : {voteChoice.name} <Button variant="outlined" color="secondary" endIcon={<DeleteIcon color="primary" />} onClick={() => {deleteVoteChoice(pollQuestions[key], voteChoice.name, keyVote)}}></Button></li>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                </Paper>
             </div>
     );
 }
