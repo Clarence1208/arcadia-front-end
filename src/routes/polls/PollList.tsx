@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import '../../styles/VotesList.css';
-import { Footer } from "./../components/Footer";
-import Header from "./../components/Header";
+import '../../styles/PollsList.css';
 import {UserSessionContext} from "../../contexts/user-session";
 import 'react-clock/dist/Clock.css';
 import { Poll } from "./Poll";
@@ -59,7 +57,7 @@ export function PollList() {
             <div className={"main"}>
                 <h1>Sondages :</h1>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
-                    <div className={"votes-list"}>
+                    <div className={"polls-list"}>
                         {polls.length === 0 ? <div>Chargement ou pas de sondages...</div> :
                             polls.map(poll => {
                                 return <Poll key={poll.id} poll={poll} />
@@ -67,10 +65,11 @@ export function PollList() {
                         }
                     </div>
                 </div>
+                <div style={{marginTop: "2vh"}}>
+                    <Pagination count={10} page={page} onChange={handleChangePage}/>
+                </div>
             </div>
-            <div style={{marginTop: "2vh"}}>
-                <Pagination count={10} page={page} onChange={handleChangePage}/>
-            </div>
+
         </div>
     )
 }

@@ -65,62 +65,79 @@ export function Poll({poll}: PollProps){
     };
 
     return (
-        <div className="vote-div" >
-            <Snackbar
-                open={open}
-                autoHideDuration={3000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                <Alert
+        (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || !poll.isClosed) ? (
+            <div className="vote-div">
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
                     onClose={handleClose}
-                    severity="error"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >{ErrorMessage}</Alert>
-            </Snackbar>
-            <h2>{poll.name}</h2>
-                    {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
-                        <div>
-                            <span className="vote-admin">Nombre de réponses : {poll.users?.length}</span>
-                        </div>
-                    ) : null}
-
-                    {!poll.isClosed ? (
-                        !userInPoll ? (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                href={`/polls/${poll.id}/vote`}
-                                endIcon={<HowToVoteIcon></HowToVoteIcon>}
-                            >
-                                Repondre
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                endIcon={<TaskIcon></TaskIcon>}
-                                disabled
-                            >
-                                Déjà répondu
-                            </Button>
-                        )
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >
+                        {ErrorMessage}
+                    </Alert>
+                </Snackbar>
+                <h2>{poll.name}</h2>
+                {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
+                    <div style={{marginBottom: "1vh"}}>
+                        <span className="vote-admin">Nombre de réponses : {poll.users?.length}</span>
+                    </div>
+                ) : null}
+    
+                {!poll.isClosed ? (
+                    !userInPoll ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            href={`/polls/${poll.id}/vote`}
+                            endIcon={<HowToVoteIcon />}
+                            sx={{marginBottom: "1vh"}}
+                        >
+                            Repondre
+                        </Button>
                     ) : (
-                        null
-                    )}
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            endIcon={<TaskIcon />}
+                            sx={{marginBottom: "1vh"}}
+                            disabled
+                        >
+                            Déjà répondu
+                        </Button>
+                    )
+                ) : null}
+    
+                {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
                     <Button
                         variant="contained"
                         color="primary"
                         href={`/poll/${poll.id}/results`}
-                        endIcon={<RemoveRedEyeIcon></RemoveRedEyeIcon>}>
+                        sx={{marginBottom: "1vh"}}
+                        endIcon={<RemoveRedEyeIcon />}
+                    >
                         Voir les résultats du sondage
                     </Button>
-                    {userSession && (userSession.roles.includes("admin") || userSession.roles.includes("superadmin")) ? (
-                        <Button variant="contained" color="primary" endIcon={<CancelIcon></CancelIcon>} onClick={(e) => { onSubmit(e, poll) }}>
-                            Mettre fin au sondage
-                        </Button>
-                    ) : null}
-        </div>
+                ) : null}
+    
+                {(userSession && (userSession.roles.includes("admin") || userSession.roles.includes("superadmin"))) && !poll.isClosed ? (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        endIcon={<CancelIcon />}
+                        sx={{marginBottom: "1vh"}}
+                        onClick={(e) => { onSubmit(e, poll) }}
+                    >
+                        Mettre fin au sondage
+                    </Button>
+                ) : null}
+            </div>
+        ) : null
     )
+    
 }

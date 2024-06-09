@@ -50,7 +50,7 @@ export default function Header() {
         </div>
           <div className="nav-header">
              <CustomNavItem link="/" text="Accueil" expand={true} />
-              <CustomNavItem link="/blog" text="Se renseigner(blog)" />
+              <CustomNavItem link="/blog" text="Actualités" />
                 <CustomNavItem link="/donate" text="Nous soutenir" />
 
               { userSession?.isLoggedIn && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
