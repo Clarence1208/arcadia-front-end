@@ -10,6 +10,7 @@ import {UsersDashboard} from "./UsersDashboard";
 import { MeetingsList } from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
+import {PollList} from "./polls/PollList";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -86,7 +87,7 @@ export function Dashboard(){
                     </TabPanel>
                     <TabPanel value={tabsValue} index={4}>
                     <Button href="/createPoll" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
-                        <h1>To do : Sondage List with 'see results' and 'end sondage'</h1>
+                        <PollList />
                     </TabPanel>
                 </div>
 

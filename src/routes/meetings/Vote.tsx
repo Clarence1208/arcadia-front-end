@@ -6,6 +6,8 @@ import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import TaskIcon from '@mui/icons-material/Task';
 import { useNavigate, useParams } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
+import CancelIcon from '@mui/icons-material/Cancel';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 interface VoteProps {
     vote: Vote;
@@ -94,7 +96,7 @@ export function Vote({vote, meetingId}: VoteProps){
                     variant="contained"
                     color="primary"
                     href={`/meeting/${meetingId}/vote/${vote.id}/results`}
-                    endIcon={<HowToVoteIcon></HowToVoteIcon>}
+                    endIcon={<RemoveRedEyeIcon></RemoveRedEyeIcon>}
                 >
                     Voir les résultats du vote
                 </Button>
@@ -132,7 +134,7 @@ export function Vote({vote, meetingId}: VoteProps){
                                 Mettre fin au Vote
                             </Button>
                         ) : (
-                            <Button variant="contained" color="primary" onClick={(e) => { displayError("Le quorum n\'a pas été atteint")}}>
+                            <Button variant="contained" color="primary" endIcon={<CancelIcon></CancelIcon>} onClick={(e) => { displayError("Le quorum n\'a pas été atteint")}}>
                                 Mettre fin au Vote
                             </Button>
                         )

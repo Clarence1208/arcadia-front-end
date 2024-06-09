@@ -4,6 +4,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import { useContext } from "react";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 interface Meeting {
     id: number,
@@ -21,7 +22,6 @@ export function Meeting({meeting}: {meeting: Meeting}){
     meeting.startDate = new Date(meeting.startDate)
     const startTime = meeting.startDate.toLocaleTimeString()
     const endTime = meeting.endDate.toLocaleTimeString()
-    console.log(meeting)
     return (
         <div className="meeting-div-user" >
 
@@ -55,7 +55,7 @@ export function Meeting({meeting}: {meeting: Meeting}){
                                 color="primary"
                                 href={`/meeting/${meeting.id}/votes`}
                                 disableElevation={true}
-                                endIcon={ <HowToVoteIcon></HowToVoteIcon>}
+                                endIcon={ <RemoveRedEyeIcon></RemoveRedEyeIcon>}
                             >Résultats des votes</Button>
                         }
                     </div>
