@@ -1,4 +1,4 @@
-import { Button, InputLabel, MenuItem, Pagination, Select, Switch } from "@mui/material";
+import { Alert, Button, InputLabel, MenuItem, Pagination, Select, Snackbar, Switch } from "@mui/material";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import '../../styles/VoteChoiceList.css';
 import { useNavigate, useParams } from "react-router-dom";
@@ -43,6 +43,7 @@ export function MeetingVoteApply() {
     const [data, setData] = useState<VoteParams>({ isWhiteVote: false });
     const [voteChoices, setVoteChoices] = useState<VoteChoice[]>([]);
     const [results, setResults] = useState<VoteChoice[]>([]);
+    const [open, setOpen] = useState(false);
 
     const navigate = useNavigate();
     const { voteId, id } = useParams();
@@ -158,12 +159,28 @@ export function MeetingVoteApply() {
         }
         navigate("/meeting/" + id + "/votes");
     }
-    
+
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     return (
         <div>
             <Header />
                 <div className={"main"}>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >{ErrorMessage}</Alert>
+                </Snackbar>
                     <Paper elevation={1} className={"content"}>
                     <div>
                         <h1>{vote?.name}</h1><br />

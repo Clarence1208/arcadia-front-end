@@ -26,6 +26,13 @@ interface Poll {
     name: string,
     isClosed: boolean,
     users?: User[],
+    questions : PollQuestion[]
+}
+
+
+type PollQuestion = {
+    id: number,
+    name: string,
 }
 
 export function Poll({poll}: PollProps){
@@ -84,9 +91,14 @@ export function Poll({poll}: PollProps){
                 </Snackbar>
                 <h2>{poll.name}</h2>
                 {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
+                <div>
                     <div style={{marginBottom: "1vh"}}>
-                        <span className="vote-admin">Nombre de réponses : {poll.users?.length}</span>
+                        <span className="vote-admin">Nombre de questions : {poll.questions.length}</span>
                     </div>
+                    <div style={{marginBottom: "1vh"}}>
+                        <span className="vote-admin">Nombre de personnes ayant répondu : {poll.users?.length}</span>
+                    </div>
+                </div>
                 ) : null}
     
                 {!poll.isClosed ? (

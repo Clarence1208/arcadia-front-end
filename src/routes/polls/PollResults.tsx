@@ -7,20 +7,13 @@ import {UserSessionContext} from "../../contexts/user-session";
 import {useNavigate, useParams} from "react-router-dom";
 import { PollQuestionForm } from "./PollQuestionForm";
 import { JSX } from "react/jsx-runtime";
-
-type FormData = {
-    responses: VoteChoice[]
-}
-
-const body: FormData = {
-    responses: []
-}
+import { PollQuestionResult } from "./PollQuestionResult";
 
 interface Poll {
     id: number,
     name: string,
-    description: string,
-    users?: User[],
+    isAnonymous: boolean;
+    users: User[],
     questions : PollQuestion[]
 }
 
@@ -29,6 +22,7 @@ type VoteChoice = {
     name: string,
     step: number,
     type: string,
+    users: User[],
 }
 
 type PollQuestion = {
@@ -39,52 +33,21 @@ type PollQuestion = {
     voteChoices: VoteChoice[],
 }
 
-interface User {
+type User = {
     id: number,
+    surname: string,
     firstName: string,
-    lastName: string,
-    email: string,
-    roles: string[],
 }
 
 
-export function PollVoteApply() {
+export function PollResults() {
     const navigate = useNavigate()
     const userSession = useContext(UserSessionContext)?.userSession
-    const [data, setData] = useState(body)
     const [poll, setPoll] = useState<Poll>()
     const [pollQuestions, setPollQuestions] = useState<PollQuestion[]>()
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
     const {id} = useParams()
-
-    async function updateFields(voteChoiceData: VoteChoice, limit: number) {
-        setData(prev => {
-            let responses = [...prev.responses];
-            let stepResponses = 0;
-    
-            const existingIndex = responses.findIndex(voteChoice => voteChoice.id === voteChoiceData.id);
-            if (existingIndex !== -1) {
-                responses = responses.filter(voteChoice => voteChoice.id !== voteChoiceData.id);
-                return { ...prev, responses };
-            }
-    
-            responses.forEach(voteChoice => {
-                if (voteChoice.step === voteChoiceData.step) {
-                    stepResponses++;
-                }
-            });
-    
-            if (stepResponses >= limit) {
-                setErrorMessage("Vous avez atteint le nombre maximum de choix pour cette question");
-                setOpen(true);
-                return prev;
-            }
-    
-            responses.push(voteChoiceData);
-            return { ...prev, responses };
-        });
-    }
 
     useEffect(() => {
         if(userSession?.loginToken) {
@@ -137,15 +100,16 @@ export function PollVoteApply() {
     }, [poll]);
 
     let forms: JSX.Element[] = [];
-    pollQuestions?.forEach(question => {
-        forms.push(
-            <PollQuestionForm 
-                {...data}
-                question={question} 
-                updateFields={updateFields} 
-            />
-        );
-    });
+    if(poll) {
+        pollQuestions?.forEach(question => {
+            forms.push(
+                <PollQuestionResult 
+                    poll={poll}
+                    question={question}
+                />
+            );
+        });
+    }
     const { steps, currentStepIndex, step, isFirstStep, isLastStep, back, next } = useMultiStepForm(forms)
 
     const handleClose = () => {
@@ -153,31 +117,6 @@ export function PollVoteApply() {
     };
 
     async function onSubmit(e: FormEvent) {
-        e.preventDefault()
-        if (userSession?.loginToken) {
-            const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/polls/" + id + "/join", {method: "POST",
-                headers: {
-                    "Authorization": bearer,
-                    "Content-Type": "application/json"
-                }});
-            if (!response.ok) {
-                const error =  await response.json()
-                setErrorMessage("Erreur : " + await error.message);
-                return
-            }
-
-            const responseVoteChoices: Response = await fetch( process.env.REACT_APP_API_URL+"/polls/" + id + "/voteChoices/apply", {method: "POST", body: JSON.stringify(data.responses),
-                headers: {
-                "Authorization": bearer,
-                "Content-Type": "application/json"
-            }});
-            if (!response.ok) {
-                const error =  await responseVoteChoices.json()
-                setErrorMessage("Erreur : " + await error.message);
-                return
-            }
-        }
         navigate("/blog");
     }
 
@@ -201,9 +140,6 @@ export function PollVoteApply() {
                     sx={{ width: '100%' }}
                 >{ErrorMessage}</Alert>
                 </Snackbar>
-                        <div style={{ display: "flex", justifyContent: "center"}}>
-                            <span>{poll?.description}</span>
-                        </div>
                     <div style={{ display: "flex", justifyContent: "center"}}>
                         <div style={{ minWidth: "40vw", position: "relative", border: "1px solid black", padding: "2rem", margin: "1rem", borderRadius: ".5rem", maxWidth: "max-content" }}>
 

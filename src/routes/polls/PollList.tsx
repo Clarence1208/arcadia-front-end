@@ -9,6 +9,21 @@ interface Poll {
     id: number,
     name: string,
     isClosed: boolean,
+    users?: User[],
+    questions : PollQuestion[]
+}
+
+interface User {
+    id: number,
+    firstName: string,
+    lastName: string,
+    email: string,
+    roles: string[],
+}
+
+type PollQuestion = {
+    id: number,
+    name: string,
 }
 
 type Filters = {

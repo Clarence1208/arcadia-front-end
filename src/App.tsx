@@ -30,6 +30,7 @@ import {Contact} from "./routes/Contact";
 import { VoteResults } from './routes/meetings/VoteResults';
 import { CreatePoll } from './routes/polls/CreatePoll';
 import { PollVoteApply } from './routes/polls/PollVoteApply';
+import { PollResults } from './routes/polls/PollResults';
 
 
 function App() {
@@ -96,6 +97,7 @@ function App() {
                 <Route path='/meeting/:id/vote/:voteId' element={<MeetingVoteApply />}/>
                 <Route path='/meeting/:id/vote/:voteId/results' element={<VoteResults />}/>
                 <Route path='/polls/:id/vote' element={<PollVoteApply />}/>
+                <Route path='/poll/:id/results' element={<PollResults />}/>
 
                 <Route path='*' element={<NotFound />}/>
             </Routes>

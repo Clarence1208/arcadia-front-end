@@ -13,6 +13,7 @@ import Snackbar from "@mui/material/Snackbar";
 
 type CreatePollData = {
     name: string,
+    description: string,
     isAnonymous: boolean,
     pollQuestions?: PollQuestion[],
 }
@@ -32,6 +33,7 @@ type PollQuestion = {
 
 const body : CreatePollData = {
     name: "",
+    description: "",
     isAnonymous: false,
 }
 
@@ -257,6 +259,14 @@ function CreatePollForm() {
                         size="small"
                         style={{marginBottom: "2em"}}
                         onChange={e => updateFields({ name: e.target.value })}
+                    />
+                    <TextField
+                        id="create-vote-title"
+                        label="Description du sondage"
+                        variant="outlined"
+                        size="small"
+                        style={{marginBottom: "2em"}}
+                        onChange={e => updateFields({ description: e.target.value })}
                     />
                     <div className={"row"}>
                     <div>

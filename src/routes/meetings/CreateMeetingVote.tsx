@@ -280,7 +280,7 @@ function CreateMeetingVoteForm() {
                             placeholder="Quorum"
                             onChange={e => updateFields({ quorum: parseInt(e.target.value) })}
                         />
-                        <Tooltip title="Nombre de personnes maximale à voter (ne pas remplir pour aucun maximal)">
+                        <Tooltip title="Nombre de personnes minimal nécéssaire pour que le vote soit valide (ne pas remplir pour aucun maximal)">
                             <IconButton>
                                 <HelpIcon />
                             </IconButton>
