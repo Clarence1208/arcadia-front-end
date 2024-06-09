@@ -177,7 +177,7 @@ export function PollVoteApply() {
                 return
             }
         }
-        //navigate("/adminDashboard");
+        navigate("/blog");
     }
 
     return (
