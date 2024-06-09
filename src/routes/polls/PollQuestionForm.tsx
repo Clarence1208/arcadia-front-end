@@ -1,3 +1,5 @@
+import {Checkbox, FormControlLabel} from "@mui/material";
+
 type VoteChoice = {
     id: number,
     name: string,
@@ -36,8 +38,7 @@ export function PollQuestionForm(props : PollQuestionFormProps) {
                 {props.question.voteChoices.map((voteChoice, index) => {
                     return (
                         <div key={voteChoice.id}>
-                            <input type="checkbox" id={voteChoice.name} name={voteChoice.name} value={voteChoice.name} checked={isVoteChoiceChecked(voteChoice)} onChange={() => props.updateFields(voteChoice, props.question.nbPossibleVotes)} />
-                            <label htmlFor={voteChoice.name}>{voteChoice.name}</label>
+                            <FormControlLabel checked={isVoteChoiceChecked(voteChoice)} onChange={() => props.updateFields(voteChoice, props.question.nbPossibleVotes)} control={<Checkbox />} label={voteChoice.name} />
                         </div>
                     )
                 })}

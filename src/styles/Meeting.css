@@ -1,13 +1,13 @@
 .vote-div {
     display: flex;
     flex-direction: column;
-    margin-bottom: 2vh;
+    margin-bottom: 4em;
     border: 2px solid var(--dark-grey-text);
     border-radius: 10px;
     min-height: 20vh;
     width: 20vw;
     justify-content: space-evenly;
-    padding: 1vh;
+    padding: 2em;
 }
 
 .meeting-link {
