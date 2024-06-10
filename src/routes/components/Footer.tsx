@@ -10,8 +10,7 @@ export function Footer() {
             <div className="footer-content">
                 <img src={Logo} alt={"logo"} />
                 <div className="raccourcis">
-                    <a href="/termsOfServices">Mentions légales</a>
-                    <a href="/">CGU</a>
+                    <a href="/termsOfServices">Mentions légales et CGU</a>
                     <a href="/contact">Contact</a>
                 </div>
                <div>{"2024"}</div>
