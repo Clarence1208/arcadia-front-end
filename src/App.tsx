@@ -36,10 +36,14 @@ import {CreatePremise} from './routes/premises/CreatePremise';
 import ReturnStripeAccountPage from "./routes/stripe/ReturnStripeAccountPage";
 import {RefreshStripe} from "./routes/stripe/RefreshStripe";
 import {Donate} from "./routes/Donate";
-import {loadStripe} from "@stripe/stripe-js";
-import {Elements} from "@stripe/react-stripe-js";
 
-
+type WebSetting = {
+    name: string,
+    value: string,
+    description: string,
+    type: string
+}
+const DEFAULT_PRIMARY_COLOR = '#074032'
 function App() {
     const [theme, setTheme] = React.useState(createTheme());
     const config = useContext(ConfigContext);
@@ -49,14 +53,17 @@ function App() {
     async function getConfiguration() {
         try {
             if (!config || !config.apiURL) {
-                return '#074032'
+                return DEFAULT_PRIMARY_COLOR;
             }
             const response = await fetch(`${config.apiURL}/websiteSettings`);
-            const data = await response.json();
-            return data[2].value
-        } catch (e) {
+            const data : WebSetting[] = await response.json();
+            console.log(data)
+            const primaryColor = data.find( item => item.name === 'primaryColor');
+            const secondaryColor = data.find( item => item.name === 'secondaryColor');
+            return [(primaryColor ? primaryColor.value : DEFAULT_PRIMARY_COLOR) , (secondaryColor ? secondaryColor.value : '#f5f5f5')];
+        }catch (e) {
             console.warn(e)
-            return '#074032'
+            return DEFAULT_PRIMARY_COLOR;
         }
     }
 
@@ -65,16 +72,19 @@ function App() {
         const theme = createTheme({
             palette: {
                 primary: {
-                    main: '#074032', // DEFAULT COLOR
+                    main: DEFAULT_PRIMARY_COLOR, // DEFAULT COLOR
+                    dark: DEFAULT_PRIMARY_COLOR,
                 },
                 secondary: {
                     main: '#f5f5f5',
                 },
+
                 // Add more customizations as needed
             },
         });
         getConfiguration().then(data => {
-            theme.palette.primary.main = data;
+            theme.palette.primary.main = data[0];
+            theme.palette.primary.dark = data[1];
             setTheme(theme)
         });
 

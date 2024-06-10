@@ -3,12 +3,22 @@ import {Footer} from "./components/Footer";
 import {Chatbot} from "./components/Chatbot";
 import mainPic from "../images/template_home_pic.jpg";
 import "../styles/Home.css";
+import {CookieConsent} from "react-cookie-consent";
 import { useContext, useEffect, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
+import {Skeleton} from "@mui/material";
+import { getS3Config } from "../utils/s3Config";
 import { listFilesS3, getObjectS3 } from "../utils/s3";
 import { ConfigContext } from "../index";
 import { _Object } from "@aws-sdk/client-s3";
 
+
+type WebSetting = {
+    name: string,
+    value: string,
+    description: string,
+    type: string
+}
 export function Home() {
 
     const [errorMessage, setErrorMessage] = useState("");
@@ -17,6 +27,7 @@ export function Home() {
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const config = useContext(ConfigContext);
+    const [data, setData] = useState<string[]>([]);
 
     useEffect(() => {
         if (isDataFetched) {
@@ -46,6 +57,27 @@ export function Home() {
                 setOpen(true);
             }
         };
+        async function getConfiguration(){
+            try{
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+                const data : WebSetting[] = await response.json();
+                const title = data.find( item => item.name === 'titleHomePage');
+                const subTitle = data.find( item => item.name === 'subTitleHomePage');
+                const showChatbot = data.find( item => item.name === 'displayChatbot');
+                return [
+                    title ? title.value : "Association française des personnes malades",
+                    subTitle ? subTitle.value : "Vous nous avez vu mais nous avez vous regardé ?",
+                    showChatbot ? showChatbot.value : "false"
+                ];
+            }catch (e) {
+                console.warn(e)
+                return [];
+            }
+        }
+
+        getConfiguration().then(data => {
+            setData(data);
+        });
         fetchData();
     }, []);
 
@@ -57,7 +89,7 @@ export function Home() {
         return (
             <div>
                 <Header />
-                {isPageLoaded && 
+                {isPageLoaded &&
                 <div>
                     <Snackbar
                     open={open}
@@ -75,8 +107,8 @@ export function Home() {
                         <div className={"main home"}>
                             <div>
                                 <h1>{config.associationName}</h1>
-                                <h2>Association française des personnes malades</h2>
-                                <h3>Vous nous avez vu mais nous avez vous regardé ?</h3>
+                                <h1>{data[0]}</h1>
+                                <h3>{data[1]}</h3>
                             </div>
                             <img src={image ? image : mainPic} alt="main-pic" />
                         </div>

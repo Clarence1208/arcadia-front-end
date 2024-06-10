@@ -75,8 +75,7 @@ export function Footer() {
             <div className="footer-content">
                 <img src={s3Logo ? s3Logo : logo } alt={"logo"} style={{maxHeight:"10vh"}} />
                 <div className="raccourcis">
-                    <a href="/termsOfServices">Mentions légales</a>
-                    <a href="/">CGU</a>
+                    <a href="/termsOfServices">Mentions légales et CGU</a>
                     <a href="/contact">Contact</a>
                 </div>
                <div>{"2024"}</div>

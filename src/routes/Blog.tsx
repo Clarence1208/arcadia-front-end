@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import React, { useContext, useEffect, useState } from "react";
 import { UserSessionContext } from "../contexts/user-session";
 import { ArticleList } from "./articles/ArticleList";
-import { Pagination, Button, Alert, CircularProgress, Box } from "@mui/material";
+import {Pagination, List, Button, Alert, CircularProgress, Box, useTheme} from "@mui/material";
 import '../styles/Blog.css';
 import { Add } from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
@@ -43,6 +43,7 @@ export function Blog() {
         }, 100);
     }, []);
 
+    const theme = useTheme();
     const handleClose = () => {
         setOpen(false);
     }
@@ -150,8 +151,7 @@ export function Blog() {
                             onChange={handleChangePage}
                         />
 
-                        <div style={{ backgroundColor: "pink", height: "0.25em", width: "auto", margin: "6em 0" }}></div>
-                        {/* TODO: CHANGE COLOR LA JE VAIS CHERCHER MA PIZZA */}
+                        <div style={{ backgroundColor: theme.palette.primary.main, height: "0.25em", width: "auto", margin: "6em 0" }}></div>
 
                         <PollList />
                     </div>
