@@ -27,9 +27,9 @@ type PollQuestion = {
     name: string,
     step: number,
     nbPossibleVotes: number,
+    canFreeVote: boolean,
     voteChoices: VoteChoice[],
 }
-
 
 const body : CreatePollData = {
     name: "",
@@ -93,7 +93,7 @@ function CreatePollForm() {
         if (duplicateFound) {
             return;
         }
-        const newPollQuestions = [...pollQuestions, { name: name, nbPossibleVotes: 1, step:pollQuestions.length, voteChoices: [] }];
+        const newPollQuestions = [...pollQuestions, { name: name, nbPossibleVotes: 1, canFreeVote:false, step:pollQuestions.length, voteChoices: [] }];
         setPollQuestions(newPollQuestions);
         setName("");
     }
@@ -172,6 +172,7 @@ function CreatePollForm() {
             }
             const pollResponse = await response.json()
             pollQuestions.forEach(async pollQuestion => {
+                console.log(pollQuestion)
                 const bearer = "Bearer " + userSession?.loginToken;
                 const response: Response = await fetch( process.env.REACT_APP_API_URL+"/polls/" + pollResponse.id + "/pollQuestions", {method: "POST", body: JSON.stringify(pollQuestion),                     headers: {
                         "Authorization": bearer,
@@ -316,7 +317,7 @@ function CreatePollForm() {
                             <div  className={"row"}>
                                 <div>
 
-                                    <InputLabel>Nombre maximum de choix possible</InputLabel>
+                                    <InputLabel>Nombre max de choix possible</InputLabel>
                                     <Input
                                         id="create-vote-nbPossibleVotes"
                                         type="number"
@@ -329,6 +330,10 @@ function CreatePollForm() {
                                             <HelpIcon />
                                         </IconButton>
                                     </Tooltip>
+                                </div>
+                                <div>
+                                    <InputLabel>Réponse Ouverte</InputLabel>
+                                    <Switch checked={pollQuestions[key].canFreeVote}  onChange={e => updatePollQuestionFields({ canFreeVote: !pollQuestions[key].canFreeVote }, key)} color="primary" />
                                 </div>
                             </div>
                             <div className={"choices-list"}>

@@ -3,6 +3,7 @@ import {Checkbox, FormControlLabel} from "@mui/material";
 type VoteChoice = {
     id: number,
     name: string,
+    isAlive: boolean,
     step: number,
     type: string,
 }
@@ -16,6 +17,7 @@ type PollQuestion = {
     name: string,
     step: number,
     nbPossibleVotes: number,
+    canFreeVote: boolean,
     voteChoices: VoteChoice[],
 }
 
@@ -30,6 +32,8 @@ export function PollQuestionForm(props : PollQuestionFormProps) {
         return props.responses.some(response => response.id === voteChoice.id);
     };
 
+    console.log(props.question);
+
     return (
         <div className="form-base">
             <h1>{props.question.name} :</h1>
@@ -42,6 +46,14 @@ export function PollQuestionForm(props : PollQuestionFormProps) {
                         </div>
                     )
                 })}
+            </div>
+            <div>
+                {props.question.canFreeVote && (
+                    <div>
+                        <span>Vote libre :</span>
+                    </div>
+            
+                )}
             </div>
         </div>
     )
