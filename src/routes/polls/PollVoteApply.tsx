@@ -30,6 +30,7 @@ type VoteChoice = {
     isAlive: boolean,
     step: number,
     type: string,
+    pollQuestion : PollQuestion,
 }
 
 type PollQuestion = {
