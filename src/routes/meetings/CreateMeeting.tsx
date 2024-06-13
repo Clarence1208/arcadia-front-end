@@ -11,7 +11,7 @@ import { Dayjs, isDayjs } from "dayjs";
 import Paper from "@mui/material/Paper";
 import {Groups3} from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
-
+import Mailer from "../../Mailer";
 
 type CreateMeetingData = {
     name: string,
@@ -26,6 +26,14 @@ type TempMeetingData = {
     startHour: number,
     endHour: number,
 
+}
+
+type User = {
+    id: number,
+    firstName: string,
+    surname: string,
+    email: string,
+    roles: string,
 }
 
 const body : CreateMeetingData = {
@@ -89,7 +97,8 @@ function CreateMeetingForm() {
             setOpen(true)
             return
         }
-        setErrorMessage("");
+        const mailer = new Mailer();
+        mailer.sendMail([{id: 0, firstName: "", surname: "", email: "ninoplane@gmail.com", roles: ""}])
         navigate('/adminDashboard')
     }
 
