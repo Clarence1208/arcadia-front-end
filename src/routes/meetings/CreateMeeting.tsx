@@ -140,13 +140,13 @@ function CreateMeetingForm() {
                 open={open}
                 autoHideDuration={3000}
                 onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
                 <Alert
                     onClose={handleClose}
                     severity="error"
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >{ErrorMessage}</Alert>
             </Snackbar>
 

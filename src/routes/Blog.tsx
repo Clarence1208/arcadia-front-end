@@ -1,15 +1,15 @@
-import { Footer } from "./components/Footer";
+import {Footer} from "./components/Footer";
 import Header from "./components/Header";
-import React, { useContext, useEffect, useState } from "react";
-import { UserSessionContext } from "../contexts/user-session";
-import { ArticleList } from "./articles/ArticleList";
+import React, {useContext, useEffect, useState} from "react";
+import {UserSessionContext} from "../contexts/user-session";
+import {ArticleList} from "./articles/ArticleList";
 import {Pagination, List, Button, Alert, CircularProgress, Box, useTheme} from "@mui/material";
 import '../styles/Blog.css';
-import { Add } from "@mui/icons-material";
+import {Add} from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
-import { useNavigate } from "react-router-dom";
-import { Chatbot } from "./components/Chatbot";
-import { PollList } from "./polls/PollList";
+import {useNavigate} from "react-router-dom";
+import {Chatbot} from "./components/Chatbot";
+import {PollList} from "./polls/PollList";
 import theme from "../utils/theme";
 import {ConfigContext} from "../index";
 
@@ -71,7 +71,7 @@ export function Blog() {
                 const res = await response.json();
                 return res;
             }
-            getArticles({ page: page }).then((data) => {
+            getArticles({page: page}).then((data) => {
                 setArticles(data);
             });
         }
@@ -103,7 +103,7 @@ export function Blog() {
             <Header />
                     {!isPageLoaded ? (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
-                    <CircularProgress />
+                    <CircularProgress/>
                     <div>Loading...</div>
                 </Box>
             ) : (
@@ -113,13 +113,13 @@ export function Blog() {
                         open={open}
                         autoHideDuration={3000}
                         onClose={handleClose}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
                     >
                         <Alert
                             onClose={handleClose}
                             severity="success"
                             variant="filled"
-                            sx={{ width: '100%' }}
+                            sx={{width: '100%'}}
                         >{flashMessage}</Alert>
                     </Snackbar>
 
@@ -131,7 +131,7 @@ export function Blog() {
                                     <Button
                                         href={"/createArticle"}
                                         variant="contained"
-                                        startIcon={<Add />}
+                                        startIcon={<Add/>}
                                     >
                                         Créer un article
                                     </Button>
@@ -142,18 +142,23 @@ export function Blog() {
                         {articles.length === 0 ? (
                             <div>No articles available. Please check back later.</div>
                         ) : (
-                            <ArticleList articles={articles} deleteItem={deleteItem} />
+                            <ArticleList articles={articles} deleteItem={deleteItem}/>
                         )}
                         <Pagination
-                            style={{ alignSelf: "center" }}
+                            style={{alignSelf: "center"}}
                             count={10}
                             page={page}
                             onChange={handleChangePage}
                         />
 
-                        <div style={{ backgroundColor: theme.palette.primary.main, height: "0.25em", width: "auto", margin: "6em 0" }}></div>
+                        <div style={{
+                            backgroundColor: theme.palette.primary.main,
+                            height: "0.25em",
+                            width: "auto",
+                            margin: "6em 0"
+                        }}></div>
 
-                        <PollList />
+                        <PollList/>
                     </div>
                     <Chatbot />
                 </div>
