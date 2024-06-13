@@ -5,7 +5,7 @@ import {UserSessionContext} from "../contexts/user-session";
 import {ArticleList} from "./articles/ArticleList";
 import {Pagination, List, Button, Alert, useTheme} from "@mui/material";
 import '../styles/Blog.css';
-import { Add } from "@mui/icons-material";
+import {Add} from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
 import {useNavigate} from "react-router-dom";
 import {Chatbot} from "./components/Chatbot";
@@ -25,7 +25,8 @@ type Filters = {
     page?: number,
     limit?: number,
 }
-export function Blog(){
+
+export function Blog() {
 
     const userSession = useContext(UserSessionContext)?.userSession
     const [articles, setArticles] = useState<Article[]>([])
@@ -94,19 +95,19 @@ export function Blog(){
 
     return (
         <div>
-          <Header />
+            <Header/>
 
             <Snackbar
                 open={open}
                 autoHideDuration={3000}
                 onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
                 <Alert
                     onClose={handleClose}
                     severity="success"
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >{flashMessage}</Alert>
             </Snackbar>
 
@@ -118,25 +119,30 @@ export function Blog(){
                             <Button
                                 href={"/createArticle"}
                                 variant="contained"
-                                startIcon={<Add />}>
+                                startIcon={<Add/>}>
                                 Créer un article
                             </Button>
                         </div> : null
                     }
                 </div>
 
-                    {
-                        articles.length === 0 ?
+                {
+                    articles.length === 0 ?
                         <div>Loading or no articles...</div> :
                         <ArticleList articles={articles} deleteItem={deleteItem}/>
-                    }
-                <Pagination style={{alignSelf: "center"}} count={10} page={page} onChange={handleChangePage} />
-                <div style={{backgroundColor: theme.palette.primary.main, height:"0.25em", width:"auto", margin:"6em 0"}}></div>
+                }
+                <Pagination style={{alignSelf: "center"}} count={10} page={page} onChange={handleChangePage}/>
+                <div style={{
+                    backgroundColor: theme.palette.primary.main,
+                    height: "0.25em",
+                    width: "auto",
+                    margin: "6em 0"
+                }}></div>
 
                 <PollList />
             </div>
-            <Chatbot />
-          <Footer />
+            <Chatbot/>
+            <Footer/>
         </div>
     )
 }

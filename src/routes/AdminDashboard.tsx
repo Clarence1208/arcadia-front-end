@@ -93,7 +93,7 @@ export function Dashboard() {
                         </div>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={4}>
-                        <StripeSettings />
+                        <StripeSettings/>
                     </TabPanel>
 
                 </div>

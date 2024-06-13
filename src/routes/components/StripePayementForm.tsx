@@ -1,33 +1,64 @@
 import {Elements, PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
-import {Button} from "@mui/material";
-import {useEffect, useState} from "react";
+import {Alert, Button, Snackbar} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import {loadStripe} from "@stripe/stripe-js";
 
 type FormProps = {
-    clientSecret: string
+    clientSecret: string,
+    amount: number
 }
-const stripePromise = loadStripe("pk_test_51PPPaZBvbnM6p69y9VGLCmAkev3tT3Plbw8JPtnf78iiJxiGtsTXNPOEPn3M9OktpiKeuTqx1XwcoKoVUty97nr600GCnOjcBt",
-    {
-        stripeAccount: 'acct_1PPSByR1DVn2pKme'
 
-    });
+export default function StripePayementForm({amount, clientSecret}: FormProps) {
 
-export default function StripePayementForm({clientSecret}:FormProps) {
-    const options = {
-        clientSecret: clientSecret
+    const stripe = useStripe();
+    const elements = useElements(); //
+    const [errorMessage, setErrorMessage] = useState("");
+    const [open, setOpen] = useState(false);
+
+    async function handlePayButton(e: React.FormEvent) {
+        console.log("Handle pay button")
+        e.preventDefault();
+        if (stripe && elements) {
+            const {error} = await stripe.confirmPayment({
+                //`Elements` instance that was used to create the Payment Element
+                elements,
+                confirmParams: {
+                    return_url: 'http://localhost:8080/stripe/return',
+                },
+            });
+
+            if (error) {
+                // This point will only be reached if there is an immediate error when
+                // confirming the payment. Show error to your customer (for example, payment
+                // details incomplete)
+                setErrorMessage(error.message || "Une erreur indéfinie est survenue");
+            }
+        } else {
+            console.log("Stripe or elements not loaded")
+        }
     }
+
     return (
         <div className={"stripe-div"}>
-            <h1>Procéder au paiement</h1>
-            <form>
-                {clientSecret &&
-                <Elements stripe={stripePromise} options={options}>
-                    <PaymentElement />
-                    <Button variant={"contained"}>Submit</Button>
-                </Elements>
-                }
+            <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={() => setOpen(false)}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+            >
+                <Alert
+                    onClose={() => setOpen(false)}
+                    severity="error"
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >{errorMessage}</Alert>
+            </Snackbar>
+            <h2>Procéder au paiement</h2>
+            <form onSubmit={handlePayButton}>
+                <PaymentElement/>
+                <Button variant={"contained"} type="submit" disabled={!stripe}>Je fais un don de {amount}€</Button>
+                {/*//receipt_email could be added*/}
             </form>
-
         </div>
     )
 

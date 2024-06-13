@@ -12,18 +12,18 @@ export default function StripeSettings() {
     const [createStripeAccountData, setcreateStripeAccountData] = useState({
         country: "FR",
         email: "loriane.hilderal@gmail.com",
-        companyName: "Test 1"
     });
 
-    async function getStripeAccount(){
-        try{
+    async function getStripeAccount() {
+        try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
             const data = await response.json();
             return data
-        }catch (e) {
+        } catch (e) {
             console.warn(e)
         }
     }
+
     async function createStripeAccount() {
         const bearer = `Bearer ${userSession?.loginToken}`;
         setAccountCreatePending(true);
@@ -40,12 +40,11 @@ export default function StripeSettings() {
             .then((json) => {
                 setAccountCreatePending(false);
 
-                const { account, message } = json;
+                const {account, message} = json;
 
                 if (account) {
                     setConnectedAccountId(account);
-                }
-                else {
+                } else {
                     setErrorMessage(message);
                     setOpenError(true)
                 }
@@ -55,18 +54,18 @@ export default function StripeSettings() {
     async function handleStripeAccountLink() {
         const bearer = `Bearer ${userSession?.loginToken}`;
         await fetch(`${process.env.REACT_APP_API_URL}/stripe/accountLinks`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": bearer,
-                },
-                body: JSON.stringify({
-                    accountId: connectedAccountId,
-                }),
-            })
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": bearer,
+            },
+            body: JSON.stringify({
+                accountId: connectedAccountId,
+            }),
+        })
             .then((response) => response.json())
             .then((json) => {
-                const { url } = json;
+                const {url} = json;
                 window.location.href = url;
             })
             .catch((error) => {
@@ -89,13 +88,13 @@ export default function StripeSettings() {
                 open={openError}
                 autoHideDuration={3000}
                 onClose={() => setOpenError(false)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
                 <Alert
                     onClose={() => setOpenError(false)}
                     severity="warning"
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >{errorMessage}</Alert>
             </Snackbar>
 
@@ -105,9 +104,11 @@ export default function StripeSettings() {
 
             {!connectedAccountId &&
                 <div>
-                    <p>Lors de votre 1ère visite sur cette page, veuillez créer un compte Stripe (Bouton "Créer un compte Stripe") pour utiliser la fonctionalité "Dons" du site.</p>
-                    <p>Vous pouvez ensuite personaliser le compte avec vos informations depuis le bouton "Modifier les informations du compte Stripe"</p>
-                    {accountCreatePending && <LoadingSpinner message={"Création du compte en cours..."} />}
+                    <p>Lors de votre 1ère visite sur cette page, veuillez créer un compte Stripe (Bouton "Créer un
+                        compte Stripe") pour utiliser la fonctionalité "Dons" du site.</p>
+                    <p>Vous pouvez ensuite personaliser le compte avec vos informations depuis le bouton "Modifier les
+                        informations du compte Stripe"</p>
+                    {accountCreatePending && <LoadingSpinner message={"Création du compte en cours..."}/>}
 
                     <Button
                         variant="contained"
@@ -123,15 +124,17 @@ export default function StripeSettings() {
                 </div>
             }
 
-        {connectedAccountId &&
-            <Button
-                variant="contained"
-                onClick={()=> window.location.href = `https://dashboard.stripe.com/login`}
+            {connectedAccountId &&
+                <Button
+                    variant="contained"
+                    onClick={() => window.location.href = `https://dashboard.stripe.com/login`}
                 >Accès au dashboard Stripe (ouvre un nouvel onglet)
-            </Button>
-        }
+                </Button>
+            }
 
             <h2>Dons & adhésions</h2>
+            <p>Todo: afficher les paiements (les dons donc)</p>
+            <a href={"https://docs.stripe.com/connect/supported-embedded-components/payments"}>docs de l'api stripe </a>
         </div>
     )
 }

@@ -121,9 +121,10 @@ function App() {
                             <Route path='/polls/:id/vote' element={<PollVoteApply/>}/>
                             <Route path='/poll/:id/results' element={<PollResults/>}/>
 
-                            {/*STRIPE*/}
-                            <Route path='/return/:id' element={<ReturnStripeAccountPage/>}/>
-                            <Route path='/refresh/:id' element={<RefreshStripe/>}/>
+                {/*STRIPE*/}
+                <Route path='/return/:id' element={<ReturnStripeAccountPage />}/>
+                <Route path='/stripe/return' element={<ReturnStripeAccountPage />}/>
+                <Route path='/refresh/:id' element={<RefreshStripe />}/>
 
 
                             <Route path='*' element={<NotFound/>}/>

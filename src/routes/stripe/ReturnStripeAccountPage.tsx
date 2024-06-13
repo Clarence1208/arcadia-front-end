@@ -1,23 +1,18 @@
 import React from "react";
-import { useParams} from 'react-router-dom';
+import Header from "../components/Header";
+import {Footer} from "../components/Footer";
 
 export default function ReturnStripeAccountPage() {
-    const {connectedAccountId} = useParams();
 
     return (
-        <div className="container">
-            <div className="banner">
-                <h2>Arcadia Solutions</h2>
-            </div>
-            <div className="content">
-                <h2>Details submitted</h2>
-                <p>That's everything we need for now</p>
-            </div>
-            <div className="info-callout">
+        <div>
+            <Header/>
+            <div className="main">
                 <p>
-                    This is a sample app for Stripe-hosted Connect onboarding. <a href="https://docs.stripe.com/connect/onboarding/quickstart?connect-onboarding-surface=hosted" target="_blank" rel="noopener noreferrer">View docs</a>
+                    Merci de votre don ! La transaction a été effectuée avec succès !
                 </p>
             </div>
+            <Footer/>
         </div>
     );
 }

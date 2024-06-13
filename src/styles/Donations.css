@@ -1,11 +1,11 @@
-.donate-form{
+.donate-form {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     min-height: 50vh;
     justify-content: space-around;
 }
 
-.amounts-predefined{
+.amounts-predefined {
     display: flex;
     justify-content: space-around;
     width: 20vw;
@@ -15,6 +15,14 @@
     display: flex;
     justify-content: space-between;
 }
-.stripe-div{
+
+.stripe-div {
     min-width: 35vw
+}
+
+.stripe-div form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-height: 40vh;
 }
