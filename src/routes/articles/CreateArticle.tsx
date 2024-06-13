@@ -56,7 +56,7 @@ function CreateArticleForm() {
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/articles?currentUserId="+userSession?.userId, {
+        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/articles?currentUserId="+userSession?.userId, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -72,7 +72,7 @@ function CreateArticleForm() {
         // if (fileData.file) {
         //     const formData = new FormData();
         //     formData.append("file", fileData.file);
-        //     const responseFile: Response = await fetch( process.env.REACT_APP_API_URL+"/articles/"+(await response.json()).id+"/media", {method: "POST", body: formData});
+        //     const responseFile: Response = await fetch( import.meta.env.VITE_API_URL+"/articles/"+(await response.json()).id+"/media", {method: "POST", body: formData});
         //     if (!responseFile.ok) {
         //         const error =  await responseFile.json()
         //         setErrorMessage("Erreur : " + await error.message);

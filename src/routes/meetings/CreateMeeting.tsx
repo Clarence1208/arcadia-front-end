@@ -82,7 +82,7 @@ function CreateMeetingForm() {
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const req = transformToCreateData(tempData, data);
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Content-Type": "application/json"}});
+        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur : " + await error.message);

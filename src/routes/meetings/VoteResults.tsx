@@ -60,7 +60,7 @@ export function VoteResults() {
                         const bearer = "Bearer " + userSession?.loginToken;
                         
                         // Fetch vote information
-                        const voteResponse = await fetch(`${process.env.REACT_APP_API_URL}/votes/${voteId}`, {
+                        const voteResponse = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}`, {
                             method: "GET",
                             headers: {
                                 "Authorization": bearer,
@@ -74,7 +74,7 @@ export function VoteResults() {
                         setVote(await voteResponse.json());
         
                         // Fetch vote choices
-                        const voteChoicesResponse = await fetch(`${process.env.REACT_APP_API_URL}/votes/${voteId}/voteChoices?type=Vote`, {
+                        const voteChoicesResponse = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}/voteChoices?type=Vote`, {
                             method: "GET",
                             headers: {
                                 "Authorization": bearer,

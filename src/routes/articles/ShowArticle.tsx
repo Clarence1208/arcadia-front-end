@@ -26,7 +26,7 @@ export function ShowArticle(){
     useEffect(() => {
     const getArticle = async (): Promise<Article> => {
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${articleId}`, {
+        const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/articles/${articleId}`, {
             headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

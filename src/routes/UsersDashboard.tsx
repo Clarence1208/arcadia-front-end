@@ -38,7 +38,7 @@ export function UsersDashboard() {
 
     async function deleteItem(id: number) {
         const bearer = "Bearer " + userSession?.loginToken;
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": bearer,
@@ -61,7 +61,7 @@ export function UsersDashboard() {
             if (userToken && userId) {
                 const getUsers = async (filters?: Filters): Promise<User[]> => {
                     const bearer = "Bearer " + userToken;
-                    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+                    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
                         headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"

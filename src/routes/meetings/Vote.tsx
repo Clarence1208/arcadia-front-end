@@ -52,7 +52,7 @@ export function Vote({vote, meetingId}: VoteProps){
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/votes/" + vote.id + "/end", {method: "POST",
+            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + vote.id + "/end", {method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"

@@ -61,7 +61,7 @@ export function MeetingVoteApply() {
         if(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("adherent")) {
             const getVote = async (filters?: Filters): Promise<Vote> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/votes/${voteId}`, {method: "GET",
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -82,7 +82,7 @@ export function MeetingVoteApply() {
             getVote().then(setVote)
             const getVoteChoices = async (filters?: Filters): Promise<VoteChoice[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/votes/${voteId}/voteChoices?type=Vote`, {method: "GET",
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}/voteChoices?type=Vote`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -132,7 +132,7 @@ export function MeetingVoteApply() {
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/votes/" + voteId + "/join", {method: "POST",
+            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + voteId + "/join", {method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
@@ -145,7 +145,7 @@ export function MeetingVoteApply() {
 
             if(!data.isWhiteVote) {
                 let voteChoicesIds = results.map((result) => result.id);
-                const response: Response = await fetch( process.env.REACT_APP_API_URL+"/votes/" + voteId + "/voteChoices/apply", {method: "POST", body: JSON.stringify(voteChoicesIds),
+                const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + voteId + "/voteChoices/apply", {method: "POST", body: JSON.stringify(voteChoicesIds),
                     headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"

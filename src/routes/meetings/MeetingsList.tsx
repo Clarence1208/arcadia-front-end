@@ -19,7 +19,7 @@ type Filters = {
 
 
 const getMeetings = async (filters?: Filters): Promise<Meeting[]> => {
-    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
+    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
         headers: {
             //"Authorization": bearer,
             "Content-Type": "application/json"
