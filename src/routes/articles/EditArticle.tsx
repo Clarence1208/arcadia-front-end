@@ -41,7 +41,7 @@ export function EditArticle() {
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+`/articles/${articleId}`, {
+        const response: Response = await fetch( import.meta.env.VITE_API_URL+`/articles/${articleId}`, {
             method: "PATCH",
             body: JSON.stringify(data),
             headers: {
@@ -63,7 +63,7 @@ export function EditArticle() {
     useEffect(() => {
         const getArticle = async (): Promise<PatchArticle> => {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${articleId}`, {
+            const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/articles/${articleId}`, {
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"

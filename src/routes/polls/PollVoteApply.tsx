@@ -90,7 +90,7 @@ export function PollVoteApply() {
         if(userSession?.loginToken) {
             const getPoll = async (): Promise<Poll> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/polls/${id}`, {method: "GET",
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls/${id}`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -115,7 +115,7 @@ export function PollVoteApply() {
         if(userSession?.loginToken) {
             const getPollQuestions = async (): Promise<PollQuestion[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/polls/${id}/pollQuestions`, {method: "GET",
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls/${id}/pollQuestions`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -156,7 +156,7 @@ export function PollVoteApply() {
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/polls/" + id + "/join", {method: "POST",
+            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/polls/" + id + "/join", {method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
@@ -167,7 +167,7 @@ export function PollVoteApply() {
                 return
             }
 
-            const responseVoteChoices: Response = await fetch( process.env.REACT_APP_API_URL+"/polls/" + id + "/voteChoices/apply", {method: "POST", body: JSON.stringify(data.responses),
+            const responseVoteChoices: Response = await fetch( import.meta.env.VITE_API_URL+"/polls/" + id + "/voteChoices/apply", {method: "POST", body: JSON.stringify(data.responses),
                 headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

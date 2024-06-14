@@ -16,7 +16,7 @@ const initialMessages : PromptMessages = [
     }
     ]
 export function Chatbot() {
-    const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+    const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
     const [messages, setMessages] = useState<PromptMessages>(initialMessages);
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")

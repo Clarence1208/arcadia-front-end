@@ -49,7 +49,7 @@ export function PollQuestionResult(props : PollQuestionFormProps) {
         if(userSession?.loginToken) {
             const getPollQuestions = async (): Promise<VoteChoice[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/votes/${props.question.id}/voteChoices?type=Poll`, {method: "GET",
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/votes/${props.question.id}/voteChoices?type=Poll`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

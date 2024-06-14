@@ -39,7 +39,7 @@ export function EditUser({userId, userToken}: EditUserProps){
         if (userToken && userId) {
             const getUser = async (): Promise<FormData> => {
                 const bearer = "Bearer " + userToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`, {
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

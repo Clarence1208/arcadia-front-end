@@ -151,7 +151,7 @@ function CreateMeetingVoteForm() {
         }
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/meetings/" + id + "/votes", {method: "POST", body: JSON.stringify(data),                     headers: {
+            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/meetings/" + id + "/votes", {method: "POST", body: JSON.stringify(data),                     headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
                 }});
@@ -166,7 +166,7 @@ function CreateMeetingVoteForm() {
                     name: votes[i],
                     type: "Vote"
                 }
-                const responseVoteChoices: Response = await fetch(process.env.REACT_APP_API_URL+"/votes/" + vote.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice), headers: {
+                const responseVoteChoices: Response = await fetch(import.meta.env.VITE_API_URL+"/votes/" + vote.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice), headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
                     }});

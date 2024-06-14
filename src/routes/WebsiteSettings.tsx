@@ -48,7 +48,7 @@ function CreateSettingModal({settings, setSettings, open, handleClose, loginToke
         e.preventDefault()
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings", {
+        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/websiteSettings", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -140,7 +140,7 @@ function EditSettingModal({settings, setSettings,setting, open, handleClose, log
         e.preventDefault()
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings/"+data?.id, {
+        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/websiteSettings/"+data?.id, {
             method: "PATCH",
             body: JSON.stringify(data),
             headers: {
@@ -234,7 +234,7 @@ export function WebsiteSettings() {
             if (userToken && userId) {
                 const getSettings = async (): Promise<WebsiteSettings[]> => {
                     const bearer = "Bearer " + userToken;
-                    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`, {
+                    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/websiteSettings`, {
                         headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"

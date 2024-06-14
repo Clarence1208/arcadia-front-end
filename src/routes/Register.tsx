@@ -45,7 +45,7 @@ export function Register(){
         }
 
         delete userData.confirmPassword;
-        const response: Response = await fetch(process.env.REACT_APP_API_URL+"/users/register", {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
+        const response: Response = await fetch(import.meta.env.VITE_API_URL+"/users/register", {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur lors de la création du compte: " + await error.message);

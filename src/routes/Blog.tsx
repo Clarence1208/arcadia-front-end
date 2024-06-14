@@ -44,7 +44,7 @@ export function Blog(){
         if (userSession?.loginToken) {
             const getArticles = async (filters?: Filters): Promise<Article[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles${filters?.page ? "?limit=6&page=" + filters?.page : ""}`, {
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/articles${filters?.page ? "?limit=6&page=" + filters?.page : ""}`, {
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -70,7 +70,7 @@ export function Blog(){
 
     async function deleteItem(id: number) {
         const bearer = "Bearer " + userSession?.loginToken;
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/articles/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": bearer,

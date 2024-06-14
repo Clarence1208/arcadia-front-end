@@ -161,7 +161,7 @@ function CreatePollForm() {
         }
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/polls", {method: "POST", body: JSON.stringify(data),                     headers: {
+            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/polls", {method: "POST", body: JSON.stringify(data),                     headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
                 }});
@@ -173,7 +173,7 @@ function CreatePollForm() {
             const pollResponse = await response.json()
             pollQuestions.forEach(async pollQuestion => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch( process.env.REACT_APP_API_URL+"/polls/" + pollResponse.id + "/pollQuestions", {method: "POST", body: JSON.stringify(pollQuestion),                     headers: {
+                const response: Response = await fetch( import.meta.env.VITE_API_URL+"/polls/" + pollResponse.id + "/pollQuestions", {method: "POST", body: JSON.stringify(pollQuestion),                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
                     }});
@@ -185,7 +185,7 @@ function CreatePollForm() {
                 const pollQuestionResponse = await response.json()
                 pollQuestion.voteChoices.forEach(async voteChoice => {
                     const bearer = "Bearer " + userSession?.loginToken;
-                    const response: Response = await fetch( process.env.REACT_APP_API_URL+"/votes/" + pollQuestionResponse.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice),                     headers: {
+                    const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + pollQuestionResponse.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice),                     headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"
                         }});

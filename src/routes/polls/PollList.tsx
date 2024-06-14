@@ -45,7 +45,7 @@ export function PollList() {
         if (userSession?.loginToken) {
             const getPolls = async (filters?: Filters): Promise<Poll[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/polls${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {method: "GET",
+                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

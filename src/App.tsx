@@ -39,7 +39,7 @@ function App() {
 //API CALL TO GET THE THEME FROM WEBSITE SETTINGS
     async function getConfiguration(){
        try{
-           const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+           const response = await fetch(`${import.meta.env.VITE_API_URL}/websiteSettings`);
            const data = await response.json();
            return data[2].value
        }catch (e) {

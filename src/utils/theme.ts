@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 //API CALL TO GET THE THEME FROM WEBSITE SETTINGS
 async function getConfiguration(){
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/websiteSettings`);
     const data = await response.json();
     console.log(data[2]); //TODO : récupérer la valeur directement pas comme ça mais c'est déjà cool
     return data[2].value
