@@ -20,7 +20,7 @@ jobs:
       - name: SSH and Deploy
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} << 'EOF'
-          cd /root/arcadia-api
+          cd /root/arcadia-front-end
           git pull origin main
           docker build -t arcadia-front .
           cd /root/scripts
