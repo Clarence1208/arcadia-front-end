@@ -7,6 +7,7 @@ import {Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {MeetingsListUser} from "./meetings/MeetingsListUser";
 import {EditUser} from "./users/EditUser";
+import { DocumentList } from "../documents/DocumentList";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -61,7 +62,7 @@ export function MemberDashboard(){
                     <Tab label="Mes assemblées générales" {...a11yProps(0)}/>
                     <Tab label="Mes informations personnelles" {...a11yProps(1)}/>
                     <Tab label="Mes paiements" {...a11yProps(2)}/>
-                    {/*<Tab label="To be defined" {...a11yProps(3)}/>*/}
+                    <Tab label="Mes documents" {...a11yProps(3)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -77,9 +78,9 @@ export function MemberDashboard(){
                     <TabPanel value={tabsValue} index={2}>
                         <h1>Mes paiements </h1>
                     </TabPanel>
-                    {/*<TabPanel value={tabsValue} index={3}>*/}
-                    {/*    <h1>To be defined</h1>*/}
-                    {/*</TabPanel>*/}
+                    <TabPanel value={tabsValue} index={3}>
+                        <DocumentList />
+                    </TabPanel>
                 </div>
 
             </div>
