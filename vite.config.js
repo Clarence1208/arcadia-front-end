@@ -6,6 +6,14 @@ export default defineConfig({
     base: "",
     build: {
         outDir: 'build',
+        rollupOptions: {
+            // Flatten because I had issues with nested folders in nginx
+            output: {
+                entryFileNames: "[name].js",
+                chunkFileNames: "[name].js",
+                assetFileNames: "[name].[ext]",
+            },
+        },
     },
     plugins: [
         react({
