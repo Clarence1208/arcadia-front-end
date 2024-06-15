@@ -57,7 +57,7 @@ export default function StripePayementForm({amount, clientSecret}: FormProps) {
             <form onSubmit={handlePayButton}>
                 <PaymentElement/>
                 <Button variant={"contained"} type="submit" disabled={!stripe}>Je fais un don de {amount}€</Button>
-                {/*//receipt_email could be added*/}
+                {/*//receipt_email could be added */}
             </form>
         </div>
     )
