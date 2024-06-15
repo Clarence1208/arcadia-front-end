@@ -5,13 +5,13 @@ import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function StripeSettings() {
     const userSession = useContext(UserSessionContext)?.userSession;
-    const [accountCreatePending, setAccountCreatePending] = useState(false);
+    const [accountCreatePending, setAccountCreatePending] = useState(true);
     const [connectedAccountId, setConnectedAccountId] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [openError, setOpenError] = useState(false);
     const [createStripeAccountData, setcreateStripeAccountData] = useState({
         country: "FR",
-        email: "loriane.hilderal@gmail.com",
+        email: userSession?.email,
     });
 
     async function getStripeAccount() {
@@ -108,20 +108,24 @@ export default function StripeSettings() {
                         compte Stripe") pour utiliser la fonctionalité "Dons" du site.</p>
                     <p>Vous pouvez ensuite personaliser le compte avec vos informations depuis le bouton "Modifier les
                         informations du compte Stripe"</p>
-                    {accountCreatePending && <LoadingSpinner message={"Création du compte en cours..."}/>}
+                    {!accountCreatePending && <LoadingSpinner message={"Création du compte en cours..."}/>}
 
+                    {!accountCreatePending &&
                     <Button
                         variant="contained"
                         onClick={createStripeAccount}
                     >Créer un compte Stripe
                     </Button>
+                    }
 
                     <Button
                         variant="contained"
                         onClick={handleStripeAccountLink}
                     >Modifier les informations du compte Stripe (ouvre un nouvel onglet)
                     </Button>
+
                 </div>
+
             }
 
             {connectedAccountId &&
