@@ -4,12 +4,14 @@ import { Alert, Button, Modal, Paper, Snackbar } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
-import { s3Config } from './s3Config';
+import { s3Config } from './../utils/s3Config';
 import './../styles/DocumentListAdmin.css';
 import {Delete, Download} from '@mui/icons-material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FolderIcon from '@mui/icons-material/Folder';
 import LoadingSpinner from "../routes/components/LoadingSpinner";
+import PublicIcon from '@mui/icons-material/Public';
+import LockIcon from '@mui/icons-material/Lock';
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -309,22 +311,23 @@ export function DocumentListAdmin() {
             </div>
             <div className="file-lists">
                 <div className="file-list">
-                    <h2>Documents publiques :</h2>
+                    <h2>Documents public de {process.env.REACT_APP_ASSOCIATION_NAME} :</h2>
                     <Button
                     component="label"
                     role="button"
                     variant="contained"
                     tabIndex={-1}
                     startIcon={<CloudUploadIcon />}
+                    endIcon= {<PublicIcon/>}
                 >
-                    Charger un document
+                    Charger un document public
                     <VisuallyHiddenInput
                         type="file"
                         onChange={(e)=>handleFileChange(e, "public")}
                     />
                 </Button>
                     <ul className="file-list-ul">
-                    {publicFiles.length === 0 && <h4>Aucun fichier publique</h4>}
+                    {publicFiles.length === 0 && <h4>Aucun fichier pulic</h4>}
                     {publicFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
@@ -337,15 +340,16 @@ export function DocumentListAdmin() {
                     </ul>
                 </div>
                 <div className="file-list">
-                    <h2>Documents privés :</h2>
+                    <h2>Documents privés de {process.env.REACT_APP_ASSOCIATION_NAME} :</h2>
                     <Button
                     component="label"
                     role="button"
                     variant="contained"
                     tabIndex={-1}
                     startIcon={<CloudUploadIcon />}
+                    endIcon= {<LockIcon/>}
                 >
-                    Charger un document
+                    Charger un document privé
                     <VisuallyHiddenInput
                         type="file"
                         onChange={(e)=>handleFileChange(e, "private")}

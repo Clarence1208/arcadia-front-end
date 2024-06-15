@@ -4,7 +4,7 @@ import { Alert, Button, Modal, Paper, Snackbar } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
-import { s3Config } from './s3Config';
+import { s3Config } from './../utils/s3Config';
 import './../styles/DocumentList.css';
 import {Delete, Download} from '@mui/icons-material';
 import { wait } from "@testing-library/user-event/dist/utils";
