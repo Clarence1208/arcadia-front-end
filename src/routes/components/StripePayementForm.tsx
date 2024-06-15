@@ -16,14 +16,13 @@ export default function StripePayementForm({amount, clientSecret}: FormProps) {
     const [open, setOpen] = useState(false);
 
     async function handlePayButton(e: React.FormEvent) {
-        console.log("Handle pay button")
         e.preventDefault();
         if (stripe && elements) {
             const {error} = await stripe.confirmPayment({
                 //`Elements` instance that was used to create the Payment Element
                 elements,
                 confirmParams: {
-                    return_url: 'http://localhost:8080/stripe/return',
+                    return_url: `${window.location.origin}/stripe/return`,
                 },
             });
 
@@ -32,6 +31,7 @@ export default function StripePayementForm({amount, clientSecret}: FormProps) {
                 // confirming the payment. Show error to your customer (for example, payment
                 // details incomplete)
                 setErrorMessage(error.message || "Une erreur indéfinie est survenue");
+                setOpen(true);
             }
         } else {
             console.log("Stripe or elements not loaded")

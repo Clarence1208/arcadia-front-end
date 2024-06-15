@@ -9,6 +9,13 @@ import React, {FormEvent, useContext, useEffect, useState} from "react";
 import StripePayementForm from "./components/StripePayementForm";
 import {UserSessionContext} from "../contexts/user-session";
 
+
+type WebSetting = {
+    name: string,
+    value: string,
+    description: string,
+    type: string
+}
 export function Donate() {
 
     const [formStep, setFormStep] = useState(0);
@@ -16,11 +23,24 @@ export function Donate() {
     const [clientSecret, setClientSecret] = useState("");
     const [amount, setAmount] = useState(10);
     const [reloadPaymentIntent, setReloadPaymentIntent] = useState(false);
+    const [connectedAccountId, setConnectedAccountId] = useState("");
+
+    async function getSettings() {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+        const data: WebSetting[] = await response.json();
+        return data.find(item => item.name === 'stripe_account_id')?.value || "";
+    }
+
+    useEffect(
+        () => {
+            getSettings().then((data) => setConnectedAccountId(data));
+        }, []
+    )
+
     const stripePromise = loadStripe("pk_test_51PPPaZBvbnM6p69y9VGLCmAkev3tT3Plbw8JPtnf78iiJxiGtsTXNPOEPn3M9OktpiKeuTqx1XwcoKoVUty97nr600GCnOjcBt",
         {
-            stripeAccount: 'acct_1PPSByR1DVn2pKme'
+            stripeAccount: connectedAccountId
         });
-
 
     const handlePayButton1 = async (e: FormEvent) => {
         e.preventDefault();
@@ -36,7 +56,7 @@ export function Donate() {
         async function initiatePayment(amount: number) {
             const bearer = "Bearer " + userSession?.loginToken;
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/stripe/createPaymentIntent?amount=${amount}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/stripe/createPaymentIntent?amount=${amount}&accountId=${connectedAccountId}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',

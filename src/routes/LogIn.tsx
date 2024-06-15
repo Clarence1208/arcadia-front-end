@@ -55,10 +55,10 @@ function LogInForm() {
             }
             sessionContext.updateUserSession({
                 userId: res.id, loginToken: res.loginToken,
-                fullName: res.firstName + " " + res.surname, isLoggedIn: true, roles: roles
+                fullName: res.firstName + " " + res.surname, isLoggedIn: true,
+                roles: roles, email: res.email
             })
         }
-        console.log(res)
         if (res.roles === "admin") {
             navigate('/adminDashboard')
         } else {

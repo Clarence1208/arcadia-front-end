@@ -7,6 +7,7 @@ export interface IUserSession {
     backPage: string;
     loginToken: string;
     roles: string[];
+    email: string;
 }
 
 interface IUserSessionContext {
@@ -26,6 +27,7 @@ export const UserSessionProvider: FC<IProps> = ({ children }) => {
         fullName: "",
         backPage: "",
         loginToken: "",
+        email: "",
         roles: [],
     });
 
