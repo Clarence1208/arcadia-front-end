@@ -5,16 +5,24 @@ import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
 import { s3Config } from './s3Config';
-import './../styles/DocumentList.css';
+import './../styles/DocumentListAdmin.css';
 import {Delete, Download} from '@mui/icons-material';
-import { wait } from "@testing-library/user-event/dist/utils";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import FolderIcon from '@mui/icons-material/Folder';
 import LoadingSpinner from "../routes/components/LoadingSpinner";
 
 interface File extends Blob {
     readonly lastModified: number;
     readonly name: string;
     readonly webkitRelativePath: string;
+}
+
+type User = {
+    id: number,
+    firstName: string,
+    surname: string,
+    email: string,
+    roles: string,
 }
 
 const VisuallyHiddenInput = styled('input')({
@@ -66,15 +74,19 @@ export function DocumentListAdmin() {
     const [openVideoModal, setOpenVideoModal] = useState(false);
     const [privateFiles, setPrivateFiles] = useState<Array<{ Key: string, publicUrl: string}>>([]);
     const [publicFiles, setPublicFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
+    const [userFiles, setUserFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
     const [uploaded, setUploaded] = useState(false);
     const [image, setImage] = useState<string>("");
     const [video, setVideo] = useState<string>("");
     const [loading, setLoading] = useState(false);
+    const [users, setUsers] = useState<User[]>([]);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             setPrivateFiles([]);
             setPublicFiles([]);
+            setUserFiles([]);
             const s3 = new ReactS3Client(s3Config);
             try {
                 const fileList = await s3.listFiles();
@@ -98,6 +110,17 @@ export function DocumentListAdmin() {
                             return prev;
                         });
                     }
+                    if(selectedUser) {
+                        if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "users") && (check[2] === String(selectedUser.id))) {
+                            setUserFiles((prev) => {
+                                if (!prev.some(existingFile => existingFile.Key === check[3]) && check[3] !== "") {
+                                    file.Key = check.slice(3).join("/");
+                                    return [...prev, file];
+                                }
+                                return prev;
+                            });
+                        }
+                    }
                 });
             } catch (error) {
                 setErrorMessage("Erreur : " + error);
@@ -105,7 +128,35 @@ export function DocumentListAdmin() {
             }
         };
         fetchData();
-    }, [userSession?.loginToken, uploaded]);
+    }, [userSession?.loginToken, uploaded, selectedUser]);
+
+    useEffect(() => {
+        if (userSession?.loginToken) {
+            const getUsers = async (): Promise<User[]> => {
+                const bearer = "Bearer " + userSession?.loginToken;
+                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+                    headers: {
+                        "Authorization": bearer,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (!response.ok) {
+                    const error = await response.json()
+                    setErrorMessage("Erreur : " + await error.message);
+                    setOpen(true);
+                    return []
+                }
+                const res = await response.json();
+                if (res.length === 0) {
+                    setErrorMessage("Aucun utilisateur trouvé")
+                    setOpen(true)
+                }
+                return res;
+            }
+            getUsers().then(setUsers)
+        }
+    }
+    , [userSession?.loginToken, userSession?.userId])
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, directory: string) => {
         const file = event.target.files?.[0];
@@ -308,11 +359,41 @@ export function DocumentListAdmin() {
                                 {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir l'image"} onClick={()=>showImage(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
                                 {Object.values(SupportedVideoType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir la vidéo"} onClick={()=>showVideo(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
                                 <Button title={"Télécharger"} onClick={()=>handleDownload(file.publicUrl, file.Key)}>{<Download/>}</Button>
-                                <Button title={"Supprimer"} onClick={()=>deleteFile(file.Key, "private")}>{<Delete/>}</Button>
+                                <Button title={"Supprimer"} onClick={()=>deleteFile(file.Key, "public")}>{<Delete/>}</Button>
                                 </li>
                         ))}
                     </ul>
                 </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                <h1>Gestion des documents des utilisateurs :</h1>
+            </div>
+            <div className="users-documents">
+                <div className="user-list">
+                    <h2>Utilisateurs :</h2>
+                    <ul className="user-select-list">
+                        {users.map((user) => (
+                            <Button key={user.id} startIcon={<FolderIcon></FolderIcon>} onClick={()=>setSelectedUser(user)}>{user.firstName + " " + user.surname}</Button>
+                        ))}
+                    </ul>
+                </div>
+                {selectedUser && 
+                    <div className="user-files">
+                        <h2>Documents de {selectedUser?.firstName + " " + selectedUser?.surname} :</h2>
+                        <ul className="file-list-ul">
+                        {userFiles.length === 0 && <h4>{selectedUser.firstName + " " + selectedUser.surname} n'a pas de documents</h4>}
+                        {userFiles.map((file) => (
+                                <li key={file.Key} className="file-list-li">
+                                    {file.Key}
+                                    {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir l'image"} onClick={()=>showImage(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
+                                    {Object.values(SupportedVideoType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir la vidéo"} onClick={()=>showVideo(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
+                                    <Button title={"Télécharger"} onClick={()=>handleDownload(file.publicUrl, file.Key)}>{<Download/>}</Button>
+                                    <Button title={"Supprimer"} onClick={()=>deleteFile(file.Key, "users/" + String(selectedUser.id))}>{<Delete/>}</Button>
+                                    </li>
+                            ))}
+                        </ul>
+                    </div>
+                }
             </div>
         </div>
     );

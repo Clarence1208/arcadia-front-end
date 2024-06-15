@@ -81,10 +81,10 @@ export function DocumentList() {
                 console.log('File list:', fileList);
                 fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
                     const check = file.Key.split("/");
-                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === String(userSession?.userId))) {
+                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "users") && (check[2] === String(userSession?.userId))) {
                         setUserFiles((prev) => {
-                            if (!prev.some(existingFile => existingFile.Key === check[2])) {
-                                file.Key = check.slice(2).join("/");
+                            if (!prev.some(existingFile => existingFile.Key === check[3])) {
+                                file.Key = check.slice(3).join("/");
                                 return [...prev, file];
                             }
                             return prev;
@@ -136,7 +136,7 @@ export function DocumentList() {
 
         const s3 = new ReactS3Client({
             ...s3Config,
-            dirName: s3Config.dirName + "/" + userSession?.userId,
+            dirName: s3Config.dirName + "/users/" + userSession?.userId,
         });
         let filename = fileRef.current.name;
         let parts = filename.split('.');
