@@ -11,6 +11,8 @@ import { MeetingsList } from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
 import {PollList} from "./polls/PollList";
+import { DocumentList } from "../documents/DocumentList";
+import { DocumentListAdmin } from "../documents/DocumentListAdmin";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -67,6 +69,7 @@ export function Dashboard(){
                     <Tab label="Gestions des événements" {...a11yProps(2)}/>
                     <Tab label="Gestions des paramètres globaux du site" {...a11yProps(3)}/>
                     <Tab label="Gestions des sondages" {...a11yProps(4)}/>
+                    <Tab label="Gestions des documents" {...a11yProps(5)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -89,6 +92,11 @@ export function Dashboard(){
                     <Button href="/createPoll" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
                         <div className={"board"}>
                             <PollList />
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={tabsValue} index={5}>
+                        <div className="board-documents">
+                            <DocumentListAdmin />
                         </div>
                     </TabPanel>
                 </div>

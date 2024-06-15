@@ -19,6 +19,13 @@
     /*margin: 0 auto;*/
 }
 
+.board-documents{
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    margin: 0 auto;
+}
+
 .tab-panel{
     display: flex;
     flex-direction: row;
