@@ -1,7 +1,8 @@
 import { Pagination } from "@mui/material";
 import { Meeting } from "../meetings/Meeting";
-import { useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import '../../styles/MeetingsList.css';
+import {ConfigContext} from "../../index";
 
 interface Meeting {
     id: number,
@@ -19,7 +20,8 @@ type Filters = {
 
 
 const getMeetings = async (filters?: Filters): Promise<Meeting[]> => {
-    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
+    const config = useContext(ConfigContext);
+    const response: Response = await fetch(`${config.apiURL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
         headers: {
             //"Authorization": bearer,
             "Content-Type": "application/json"

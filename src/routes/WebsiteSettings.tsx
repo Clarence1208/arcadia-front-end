@@ -17,6 +17,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 
 import "../styles/WebsiteSettings.css";
+import {ConfigContext} from "../index";
 
 type WebsiteSettings = {
     id?: number,
@@ -46,9 +47,10 @@ function CreateSettingModal({settings, setSettings, open, handleClose, loginToke
     }
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault()
+        const config = useContext(ConfigContext);
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/websiteSettings", {
+        const response: Response = await fetch( config.apiURL + "/websiteSettings", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -138,9 +140,10 @@ function EditSettingModal({settings, setSettings,setting, open, handleClose, log
     }
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault()
+        const config = useContext(ConfigContext);
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/websiteSettings/"+data?.id, {
+        const response: Response = await fetch( config.apiURL + "/websiteSettings/"+data?.id, {
             method: "PATCH",
             body: JSON.stringify(data),
             headers: {
@@ -224,6 +227,7 @@ export function WebsiteSettings() {
     const userToken = userSession?.loginToken
     const userId = userSession?.userId
     const [selectedSetting, setSelectedSetting] = useState<WebsiteSettings>()
+    const config = useContext(ConfigContext);
 
     function handleEditClicked(setting: WebsiteSettings) {
         setSelectedSetting(setting)
@@ -234,7 +238,7 @@ export function WebsiteSettings() {
             if (userToken && userId) {
                 const getSettings = async (): Promise<WebsiteSettings[]> => {
                     const bearer = "Bearer " + userToken;
-                    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/websiteSettings`, {
+                    const response: Response = await fetch(`${config.apiURL}/websiteSettings`, {
                         headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"

@@ -7,6 +7,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import {useNavigate, useParams} from "react-router-dom";
 import { PollQuestionForm } from "./PollQuestionForm";
 import { JSX } from "react/jsx-runtime";
+import {ConfigContext} from "../../index";
 
 type FormData = {
     responses: VoteChoice[]
@@ -57,6 +58,7 @@ export function PollVoteApply() {
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
     const {id} = useParams()
+    const config = useContext(ConfigContext);
 
     async function updateFields(voteChoiceData: VoteChoice, limit: number) {
         setData(prev => {
@@ -90,7 +92,7 @@ export function PollVoteApply() {
         if(userSession?.loginToken) {
             const getPoll = async (): Promise<Poll> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls/${id}`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/polls/${id}`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -115,7 +117,7 @@ export function PollVoteApply() {
         if(userSession?.loginToken) {
             const getPollQuestions = async (): Promise<PollQuestion[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls/${id}/pollQuestions`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/polls/${id}/pollQuestions`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -156,7 +158,7 @@ export function PollVoteApply() {
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/polls/" + id + "/join", {method: "POST",
+            const response: Response = await fetch( config.apiURL + "/polls/" + id + "/join", {method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
@@ -167,7 +169,7 @@ export function PollVoteApply() {
                 return
             }
 
-            const responseVoteChoices: Response = await fetch( import.meta.env.VITE_API_URL+"/polls/" + id + "/voteChoices/apply", {method: "POST", body: JSON.stringify(data.responses),
+            const responseVoteChoices: Response = await fetch( config.apiURL +"/polls/" + id + "/voteChoices/apply", {method: "POST", body: JSON.stringify(data.responses),
                 headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

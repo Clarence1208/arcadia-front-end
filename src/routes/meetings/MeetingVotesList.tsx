@@ -9,6 +9,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Vote } from "./Vote";
 import Clock from 'react-clock'
 import 'react-clock/dist/Clock.css';
+import {ConfigContext} from "../../index";
 
 interface Vote {
     id: number,
@@ -47,12 +48,13 @@ export function MeetingVotesList() {
     const { id } = useParams();
     const [meeting, setMeeting] = useState<Meeting>();
     const [time, setTime] = useState(new Date());
+    const config = useContext(ConfigContext);
 
     useEffect(() => {
         if (userSession?.loginToken) {
             const getVotes = async (filters?: Filters): Promise<Vote[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/meetings/${id}/votes`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/meetings/${id}/votes`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -78,7 +80,7 @@ export function MeetingVotesList() {
             }
             const getMeeting = async (filters?: Filters): Promise<Meeting> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/meetings/${id}`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/meetings/${id}`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

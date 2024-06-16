@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {AppConfig} from "./config/config";
 import fetchConfig from "./config/fetchConfig";
 
-export const ConfigContext = createContext<AppConfig | null>(null);
+export const ConfigContext = createContext<AppConfig>({} as AppConfig);
 
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = ReactDOM.createRoot(rootElement);

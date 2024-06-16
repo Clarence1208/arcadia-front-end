@@ -2,6 +2,7 @@ import { Alert, InputLabel, Snackbar, Switch } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import { useContext, useEffect, useState } from "react";
 import {UserSessionContext} from "../../contexts/user-session";
+import {ConfigContext} from "../../index";
 
 type VoteChoice = {
     id: number,
@@ -44,12 +45,13 @@ export function PollQuestionResult(props : PollQuestionFormProps) {
     const [ErrorMessage, setErrorMessage] = useState("")
     const [voteChoices, setVoteChoices] = useState<VoteChoice[]>()
     const [open, setOpen] = useState(false);
+    const config = useContext(ConfigContext);
 
     useEffect(() => {
         if(userSession?.loginToken) {
             const getPollQuestions = async (): Promise<VoteChoice[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/votes/${props.question.id}/voteChoices?type=Poll`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/votes/${props.question.id}/voteChoices?type=Poll`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

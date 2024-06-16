@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import {ConfigContext} from "../../index";
 
 interface VoteProps {
     vote: Vote;
@@ -47,12 +48,13 @@ export function Vote({vote, meetingId}: VoteProps){
     const userInVote = vote.users.find(user => user.id === userSession?.userId)
     const voteCanEnd = vote.quorum ? vote.users.length >= vote.quorum : true
     const { id } = useParams();
+    const config = useContext(ConfigContext);
 
     async function onSubmit(e: FormEvent, vote: Vote) {
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + vote.id + "/end", {method: "POST",
+            const response: Response = await fetch( config.apiURL + "/votes/" + vote.id + "/end", {method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"

@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import {ConfigContext} from "../../index";
 
 interface PollProps {
     poll: Poll;
@@ -39,6 +40,7 @@ export function Poll({poll}: PollProps){
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+    const config = useContext(ConfigContext);
     const userSession = useContext(UserSessionContext)?.userSession
     if(poll.users === undefined){
         poll.users = []
@@ -49,7 +51,7 @@ export function Poll({poll}: PollProps){
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/polls/" + poll.id + "/end", {method: "POST",
+            const response: Response = await fetch( config.apiURL + "/polls/" + poll.id + "/end", {method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"

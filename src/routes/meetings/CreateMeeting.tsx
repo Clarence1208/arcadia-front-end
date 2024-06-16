@@ -11,6 +11,7 @@ import { Dayjs, isDayjs } from "dayjs";
 import Paper from "@mui/material/Paper";
 import {Groups3} from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
+import {ConfigContext} from "../../index";
 
 
 type CreateMeetingData = {
@@ -45,6 +46,7 @@ const tempBody : TempMeetingData = {
 function CreateMeetingForm() {
     const userSession = useContext(UserSessionContext)?.userSession
     const navigate = useNavigate();
+    const config = useContext(ConfigContext);
 
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
@@ -82,7 +84,7 @@ function CreateMeetingForm() {
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const req = transformToCreateData(tempData, data);
-        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Content-Type": "application/json"}});
+        const response: Response = await fetch( config.apiURL + "/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur : " + await error.message);

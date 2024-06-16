@@ -10,6 +10,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Snackbar from "@mui/material/Snackbar";
+import {ConfigContext} from "../../index";
 
 type CreatePollData = {
     name: string,
@@ -46,7 +47,8 @@ function CreatePollForm() {
     const [name, setName] = useState("")
     const [names, setNames] = useState<string[]>([])
     const [open, setOpen] = useState(false);
-    const [pollQuestions, setPollQuestions] = useState<PollQuestion[]>([])
+    const [pollQuestions, setPollQuestions] = useState<PollQuestion[]>([]);
+    const config = useContext(ConfigContext);
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')
@@ -161,7 +163,7 @@ function CreatePollForm() {
         }
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/polls", {method: "POST", body: JSON.stringify(data),                     headers: {
+            const response: Response = await fetch( config.apiURL + "/polls", {method: "POST", body: JSON.stringify(data),                     headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
                 }});
@@ -173,7 +175,7 @@ function CreatePollForm() {
             const pollResponse = await response.json()
             pollQuestions.forEach(async pollQuestion => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch( import.meta.env.VITE_API_URL+"/polls/" + pollResponse.id + "/pollQuestions", {method: "POST", body: JSON.stringify(pollQuestion),                     headers: {
+                const response: Response = await fetch( config.apiURL + "/polls/" + pollResponse.id + "/pollQuestions", {method: "POST", body: JSON.stringify(pollQuestion),                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
                     }});
@@ -185,7 +187,7 @@ function CreatePollForm() {
                 const pollQuestionResponse = await response.json()
                 pollQuestion.voteChoices.forEach(async voteChoice => {
                     const bearer = "Bearer " + userSession?.loginToken;
-                    const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + pollQuestionResponse.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice),                     headers: {
+                    const response: Response = await fetch( config.apiURL + "/votes/" + pollQuestionResponse.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice),                     headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"
                         }});

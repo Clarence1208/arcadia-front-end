@@ -1,6 +1,7 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {UserRegisterForm} from "../components/UserRegisterForm";
 import {Dayjs} from "dayjs";
+import {ConfigContext} from "../../index";
 
 type FormData = {
     firstName: string;
@@ -29,6 +30,7 @@ type EditUserProps = {
 export function EditUser({userId, userToken}: EditUserProps){
     const [formData, setFormData] = useState<FormData>(editUserData);
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const config = useContext(ConfigContext);
     function updateFields(fields: Partial<FormData>){
         setFormData(prev => {
             return {...prev, ...fields}
@@ -39,7 +41,7 @@ export function EditUser({userId, userToken}: EditUserProps){
         if (userToken && userId) {
             const getUser = async (): Promise<FormData> => {
                 const bearer = "Bearer " + userToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`, {
+                const response: Response = await fetch(`${config.apiURL}/users/${userId}`, {
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

@@ -8,6 +8,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Vote } from "./Vote";
 import { PieChart } from '@mui/x-charts';
+import {ConfigContext} from "../../index";
 
 
 type User = {
@@ -47,6 +48,7 @@ export function VoteResults() {
     const [loosers, setLooser] = useState<VoteChoice[]>([]);
     const [isLastVote , setIsLastVote] = useState<boolean>(false);
     const [isVoteResultVisible, setIsVoteResultVisible] = useState<boolean>(false);
+    const config = useContext(ConfigContext);
 
     useEffect(() => {
         // Fetch vote data and vote choices
@@ -60,7 +62,7 @@ export function VoteResults() {
                         const bearer = "Bearer " + userSession?.loginToken;
                         
                         // Fetch vote information
-                        const voteResponse = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}`, {
+                        const voteResponse = await fetch(`${config.apiURL}/votes/${voteId}`, {
                             method: "GET",
                             headers: {
                                 "Authorization": bearer,
@@ -74,7 +76,7 @@ export function VoteResults() {
                         setVote(await voteResponse.json());
         
                         // Fetch vote choices
-                        const voteChoicesResponse = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}/voteChoices?type=Vote`, {
+                        const voteChoicesResponse = await fetch(`${config.apiURL}/votes/${voteId}/voteChoices?type=Vote`, {
                             method: "GET",
                             headers: {
                                 "Authorization": bearer,

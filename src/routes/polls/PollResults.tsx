@@ -8,6 +8,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import { PollQuestionForm } from "./PollQuestionForm";
 import { JSX } from "react/jsx-runtime";
 import { PollQuestionResult } from "./PollQuestionResult";
+import {ConfigContext} from "../../index";
 
 interface Poll {
     id: number,
@@ -47,13 +48,14 @@ export function PollResults() {
     const [pollQuestions, setPollQuestions] = useState<PollQuestion[]>()
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
+    const config = useContext(ConfigContext);
     const {id} = useParams()
 
     useEffect(() => {
         if(userSession?.loginToken) {
             const getPoll = async (): Promise<Poll> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls/${id}`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/polls/${id}`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -78,7 +80,7 @@ export function PollResults() {
         if(userSession?.loginToken) {
             const getPollQuestions = async (): Promise<PollQuestion[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls/${id}/pollQuestions`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/polls/${id}/pollQuestions`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

@@ -8,6 +8,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import LoadingSpinner from "../components/LoadingSpinner";
 import {ArrowBack} from "@mui/icons-material";
 import { useTheme } from "@mui/material";
+import {ConfigContext} from "../../index";
 
 type Article = {
     id: number,
@@ -22,11 +23,12 @@ export function ShowArticle(){
     const [errorMessage, setErrorMessage] = useState(null);
     const userSession = useContext(UserSessionContext)?.userSession
     const theme = useTheme();
+    const config = useContext(ConfigContext);
 
     useEffect(() => {
     const getArticle = async (): Promise<Article> => {
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/articles/${articleId}`, {
+        const response: Response = await fetch(`${config.apiURL}/articles/${articleId}`, {
             headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

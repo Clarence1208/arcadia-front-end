@@ -16,6 +16,7 @@ import {AddCircleOutline, Edit, Delete} from '@mui/icons-material';
 import React, {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 import Snackbar from "@mui/material/Snackbar";
+import {ConfigContext} from "../index";
 
 type User = {
     id: number,
@@ -35,10 +36,11 @@ export function UsersDashboard() {
     const userSession = useContext(UserSessionContext)?.userSession
     const userToken = userSession?.loginToken
     const userId = userSession?.userId
+    const config = useContext(ConfigContext);
 
     async function deleteItem(id: number) {
         const bearer = "Bearer " + userSession?.loginToken;
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
+        const response = await fetch(`${config.apiURL}/users/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": bearer,
@@ -61,7 +63,7 @@ export function UsersDashboard() {
             if (userToken && userId) {
                 const getUsers = async (filters?: Filters): Promise<User[]> => {
                     const bearer = "Bearer " + userToken;
-                    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+                    const response: Response = await fetch(`${config.apiURL}/users`, {
                         headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"

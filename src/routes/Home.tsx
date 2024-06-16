@@ -18,7 +18,7 @@ export function Home() {
             <Header/>
             <div className={"main home"}>
                 <div>
-                    <h1>Test: {config.apiURL}</h1>
+                    {/*<h1>Test: {config.apiURL}</h1>*/}
                     <h1>Association française des personnes malades</h1>
                     <h3>Vous nous avez vu mais nous avez vous regardé ?</h3>
                 </div>

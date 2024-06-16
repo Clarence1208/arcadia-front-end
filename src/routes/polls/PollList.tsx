@@ -4,6 +4,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import 'react-clock/dist/Clock.css';
 import { Poll } from "./Poll";
 import { Pagination } from "@mui/material";
+import {ConfigContext} from "../../index";
 
 interface Poll {
     id: number,
@@ -36,6 +37,7 @@ export function PollList() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [polls, setPolls] = useState<Poll[]>([])
     const [page, setPage] = useState(1);
+    const config = useContext(ConfigContext);
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -45,7 +47,7 @@ export function PollList() {
         if (userSession?.loginToken) {
             const getPolls = async (filters?: Filters): Promise<Poll[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/polls${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/polls${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"

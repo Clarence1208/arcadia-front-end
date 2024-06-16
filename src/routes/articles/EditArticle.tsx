@@ -8,6 +8,7 @@ import {ArrowBack, FileUpload} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import {UserSessionContext} from "../../contexts/user-session";
 import Snackbar from "@mui/material/Snackbar";
+import {ConfigContext} from "../../index";
 
 type PatchArticle = {
     title?: string,
@@ -27,6 +28,7 @@ export function EditArticle() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
+    const config = useContext(ConfigContext);
     const handleClose = () => {
         setOpen(false)
     }
@@ -41,7 +43,7 @@ export function EditArticle() {
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch( import.meta.env.VITE_API_URL+`/articles/${articleId}`, {
+        const response: Response = await fetch( config.apiURL + `/articles/${articleId}`, {
             method: "PATCH",
             body: JSON.stringify(data),
             headers: {
@@ -63,7 +65,7 @@ export function EditArticle() {
     useEffect(() => {
         const getArticle = async (): Promise<PatchArticle> => {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/articles/${articleId}`, {
+            const response: Response = await fetch(`${config.apiURL}/articles/${articleId}`, {
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"

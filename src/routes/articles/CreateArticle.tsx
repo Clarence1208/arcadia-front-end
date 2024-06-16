@@ -9,6 +9,7 @@ import { Footer } from "../components/Footer";
 import FeedIcon from '@mui/icons-material/Feed';
 import {ArrowBack, FileUpload} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
+import {ConfigContext} from "../../index";
 
 type CreateArticleData = {
     title: string,
@@ -30,6 +31,7 @@ const file : CreateArticleFile = {
 function CreateArticleForm() {
     const userSession = useContext(UserSessionContext)?.userSession
     const navigate = useNavigate();
+    const config = useContext(ConfigContext);
 
     const [ErrorMessage, setErrorMessage] = useState("")
     const [data, setData] = useState(body)
@@ -56,7 +58,7 @@ function CreateArticleForm() {
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch( import.meta.env.VITE_API_URL+"/articles?currentUserId="+userSession?.userId, {
+        const response: Response = await fetch( config.apiURL + "/articles?currentUserId="+userSession?.userId, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -72,7 +74,7 @@ function CreateArticleForm() {
         // if (fileData.file) {
         //     const formData = new FormData();
         //     formData.append("file", fileData.file);
-        //     const responseFile: Response = await fetch( import.meta.env.VITE_API_URL+"/articles/"+(await response.json()).id+"/media", {method: "POST", body: formData});
+        //     const responseFile: Response = await fetch( config.apiURL+"/articles/"+(await response.json()).id+"/media", {method: "POST", body: formData});
         //     if (!responseFile.ok) {
         //         const error =  await responseFile.json()
         //         setErrorMessage("Erreur : " + await error.message);

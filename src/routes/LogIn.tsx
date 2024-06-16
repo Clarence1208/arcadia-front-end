@@ -6,6 +6,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {UserSessionContext} from "../contexts/user-session";
 import Collapse from "@mui/material/Collapse";
 import Snackbar from '@mui/material/Snackbar';
+import {ConfigContext} from "../index";
 
 
 type LogInData = {
@@ -21,6 +22,7 @@ function LogInForm() {
     let navigate = useNavigate();
     const [open, setOpen] = useState(true);
     const sessionContext = useContext(UserSessionContext)
+    const config = useContext(ConfigContext);
 
     const [ErrorMessage, setErrorMessage] = useState("")
     const [data, setData] = useState(body)
@@ -33,7 +35,7 @@ function LogInForm() {
 
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
-        const response: Response = await fetch(import.meta.env.VITE_API_URL + "/users/login", {
+        const response: Response = await fetch(`${config.apiURL}/users/login`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {"Content-Type": "application/json"}
@@ -72,7 +74,7 @@ function LogInForm() {
 
     return (
         <form id="formLogin" onSubmit={onSubmit} style={{maxWidth: "40vw"}}>
-            <h1>Portail d'accès à l'administration de {import.meta.env.VITE_ASSOCIATION_NAME} </h1>
+            <h1>Portail d'accès à l'administration de {config.apiURL} </h1>
             {ErrorMessage && <Collapse in={open}><Alert className={"alert"} severity="error"
                                                         onClose={() => setOpen(false)}>{ErrorMessage}</Alert></Collapse>}
 

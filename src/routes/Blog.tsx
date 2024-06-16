@@ -11,6 +11,7 @@ import {useNavigate} from "react-router-dom";
 import {Chatbot} from "./components/Chatbot";
 import { PollList } from "./polls/PollList";
 import theme from "../utils/theme";
+import {ConfigContext} from "../index";
 
 interface Article {
     id: number,
@@ -32,6 +33,7 @@ export function Blog(){
     const [flashMessage, setFlashMessage] = useState<string>("")
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+    const config = useContext(ConfigContext);
 
     const handleClose = () => {
         setOpen(false)
@@ -44,7 +46,7 @@ export function Blog(){
         if (userSession?.loginToken) {
             const getArticles = async (filters?: Filters): Promise<Article[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/articles${filters?.page ? "?limit=6&page=" + filters?.page : ""}`, {
+                const response: Response = await fetch(`${config.apiURL}/articles${filters?.page ? "?limit=6&page=" + filters?.page : ""}`, {
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -70,7 +72,7 @@ export function Blog(){
 
     async function deleteItem(id: number) {
         const bearer = "Bearer " + userSession?.loginToken;
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/articles/${id}`, {
+        const response = await fetch(`${config.apiURL}/articles/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": bearer,

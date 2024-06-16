@@ -10,6 +10,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Snackbar from "@mui/material/Snackbar";
+import {ConfigContext} from "../../index";
 
 type CreateVoteData = {
     name: string,
@@ -47,6 +48,7 @@ function CreateMeetingVoteForm() {
     const [votes, setVotes] = useState<string[]>([])
     const [name, setName] = useState("")
     const [open, setOpen] = useState(false);
+    const config = useContext(ConfigContext);
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')
@@ -151,7 +153,7 @@ function CreateMeetingVoteForm() {
         }
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/meetings/" + id + "/votes", {method: "POST", body: JSON.stringify(data),                     headers: {
+            const response: Response = await fetch( config.apiURL + "/meetings/" + id + "/votes", {method: "POST", body: JSON.stringify(data),                     headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
                 }});
@@ -166,7 +168,7 @@ function CreateMeetingVoteForm() {
                     name: votes[i],
                     type: "Vote"
                 }
-                const responseVoteChoices: Response = await fetch(import.meta.env.VITE_API_URL+"/votes/" + vote.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice), headers: {
+                const responseVoteChoices: Response = await fetch(config.apiURL + "/votes/" + vote.id + "/voteChoices", {method: "POST", body: JSON.stringify(voteChoice), headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
                     }});

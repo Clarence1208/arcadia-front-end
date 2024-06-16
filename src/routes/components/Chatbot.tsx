@@ -1,4 +1,4 @@
-import React, {SyntheticEvent, useState} from "react";
+import React, {SyntheticEvent, useContext, useState} from "react";
 import {Alert, Button, IconButton, TextField, Tooltip} from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import "../../styles/Chatbot.css"
@@ -7,6 +7,7 @@ import OpenAI from "openai";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ChatIcon from '@mui/icons-material/Chat';
 import SendIcon from '@mui/icons-material/Send';
+import {ConfigContext} from "../../index";
 
 type PromptMessages =  OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 const initialMessages : PromptMessages = [
@@ -16,7 +17,8 @@ const initialMessages : PromptMessages = [
     }
     ]
 export function Chatbot() {
-    const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+    const config = useContext(ConfigContext);
+    const API_KEY = config.openaiAPIKey;
     const [messages, setMessages] = useState<PromptMessages>(initialMessages);
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")

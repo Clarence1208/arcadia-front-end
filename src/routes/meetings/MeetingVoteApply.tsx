@@ -1,12 +1,13 @@
-import { Alert, Button, InputLabel, MenuItem, Pagination, Select, Snackbar, Switch } from "@mui/material";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import {Alert, Button, InputLabel, MenuItem, Pagination, Select, Snackbar, Switch} from "@mui/material";
+import {FormEvent, useContext, useEffect, useState} from "react";
 import '../../styles/VoteChoiceList.css';
-import { useNavigate, useParams } from "react-router-dom";
-import { Footer } from "./../components/Footer";
+import {useNavigate, useParams} from "react-router-dom";
+import {Footer} from "./../components/Footer";
 import Header from "./../components/Header";
 import {UserSessionContext} from "../../contexts/user-session";
-import { Vote } from "./Vote";
+import {Vote} from "./Vote";
 import Paper from "@mui/material/Paper";
+import {ConfigContext} from "../../index";
 
 interface Vote {
     id: number,
@@ -18,7 +19,7 @@ interface Vote {
     nbPossibleVotes: number,
     quorum?: number,
     currentRound?: number,
-    meetingId: number,  
+    meetingId: number,
 }
 
 interface VoteParams {
@@ -40,28 +41,30 @@ export function MeetingVoteApply() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [ErrorMessage, setErrorMessage] = useState("")
     const [vote, setVote] = useState<Vote>();
-    const [data, setData] = useState<VoteParams>({ isWhiteVote: false });
+    const [data, setData] = useState<VoteParams>({isWhiteVote: false});
     const [voteChoices, setVoteChoices] = useState<VoteChoice[]>([]);
     const [results, setResults] = useState<VoteChoice[]>([]);
     const [open, setOpen] = useState(false);
+    const config = useContext(ConfigContext);
 
     const navigate = useNavigate();
-    const { voteId, id } = useParams();
+    const {voteId, id} = useParams();
 
     function changeWhiteVote() {
         setData(prev => {
-            return { ...prev, isWhiteVote: !prev.isWhiteVote }
+            return {...prev, isWhiteVote: !prev.isWhiteVote}
         })
     }
 
     useEffect(() => {
-        if(!userSession?.roles) {
+        if (!userSession?.roles) {
             return;
         }
-        if(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("adherent")) {
+        if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("adherent")) {
             const getVote = async (filters?: Filters): Promise<Vote> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/votes/${voteId}`, {
+                    method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -82,7 +85,8 @@ export function MeetingVoteApply() {
             getVote().then(setVote)
             const getVoteChoices = async (filters?: Filters): Promise<VoteChoice[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/votes/${voteId}/voteChoices?type=Vote`, {method: "GET",
+                const response: Response = await fetch(`${config.apiURL}/votes/${voteId}/voteChoices?type=Vote`, {
+                    method: "GET",
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -107,7 +111,7 @@ export function MeetingVoteApply() {
             }
             return;
         } else {
-           return;
+            return;
         }
     }, [userSession, voteId]);
 
@@ -132,26 +136,30 @@ export function MeetingVoteApply() {
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + voteId + "/join", {method: "POST",
+            const response: Response = await fetch(config.apiURL + "/votes/" + voteId + "/join", {
+                method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
-                }});
+                }
+            });
             if (!response.ok) {
-                const error =  await response.json()
+                const error = await response.json()
                 setErrorMessage("Erreur : " + await error.message);
                 return
             }
 
-            if(!data.isWhiteVote) {
+            if (!data.isWhiteVote) {
                 let voteChoicesIds = results.map((result) => result.id);
-                const response: Response = await fetch( import.meta.env.VITE_API_URL+"/votes/" + voteId + "/voteChoices/apply", {method: "POST", body: JSON.stringify(voteChoicesIds),
+                const response: Response = await fetch(config.apiURL + "/votes/" + voteId + "/voteChoices/apply", {
+                    method: "POST", body: JSON.stringify(voteChoicesIds),
                     headers: {
-                    "Authorization": bearer,
-                    "Content-Type": "application/json"
-                }});
+                        "Authorization": bearer,
+                        "Content-Type": "application/json"
+                    }
+                });
                 if (!response.ok) {
-                    const error =  await response.json()
+                    const error = await response.json()
                     setErrorMessage("Erreur : " + await error.message);
                     return
                 }
@@ -166,69 +174,69 @@ export function MeetingVoteApply() {
 
     return (
         <div>
-            <Header />
-                <div className={"main"}>
+            <Header/>
+            <div className={"main"}>
                 <Snackbar
                     open={open}
                     autoHideDuration={3000}
                     onClose={handleClose}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    anchorOrigin={{vertical: 'top', horizontal: 'right'}}
                 >
                     <Alert
                         onClose={handleClose}
                         severity="error"
                         variant="filled"
-                        sx={{ width: '100%' }}
+                        sx={{width: '100%'}}
                     >{ErrorMessage}</Alert>
                 </Snackbar>
-                    <Paper elevation={1} className={"content"}>
+                <Paper elevation={1} className={"content"}>
                     <div>
-                        <h1>{vote?.name}</h1><br />
+                        <h1>{vote?.name}</h1><br/>
                         <h2>Veuillez faire votre choix :</h2>
                         <p>(Il est possible de choisir jusqu'à : {vote?.nbPossibleVotes} choix maximum)</p>
                     </div>
                     <div className={"vote-choice-list"}>
                         <div className={"custom-choice"}>
-                            {Array.from({ length: vote?.nbPossibleVotes || 0 }).map((_, i) => {
-                                return (<div><InputLabel id="select-label">Choix n°{i+1}</InputLabel>
-                                <Select
-                                    labelId="select-label"
-                                    className="select-vote-choice"
-                                    value={results[i]?.name}
-                                    onChange={(e) => {
-                                        const newResults = [...results];
-                                        if (newResults[i]) {
-                                            newResults[i].id = parseInt(e.target.value);
-                                        } else {
-                                            newResults[i] = { id: parseInt(e.target.value) }
-                                        }
-                                        setResults(newResults);
-                                    }}
-                                >
-                                    {voteChoices.map((voteChoice) => {
-                                        return <MenuItem value={voteChoice.id}>{voteChoice.name}</MenuItem>
-                                    })}
-                                </Select>
-                            </div>)
+                            {Array.from({length: vote?.nbPossibleVotes || 0}).map((_, i) => {
+                                return (<div><InputLabel id="select-label">Choix n°{i + 1}</InputLabel>
+                                    <Select
+                                        labelId="select-label"
+                                        className="select-vote-choice"
+                                        value={results[i]?.name}
+                                        onChange={(e) => {
+                                            const newResults = [...results];
+                                            if (newResults[i]) {
+                                                newResults[i].id = parseInt(e.target.value);
+                                            } else {
+                                                newResults[i] = {id: parseInt(e.target.value)}
+                                            }
+                                            setResults(newResults);
+                                        }}
+                                    >
+                                        {voteChoices.map((voteChoice) => {
+                                            return <MenuItem value={voteChoice.id}>{voteChoice.name}</MenuItem>
+                                        })}
+                                    </Select>
+                                </div>)
                             })}
                         </div>
-                            <p>OU</p>
-                            <div>
-                                <InputLabel>Vote Blanc</InputLabel>
-                                <Switch checked={data.isWhiteVote} onChange={e => changeWhiteVote()} color="primary" />
-                            </div>
+                        <p>OU</p>
+                        <div>
+                            <InputLabel>Vote Blanc</InputLabel>
+                            <Switch checked={data.isWhiteVote} onChange={e => changeWhiteVote()} color="primary"/>
+                        </div>
                     </div>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            size={"large"}
-                            style={{width: "20vw", alignSelf:"center", height: "5vh"}}
-                            onClick={onSubmit}
-                        >Soumettre</Button>
-                    </Paper>
-                </div>
-            <Footer />
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        size={"large"}
+                        style={{width: "20vw", alignSelf: "center", height: "5vh"}}
+                        onClick={onSubmit}
+                    >Soumettre</Button>
+                </Paper>
+            </div>
+            <Footer/>
         </div>
     )
 }

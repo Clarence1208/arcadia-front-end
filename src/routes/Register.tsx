@@ -1,11 +1,12 @@
 import {UserRegisterForm} from "./components/UserRegisterForm"
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
 import {Alert, Button, Snackbar} from "@mui/material";
 import {Dayjs} from "dayjs";
 import { useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
+import {ConfigContext} from "../index";
 
 type FormData = {
     firstName: string
@@ -27,6 +28,7 @@ const body: FormData = {
 
 export function Register(){
     const navigate = useNavigate();
+    const config = useContext(ConfigContext);
 
     const [data, setData] = useState(body)
     const [errorMessage, setErrorMessage] = useState("")
@@ -45,7 +47,7 @@ export function Register(){
         }
 
         delete userData.confirmPassword;
-        const response: Response = await fetch(import.meta.env.VITE_API_URL+"/users/register", {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
+        const response: Response = await fetch(`${config.apiURL}/users/register`, {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur lors de la création du compte: " + await error.message);
