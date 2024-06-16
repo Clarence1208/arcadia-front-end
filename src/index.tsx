@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(rootElement);
 
 const fetchConfig = async (): Promise<any> => {
     try {
-        const response = await fetch('/app/config.json');
+        const response = await fetch('/usr/share/nginx/html/config.json');
         if (!response.ok) {
             throw new Error('Failed to fetch configuration');
         }
