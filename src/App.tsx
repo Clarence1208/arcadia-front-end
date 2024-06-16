@@ -38,9 +38,13 @@ function App() {
     const [theme, setTheme] = React.useState(createTheme());
     const config = useContext(ConfigContext);
 
+
 //API CALL TO GET THE THEME FROM WEBSITE SETTINGS
     async function getConfiguration(){
        try{
+           if (!config || !config.apiURL) {
+               return '#074032'
+           }
            const response = await fetch(`${config.apiURL}/websiteSettings`);
            const data = await response.json();
            return data[2].value
