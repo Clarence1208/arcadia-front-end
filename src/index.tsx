@@ -33,9 +33,9 @@ const RootComponent = () => {
         });
     }, []);
 
-    if (!config) {
-        return <div>Loading configuration...</div>; // Optionally add a spinner here
-    }
+    // if (!config) {
+    //     return <div>Loading configuration...</div>; // Optionally add a spinner here
+    // }
 
     return (
         <ConfigContext.Provider value={config}>
