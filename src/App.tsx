@@ -41,7 +41,7 @@ function App() {
 //API CALL TO GET THE THEME FROM WEBSITE SETTINGS
     async function getConfiguration(){
        try{
-           const response = await fetch(`${config.apiUrl}/websiteSettings`);
+           const response = await fetch(`${config.apiURL}/websiteSettings`);
            const data = await response.json();
            return data[2].value
        }catch (e) {
