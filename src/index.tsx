@@ -18,7 +18,7 @@ const RootComponent = () => {
         fetchConfig().then(data => {
             setConfig(data);
         }).catch(error => {
-            console.error("Error fetching configuration:", error);
+            console.error("Error fetching Arcadia configuration:", error);
         });
     }, []);
 
