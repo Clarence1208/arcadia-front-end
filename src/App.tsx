@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -31,15 +31,17 @@ import { VoteResults } from './routes/meetings/VoteResults';
 import { CreatePoll } from './routes/polls/CreatePoll';
 import { PollVoteApply } from './routes/polls/PollVoteApply';
 import { PollResults } from './routes/polls/PollResults';
+import {ConfigContext} from "./index";
 
 
 function App() {
     const [theme, setTheme] = React.useState(createTheme());
+    const config = useContext(ConfigContext);
 
 //API CALL TO GET THE THEME FROM WEBSITE SETTINGS
     async function getConfiguration(){
        try{
-           const response = await fetch(`${import.meta.env.VITE_API_URL}/websiteSettings`);
+           const response = await fetch(`${config.apiUrl}/websiteSettings`);
            const data = await response.json();
            return data[2].value
        }catch (e) {
