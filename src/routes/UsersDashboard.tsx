@@ -25,10 +25,6 @@ type User = {
     email: string,
     roles: string,
 }
-type Filters ={
-    page?: number,
-    limit?: number,
-}
 export function UsersDashboard() {
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [open, setOpen] = useState(false)
@@ -61,7 +57,7 @@ export function UsersDashboard() {
 
     useEffect(() => {
             if (userToken && userId) {
-                const getUsers = async (filters?: Filters): Promise<User[]> => {
+                const getUsers = async (): Promise<User[]> => {
                     const bearer = "Bearer " + userToken;
                     const response: Response = await fetch(`${config.apiURL}/users`, {
                         headers: {

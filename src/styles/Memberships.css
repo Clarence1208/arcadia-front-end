@@ -1,0 +1,21 @@
+.list-memberships{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 2em 0;
+}
+
+.membership-card{
+    margin-top: 3em;
+    width: 15vw;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(190, 186, 185, 0.2);
+}
+.membership-card:hover{
+    cursor: pointer;
+    background-color: rgba(175, 168, 166, 0.64);
+}
