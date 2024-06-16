@@ -1,7 +1,7 @@
 import { AppConfig } from "./config";
 
 const fetchConfig = async (): Promise<AppConfig> => {
-    const response = await fetch('/usr/share/nginx/html/config.json');  // Ensure this URL is correct
+    const response = await fetch('/config.json');  // Ensure this URL is correct
     //log the response body
     console.log(await response.text());
     if (!response.ok) {
