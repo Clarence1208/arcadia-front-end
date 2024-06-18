@@ -74,7 +74,7 @@ function LogInForm() {
 
     return (
         <form id="formLogin" onSubmit={onSubmit} style={{maxWidth: "40vw"}}>
-            <h1>Portail d'accès à l'administration de {config.apiURL} </h1>
+            <h1>Portail d'accès à l'administration de {config.associationName} </h1>
             {ErrorMessage && <Collapse in={open}><Alert className={"alert"} severity="error"
                                                         onClose={() => setOpen(false)}>{ErrorMessage}</Alert></Collapse>}
 
