@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState, useRef } from "react";
-import { UserSessionContext } from "./../contexts/user-session";
-import { Alert, Button, Modal, Paper, Snackbar } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import {useContext, useEffect, useState, useRef} from "react";
+import {UserSessionContext} from "./../contexts/user-session";
+import {Alert, Button, Modal, Paper, Snackbar} from "@mui/material";
+import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
-import { s3Config } from './../utils/s3Config';
+import {s3Config} from './../utils/s3Config';
 import './../styles/DocumentList.css';
 import {Delete, Download} from '@mui/icons-material';
-import { wait } from "@testing-library/user-event/dist/utils";
+import {wait} from "@testing-library/user-event/dist/utils";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import LoadingSpinner from "../routes/components/LoadingSpinner";
 
@@ -29,7 +29,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-export enum SupportedImageType{
+export enum SupportedImageType {
     jpg,
     JPG,
     png,
@@ -44,7 +44,7 @@ export enum SupportedImageType{
     WEBP,
 }
 
-export enum SupportedVideoType{
+export enum SupportedVideoType {
     mp4,
     MP4,
     avi,
@@ -64,7 +64,7 @@ export function DocumentList() {
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [openVideoModal, setOpenVideoModal] = useState(false);
-    const [userFiles, setUserFiles] = useState<Array<{ Key: string, publicUrl: string}>>([]);
+    const [userFiles, setUserFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
     const [publicFiles, setPublicFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
     const [uploaded, setUploaded] = useState(false);
     const [image, setImage] = useState<string>("");
@@ -127,7 +127,7 @@ export function DocumentList() {
     const uploadFile = async () => {
 
         setLoading(true);
-        
+
         if (!fileRef.current) {
             setErrorMessage("No file selected.");
             setOpen(true);
@@ -144,7 +144,7 @@ export function DocumentList() {
             parts.pop();
         }
         let nameWithoutExtension = parts.join('.');
-        
+
         try {
             const res = await s3.uploadFile(fileRef.current, nameWithoutExtension);
             setErrorMessage("Fichier chargé avec succès.");
@@ -190,27 +190,27 @@ export function DocumentList() {
         console.log('Downloading file:', url);
         console.log('File name:', fileName);
         try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-    
-          const blob = await response.blob();
-          const blobUrl = window.URL.createObjectURL(blob);
-          
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = fileName || 'downloaded-file';
-          link.style.display = 'none'; // Ensure link is not visible
-          document.body.appendChild(link);
-    
-          link.click(); // Trigger the download
-    
-          // Cleanup
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(blobUrl);
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName || 'downloaded-file';
+            link.style.display = 'none'; // Ensure link is not visible
+            document.body.appendChild(link);
+
+            link.click(); // Trigger the download
+
+            // Cleanup
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
         } catch (error) {
-          console.error('Error fetching the file:', error);
+            console.error('Error fetching the file:', error);
         }
     }
 
@@ -228,50 +228,50 @@ export function DocumentList() {
         <div>
             {loading && <LoadingSpinner message={"Chargement..."}/>}
             <Modal
-            open={openModal}
-            onClose={handleCloseModal}
-            aria-labelledby="modal-create-setting"
-            aria-describedby="modale to create a setting"
-            id="modal-create-setting"
-        >
-                <Paper elevation={1} className={"paper"} >
-                    <img src={image} alt="image" />
+                open={openModal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-create-setting"
+                aria-describedby="modale to create a setting"
+                id="modal-create-setting"
+            >
+                <Paper elevation={1} className={"paper"}>
+                    <img src={image} alt="image"/>
                 </Paper>
-        </Modal>
-        <Modal
-            open={openVideoModal}
-            onClose={handleCloseVideoModal}
-            aria-labelledby="modal-create-setting"
-            aria-describedby="modale to create a setting"
-            id="modal-create-setting"
-        >
-                <Paper elevation={1} className={"paper"} >
-                    <video controls >
+            </Modal>
+            <Modal
+                open={openVideoModal}
+                onClose={handleCloseVideoModal}
+                aria-labelledby="modal-create-setting"
+                aria-describedby="modale to create a setting"
+                id="modal-create-setting"
+            >
+                <Paper elevation={1} className={"paper"}>
+                    <video controls>
                         <source src={video} type="video/mp4"/>
                     </video>
                 </Paper>
-        </Modal>
+            </Modal>
             <Snackbar
                 open={open}
                 autoHideDuration={3000}
                 onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
                 <Alert
                     onClose={handleClose}
                     severity={errorMessage.includes("Erreur") ? "error" : "success"}
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >{errorMessage}</Alert>
             </Snackbar>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                 <h1>Mes documents :</h1>
                 <Button
                     component="label"
                     role="button"
                     variant="contained"
                     tabIndex={-1}
-                    startIcon={<CloudUploadIcon />}
+                    startIcon={<CloudUploadIcon/>}
                 >
                     Charger un document
                     <VisuallyHiddenInput
@@ -284,29 +284,46 @@ export function DocumentList() {
                 <div className="file-list">
                     <h2>Fichiers privés :</h2>
                     <ul className="file-list-ul">
-                    {userFiles.length === 0 && <h4>Aucun fichier privé</h4>}
-                    {userFiles.map((file) => (
+                        {userFiles.length === 0 && <h4>Aucun fichier privé</h4>}
+                        {userFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
-                                {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir l'image"} onClick={()=>showImage(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
-                                {Object.values(SupportedVideoType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir la vidéo"} onClick={()=>showVideo(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
-                                <Button title={"Télécharger"} onClick={()=>handleDownload(file.publicUrl, file.Key)}>{<Download/>}</Button>
-                                <Button title={"Supprimer"} onClick={()=>deleteFile(file.Key, String(userSession?.userId))}>{<Delete/>}</Button>
-                                </li>
+                                <div>
+                                    {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) &&
+                                        <Button title={"Voir l'image"} onClick={() => showImage(file.publicUrl)}>{
+                                            <VisibilityIcon/>}</Button>}
+                                    {Object.values(SupportedVideoType).includes(file.publicUrl.split('.').pop() as string) &&
+                                        <Button title={"Voir la vidéo"} onClick={() => showVideo(file.publicUrl)}>{
+                                            <VisibilityIcon/>}</Button>}
+                                    <Button title={"Télécharger"}
+                                            onClick={() => handleDownload(file.publicUrl, file.Key)}>{
+                                        <Download/>}</Button>
+                                    <Button title={"Supprimer"}
+                                            onClick={() => deleteFile(file.Key, String(userSession?.userId))}>{
+                                        <Delete/>}</Button>
+                                </div>
+                            </li>
                         ))}
                     </ul>
                 </div>
                 <div className="file-list">
                     <h2>Fichiers publics :</h2>
                     <ul className="file-list-ul">
-                    {publicFiles.length === 0 && <h4>Aucun fichier public</h4>}
+                        {publicFiles.length === 0 && <h4>Aucun fichier public</h4>}
                         {publicFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
-                                {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir l'image"} onClick={()=>showImage(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
-                                {Object.values(SupportedVideoType).includes(file.publicUrl.split('.').pop() as string) && <Button title={"Voir la vidéo"} onClick={()=>showVideo(file.publicUrl)}>{<VisibilityIcon/>}</Button>}
-                                <Button title={"Télécharger"} onClick={()=>handleDownload(file.publicUrl, file.Key)}>{<Download/>}</Button>
-                                </li>
+                                <div>
+                                {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) &&
+                                    <Button title={"Voir l'image"} onClick={() => showImage(file.publicUrl)}>{
+                                        <VisibilityIcon/>}</Button>}
+                                {Object.values(SupportedVideoType).includes(file.publicUrl.split('.').pop() as string) &&
+                                    <Button title={"Voir la vidéo"} onClick={() => showVideo(file.publicUrl)}>{
+                                        <VisibilityIcon/>}</Button>}
+                                <Button title={"Télécharger"} onClick={() => handleDownload(file.publicUrl, file.Key)}>{
+                                    <Download/>}</Button>
+                                </div>
+                            </li>
                         ))}
                     </ul>
                 </div>
