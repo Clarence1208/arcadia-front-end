@@ -405,6 +405,20 @@ export function DocumentListAdmin() {
                 {selectedUser ?
                     <div className="user-files">
                         <h2>Documents de {selectedUser?.firstName + " " + selectedUser?.surname} :</h2>
+                        <Button
+                        component="label"
+                        role="button"
+                        variant="contained"
+                        tabIndex={-1}
+                        startIcon={<CloudUploadIcon/>}
+                        sx={{marginBottom: "10px"}}
+                    >
+                        Charger un document dans le dossier de {selectedUser?.firstName + " " + selectedUser?.surname}
+                        <VisuallyHiddenInput
+                            type="file"
+                            onChange={(e) => handleFileChange(e, "users/" + String(selectedUser.id))}
+                        />
+                    </Button>
                         <ul className="file-list-ul">
                             {userFiles.length === 0 &&
                                 <h4>{selectedUser.firstName + " " + selectedUser.surname} n'a pas de documents</h4>}
