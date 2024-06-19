@@ -44,7 +44,7 @@ export function Donate() {
 
     const handlePayButton1 = async (e: FormEvent) => {
         e.preventDefault();
-        setReloadPaymentIntent(!reloadPaymentIntent);
+        setReloadPaymentIntent(true);
     }
 
     const handleFreeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,8 +73,12 @@ export function Donate() {
             setFormStep(1);
         }
 
-        console.log("Reload payment intent");
-        initiatePayment(amount);
+        //TO DO FIX THE RELOAD PAYMENT INTENT STUFF LA HEIN C'EST DE LA D
+        if (reloadPaymentIntent){
+            console.log("Reload payment intent");
+            initiatePayment(amount);
+        }
+
     }, [reloadPaymentIntent]);
 
     return (
