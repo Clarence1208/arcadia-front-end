@@ -31,7 +31,11 @@ import { VoteResults } from './routes/meetings/VoteResults';
 import { CreatePoll } from './routes/polls/CreatePoll';
 import { PollVoteApply } from './routes/polls/PollVoteApply';
 import { PollResults } from './routes/polls/PollResults';
+<<<<<<< HEAD
 import {ConfigContext} from "./index";
+=======
+import { CreatePremise } from './routes/premises/CreatePremise';
+>>>>>>> 95e44cb (added premises and fixed global error handling missing)
 
 
 function App() {
@@ -97,6 +101,7 @@ function App() {
                 <Route path="/articles/:articleId" element={<ShowArticle />} />
                 <Route path="/articles/:articleId/edit" element={<EditArticle />} />
                 <Route path='/createMeeting' element={<CreateMeeting />}/>
+                <Route path='/createPremise' element={<CreatePremise />}/>
                 <Route path='/meetings' element={<MeetingsListUser />} />
                 <Route path='/meeting/:id/votes' element={<MeetingVotesList />}/>
                 <Route path='/meeting/:id/createVote' element={<CreateMeetingVote />}/>

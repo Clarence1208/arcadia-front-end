@@ -72,13 +72,12 @@ export function MeetingVoteApply() {
                 });
                 if (!response.ok) {
                     const error = await response.json()
-                    // setErrorMessage("Erreur : " + await error.message);
+                    setErrorMessage("Erreur : " + await error.message);
                     return {} as Vote;
                 }
                 const res = await response.json();
                 if (res.length === 0) {
-                    console.log("Aucun site web trouvé")
-                    //setErrorMessage("Aucun site web trouvé")
+                    setErrorMessage("Aucun site web trouvé")
                 }
                 return res;
             }
@@ -94,20 +93,18 @@ export function MeetingVoteApply() {
                 });
                 if (!response.ok) {
                     const error = await response.json()
-                    // setErrorMessage("Erreur : " + await error.message);
+                    setErrorMessage("Erreur : " + await error.message);
                     return [];
                 }
                 const res = await response.json();
                 if (res.length === 0) {
-                    console.log("Aucun site web trouvé")
-                    //setErrorMessage("Aucun site web trouvé")
+                    setErrorMessage("Aucun choix trouvé")
                 }
                 return res;
             }
             getVoteChoices().then(setVoteChoices)
             if (voteChoices.length === 0) {
-                console.log("Aucun choix trouvé")
-                //navigate("/meeting/" + vote?.meetingId + "/votes");
+                navigate("/meeting/" + vote?.meetingId + "/votes");
             }
             return;
         } else {

@@ -1,4 +1,4 @@
-import { Button, Pagination } from "@mui/material";
+import { Alert, Button, Pagination, Snackbar } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import '../../styles/VotesList.css';
 import { useNavigate, useParams } from "react-router-dom";
@@ -45,10 +45,12 @@ export function MeetingVotesList() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [votes, setVotes] = useState<Vote[]>([])
     const navigate = useNavigate();
+    const [ErrorMessage, setErrorMessage] = useState("")
     const { id } = useParams();
     const [meeting, setMeeting] = useState<Meeting>();
     const [time, setTime] = useState(new Date());
     const config = useContext(ConfigContext);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         if (userSession?.loginToken) {
@@ -62,13 +64,13 @@ export function MeetingVotesList() {
                 });
                 if (!response.ok) {
                     const error = await response.json()
-                    // setErrorMessage("Erreur : " + await error.message);
+                    setErrorMessage("Erreur : " + await error.message);
                     return []
                 }
                 const res = await response.json();
                 if (res.length === 0) {
                     console.log("Aucun site web trouvé")
-                    //setErrorMessage("Aucun site web trouvé")
+                    setErrorMessage("Aucun site web trouvé")
                 }
                 return res;
             }
@@ -88,13 +90,12 @@ export function MeetingVotesList() {
                 });
                 if (!response.ok) {
                     const error = await response.json()
-                    // setErrorMessage("Erreur : " + await error.message);
+                    setErrorMessage("Erreur : " + await error.message);
                     return {} as Meeting
                 }
                 const res = await response.json();
                 if (res.length === 0) {
-                    console.log("Aucun site web trouvé")
-                    //setErrorMessage("Aucun site web trouvé")
+                    setErrorMessage("")
                 }
                 return res;
             }
@@ -110,10 +111,27 @@ export function MeetingVotesList() {
         };
     }, []);
 
+    const handleClose = () => {
+        setOpen(false)
+    }
+
     return (
         <div>
             <Header />
                 <div className={"main"}>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >{ErrorMessage}</Alert>
+                </Snackbar>
                     {meeting && <h1>Votes de l'assemblée générale {meeting.name} :</h1>}
 
                             {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?

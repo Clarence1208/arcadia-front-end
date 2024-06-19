@@ -11,6 +11,7 @@ import { MeetingsList } from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
 import {PollList} from "./polls/PollList";
+import {PremisesList} from "./premises/PremisesList";
 import { DocumentList } from "../documents/DocumentList";
 import { DocumentListAdmin } from "../documents/DocumentListAdmin";
 
@@ -66,10 +67,11 @@ export function Dashboard(){
                 >
                     <Tab label="Gestion des Assemblées Générales" {...a11yProps(0)}/>
                     <Tab label="Gestion des utilisateurs" {...a11yProps(1)}/>
-                    <Tab label="Gestions des événements" {...a11yProps(2)}/>
-                    <Tab label="Gestions des paramètres globaux du site" {...a11yProps(3)}/>
-                    <Tab label="Gestions des sondages" {...a11yProps(4)}/>
-                    <Tab label="Gestions des documents" {...a11yProps(5)}/>
+                    <Tab label="Gestions des salles" {...a11yProps(2)}/>
+                    <Tab label="Gestions des événements" {...a11yProps(3)}/>
+                    <Tab label="Gestions des paramètres globaux du site" {...a11yProps(4)}/>
+                    <Tab label="Gestions des sondages" {...a11yProps(5)}/>
+                    <Tab label="Gestions des documents" {...a11yProps(6)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -82,19 +84,23 @@ export function Dashboard(){
                         <UsersDashboard />
                         {/*<UserAccountPanel userId={userSession?.userId} userToken={userSession?.loginToken} />*/}
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={2}>
-                        <h1>2</h1>
-                    </TabPanel>
-                    <TabPanel value={tabsValue} index={3}>
-                        <WebsiteSettings />
+                    <TabPanel value={tabsValue} index={2}>  
+                        <Button href="/createPremise" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle salle</Button>
+                            <PremisesList />
+                    </TabPanel>                    
+                    <TabPanel value={tabsValue} index={3}>  
+                        <h1>3   </h1>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={4}>
+                        <WebsiteSettings />
+                    </TabPanel>
+                    <TabPanel value={tabsValue} index={5}>
                     <Button href="/createPoll" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
                         <div className={"board"}>
                             <PollList />
                         </div>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={5}>
+                    <TabPanel value={tabsValue} index={6}>
                         <div className="board-documents">
                             <DocumentListAdmin />
                         </div>

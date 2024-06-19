@@ -3,8 +3,8 @@ import '../../styles/PollsList.css';
 import {UserSessionContext} from "../../contexts/user-session";
 import 'react-clock/dist/Clock.css';
 import { Poll } from "./Poll";
-import { Pagination } from "@mui/material";
 import {ConfigContext} from "../../index";
+import { Alert, Pagination, Snackbar } from "@mui/material";
 
 interface Poll {
     id: number,
@@ -38,6 +38,8 @@ export function PollList() {
     const [polls, setPolls] = useState<Poll[]>([])
     const [page, setPage] = useState(1);
     const config = useContext(ConfigContext);
+    const [ErrorMessage, setErrorMessage] = useState("")
+    const [open, setOpen] = useState(false);
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -55,22 +57,37 @@ export function PollList() {
                 });
                 if (!response.ok) {
                     const error = await response.json()
-                    // setErrorMessage("Erreur : " + await error.message);
+                    setErrorMessage("Erreur : " + await error.message);
                     return []
                 }
                 const res = await response.json();
-                if (res.length === 0) {
-                    console.log("Aucun site web trouvé")
-                    //setErrorMessage("Aucun site web trouvé")
-                }
                 return res;
             }
             getPolls({ page: page }).then(setPolls)
         }
     }, [userSession?.loginToken, page]);
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
             <div style={{display:"flex", flexDirection:"column"}}>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >
+                        {ErrorMessage}
+                    </Alert>
+                </Snackbar>
                 <h1>Sondages :</h1>
                     <div className={"polls-list"}>
                         {polls.length === 0 ? <div>Pas de sondages disponibles...</div> :

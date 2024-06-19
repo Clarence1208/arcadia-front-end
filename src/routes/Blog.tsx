@@ -34,6 +34,7 @@ export function Blog(){
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const config = useContext(ConfigContext);
+    const [ErrorMessage, setErrorMessage] = useState("")
 
     const handleClose = () => {
         setOpen(false)
@@ -55,14 +56,10 @@ export function Blog(){
                 if (!response.ok) {
                     const error = await response.json()
                     console.log(error)
-                    //setErrorMessage("Erreur : " + await error.message);
+                    setFlashMessage("Erreur : " + await error.message);
                     return []
                 }
                 const res = await response.json();
-                if (res.length === 0) {
-                    console.log("Aucun article trouvé")
-                    //setErrorMessage("Aucun site web trouvé")
-                }
                 return res;
             }
             getArticles({page: page}).then(setArticles)

@@ -1,10 +1,12 @@
-import { Button, ListItemButton, ListItemText } from "@mui/material";
+import { Button, ListItemButton, ListItemText, Modal, Paper } from "@mui/material";
 import '../../styles/Meeting.css';
 import {UserSessionContext} from "../../contexts/user-session";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import PlaceIcon from '@mui/icons-material/Place';
+import { Premise } from "../premises/Premise";
 
 interface Meeting {
     id: number,
@@ -12,6 +14,15 @@ interface Meeting {
     description: string,
     startDate: Date,
     endDate: Date,
+    capacity: number,
+    premise : Premise,
+}
+
+interface Premise {
+    name: string,
+    description: string,
+    adress: string,
+    type: string,
     capacity: number,
 }
 
@@ -22,8 +33,29 @@ export function Meeting({meeting}: {meeting: Meeting}){
     meeting.startDate = new Date(meeting.startDate)
     const startTime = meeting.startDate.toLocaleTimeString()
     const endTime = meeting.endDate.toLocaleTimeString()
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    }
+
+    const showPremise = () => {
+        setOpenModal(true);
+    }
+
     return (
         <div className="meeting-div-user" >
+            <Modal
+                open={openModal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-create-setting"
+                aria-describedby="modale to create a setting"
+                id="modal-create-setting"
+            >
+                <Paper elevation={1} className={"paper"}>
+                    <Premise premise={meeting.premise}></Premise>
+                </Paper>
+            </Modal>
 
             <div className="meeting-content">
                 <div className="meeting-date">
@@ -39,6 +71,16 @@ export function Meeting({meeting}: {meeting: Meeting}){
                 }
             </div>
             <div className="meeting-actions">
+                { meeting.premise ?
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={showPremise}
+                        endIcon={ <PlaceIcon></PlaceIcon>}
+                        disableElevation={true}
+                        >Voir le lieu</Button>:
+                    null
+                }
                 { userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
                     <div>
                         { meeting.endDate > now ?
