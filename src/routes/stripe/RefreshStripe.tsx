@@ -10,7 +10,7 @@ export function RefreshStripe(){
 
     async function handleStripeAccountLink() {
         const bearer = `Bearer ${userSession?.loginToken}`;
-        await fetch(`${process.env.REACT_APP_API_URL}/stripe/accountLinks`, {
+        await fetch(`${config.apiURL}/stripe/accountLinks`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

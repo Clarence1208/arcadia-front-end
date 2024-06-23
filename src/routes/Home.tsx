@@ -29,7 +29,7 @@ export function Home() {
     useEffect(() => {
         async function getConfiguration(){
             try{
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+                const response = await fetch(`${config.apiURL}/websiteSettings`);
                 const data : WebSetting[] = await response.json();
                 const title = data.find( item => item.name === 'titleHomePage');
                 const subTitle = data.find( item => item.name === 'subTitleHomePage');
@@ -43,11 +43,11 @@ export function Home() {
 
         getConfiguration().then(data => {
             setData(data);
-            setDataFetched(true);
+            // setDataFetched(true);
         });
 
-    });
-        if (!dataFetched) {
+    }, []);
+        if (data === undefined || data.length === 0) {
             return (
                 <div>
                     <Header/>

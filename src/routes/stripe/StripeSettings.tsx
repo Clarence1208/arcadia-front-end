@@ -16,8 +16,10 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import {AddCircleOutline, Delete, Edit} from "@mui/icons-material";
 import {EditMembershipModal} from "./memberships/EditMembershipModal";
 import {CreateMembershipModal} from "./memberships/CreateMembershipModal";
+import {ConfigContext} from "../../index";
 
 export default function StripeSettings() {
+    const config = useContext(ConfigContext);
     const userSession = useContext(UserSessionContext)?.userSession;
     const [accountCreatePending, setAccountCreatePending] = useState(true);
     const [connectedAccountId, setConnectedAccountId] = useState("");
@@ -30,7 +32,7 @@ export default function StripeSettings() {
 
     async function getStripeAccount() {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+            const response = await fetch(`${config.apiURL}/websiteSettings`);
             const data = await response.json();
             return data
         } catch (e) {
@@ -41,7 +43,7 @@ export default function StripeSettings() {
     async function createStripeAccount() {
         const bearer = `Bearer ${userSession?.loginToken}`;
         setAccountCreatePending(true);
-        await fetch(`${process.env.REACT_APP_API_URL}/stripe/connectedAccounts`, {
+        await fetch(`${config.apiURL}/stripe/connectedAccounts`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -67,7 +69,7 @@ export default function StripeSettings() {
 
     async function handleStripeAccountLink() {
         const bearer = `Bearer ${userSession?.loginToken}`;
-        await fetch(`${process.env.REACT_APP_API_URL}/stripe/accountLinks`, {
+        await fetch(`${config.apiURL}/stripe/accountLinks`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -177,6 +179,7 @@ type MembershipDTO = {
 
 export function ListMemberships({accountID}: { accountID: string }) {
 
+    const config = useContext(ConfigContext);
     const [openModal, setOpenModal] = useState(false)
     const [openEditModal, setOpenEditModal] = useState(false)
     const handleOpenModal = () => setOpenModal(true)
@@ -198,7 +201,7 @@ export function ListMemberships({accountID}: { accountID: string }) {
         async function fetchMemberships() {
             const bearer = `Bearer ${userSession?.loginToken}`;
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/stripe/memberships?accountId=${accountID}`,
+            const response = await fetch(`${config.apiURL}/stripe/memberships?accountId=${accountID}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
