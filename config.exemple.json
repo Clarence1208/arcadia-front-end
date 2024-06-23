@@ -1,0 +1,7 @@
+{
+  "associationName": "Association",
+  "port": 8080,
+  "apiURL": "http://localhost:3000",
+  "openaiAPIKey": "",
+  "stripePublicKey": ""
+}

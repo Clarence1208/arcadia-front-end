@@ -70,7 +70,7 @@ export function Register(){
     const [connectedAccountId, setConnectedAccountId] = useState("");
     const [memberships, setMemberships] = useState([]);
     async function getSettings() {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+        const response = await fetch(`${config.apiURL}/websiteSettings`);
         const data: WebSetting[] = await response.json();
         return data.find(item => item.name === 'stripe_account_id')?.value || "";
     }
@@ -83,7 +83,7 @@ export function Register(){
     useEffect(() => {
         async function fetchMemberships() {
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/stripe/memberships?accountId=${connectedAccountId}`,
+            const response = await fetch(`${config.apiURL}/stripe/memberships?accountId=${connectedAccountId}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -141,7 +141,7 @@ export function PaymentInfoForm({userData,accountID,memberships, selectedMembers
 
         delete userData.confirmPassword;
         const response: Response = await fetch(`${config.apiURL}/users/register`, {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
-        //const response: Response = await fetch(process.env.REACT_APP_API_URL+`/users/register?paymentMethodId=${"la"}&priceId=${"price_1PS0fiR1DVn2pKmeWcLGL7vb"}`, {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
+        //const response: Response = await fetch(config.apiURL+`/users/register?paymentMethodId=${"la"}&priceId=${"price_1PS0fiR1DVn2pKmeWcLGL7vb"}`, {method: "POST", body: JSON.stringify(userData), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             // setErrorMessage("Erreur lors de la création du compte: " + await error.message);

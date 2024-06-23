@@ -42,7 +42,7 @@ export function CreateMembershipModal({accountId, setMemberships, memberships, o
         e.preventDefault()
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/stripe/memberships?accountId="+accountId, {
+        const response: Response = await fetch( config.apiURL+"/stripe/memberships?accountId="+accountId, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {

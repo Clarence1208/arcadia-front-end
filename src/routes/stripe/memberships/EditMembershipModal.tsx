@@ -26,7 +26,7 @@ export function EditMembershipModal({settings, setMemberships,setting, open, han
         e.preventDefault()
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/stripe/memberships/"+data?.id, {
+        const response: Response = await fetch( config.apiURL+"/stripe/memberships/"+data?.id, {
             method: "PATCH",
             body: JSON.stringify(data),
             headers: {

@@ -8,6 +8,7 @@ import '../styles/Donations.css';
 import React, {FormEvent, useContext, useEffect, useState} from "react";
 import StripePayementForm from "./components/StripePayementForm";
 import {UserSessionContext} from "../contexts/user-session";
+import {ConfigContext} from "../index";
 
 
 type WebSetting = {
@@ -18,6 +19,8 @@ type WebSetting = {
 }
 export function Donate() {
 
+    // TODO: ACCOUNT INVALID SOMETIMES ON PAYMENT?
+    const config = useContext(ConfigContext);
     const [formStep, setFormStep] = useState(0);
     const userSession = useContext(UserSessionContext)?.userSession;
     const [clientSecret, setClientSecret] = useState("");
@@ -26,7 +29,7 @@ export function Donate() {
     const [connectedAccountId, setConnectedAccountId] = useState("");
 
     async function getSettings() {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+        const response = await fetch(`${config.apiURL}/websiteSettings`);
         const data: WebSetting[] = await response.json();
         return data.find(item => item.name === 'stripe_account_id')?.value || "";
     }
@@ -56,7 +59,7 @@ export function Donate() {
         async function initiatePayment(amount: number) {
             const bearer = "Bearer " + userSession?.loginToken;
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/stripe/createPaymentIntent?amount=${amount}&accountId=${connectedAccountId}`, {
+            const response = await fetch(`${config.apiURL}/stripe/createPaymentIntent?amount=${amount}&accountId=${connectedAccountId}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',

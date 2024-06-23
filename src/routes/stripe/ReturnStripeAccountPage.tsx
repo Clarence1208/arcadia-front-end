@@ -21,7 +21,7 @@ export default function ReturnStripeAccountPage() {
     );
 
     async function getSettings() {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+        const response = await fetch(`${config.apiURL}/websiteSettings`);
         const data: WebSetting[] = await response.json();
         return data.find(item => item.name === 'stripe_account_id')?.value || "";
     }

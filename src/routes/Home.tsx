@@ -59,7 +59,7 @@ export function Home() {
         };
         async function getConfiguration(){
             try{
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`);
+                const response = await fetch(`${config.apiURL}/websiteSettings`);
                 const data : WebSetting[] = await response.json();
                 const title = data.find( item => item.name === 'titleHomePage');
                 const subTitle = data.find( item => item.name === 'subTitleHomePage');
