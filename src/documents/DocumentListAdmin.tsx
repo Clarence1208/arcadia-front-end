@@ -13,6 +13,7 @@ import LoadingSpinner from "../routes/components/LoadingSpinner";
 import PublicIcon from '@mui/icons-material/Public';
 import LockIcon from '@mui/icons-material/Lock';
 import HelpIcon from "@mui/icons-material/Help";
+import timeout from "../utils/timeout";
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -209,8 +210,9 @@ export function DocumentListAdmin() {
         const filepath = '' + process.env.REACT_APP_ASSOCIATION_NAME + '/' + directory + '/' + fileName;
 
         try {
-            const res = await s3.deleteFile(filepath);
+            await s3.deleteFile(filepath);
             setErrorMessage("Fichier supprimé avec succès.");
+            await timeout(100);
             setOpen(true);
             await setUploaded(!uploaded);
         } catch (exception) {
@@ -278,7 +280,7 @@ export function DocumentListAdmin() {
                 id="modal-create-setting"
             >
                 <Paper elevation={1} className={"paper"}>
-                    <img src={image} alt="image"/>
+                    <img src={image} alt="image" style={{maxWidth: "50vh"}}/>
                 </Paper>
             </Modal>
             <Modal
@@ -381,7 +383,7 @@ export function DocumentListAdmin() {
                                     <Button title={"Télécharger"}
                                             onClick={() => handleDownload(file.publicUrl, file.Key)}>{
                                         <Download/>}</Button>
-                                    <Button title={"Supprimer"} onClick={() => deleteFile(file.Key, "public")}>{
+                                    <Button title={"Supprimer"} onClick={() => deleteFile(file.Key, "private")}>{
                                         <Delete/>}</Button>
                                 </div>
                             </li>

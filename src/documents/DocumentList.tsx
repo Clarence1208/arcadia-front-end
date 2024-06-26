@@ -10,6 +10,7 @@ import {Delete, Download} from '@mui/icons-material';
 import {wait} from "@testing-library/user-event/dist/utils";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import LoadingSpinner from "../routes/components/LoadingSpinner";
+import timeout from "../utils/timeout";
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -164,10 +165,11 @@ export function DocumentList() {
         const filepath = '' + process.env.REACT_APP_ASSOCIATION_NAME + '/' + directory + '/' + fileName;
 
         try {
-            const res = await s3.deleteFile(filepath);
+            await s3.deleteFile(filepath);
             setErrorMessage("Fichier supprimé avec succès.");
             setOpen(true);
-            await setUploaded(!uploaded);
+            await timeout(100);               
+            setUploaded(!uploaded);
         } catch (exception) {
             console.log(exception);
         }
@@ -235,7 +237,7 @@ export function DocumentList() {
                 id="modal-create-setting"
             >
                 <Paper elevation={1} className={"paper"}>
-                    <img src={image} alt="image"/>
+                    <img src={image} alt="image" style={{maxWidth: "50vh"}}/>
                 </Paper>
             </Modal>
             <Modal
@@ -299,7 +301,7 @@ export function DocumentList() {
                                             onClick={() => handleDownload(file.publicUrl, file.Key)}>{
                                         <Download/>}</Button>
                                     <Button title={"Supprimer"}
-                                            onClick={() => deleteFile(file.Key, String(userSession?.userId))}>{
+                                            onClick={() => deleteFile(file.Key, "users/" + String(userSession?.userId))}>{
                                         <Delete/>}</Button>
                                 </div>
                             </li>
