@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState, useRef} from "react";
 import {UserSessionContext} from "./../contexts/user-session";
-import {Alert, Button, Modal, Paper, Snackbar} from "@mui/material";
+import {Alert, Button, Modal, Paper, Snackbar, TextField} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
@@ -64,6 +64,8 @@ export function DocumentList() {
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [privateSearch, setSearchPrivate] = useState("");
+    const [publicSearch, setSearchPublic] = useState("");
     const [openVideoModal, setOpenVideoModal] = useState(false);
     const [userFiles, setUserFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
     const [publicFiles, setPublicFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
@@ -79,12 +81,11 @@ export function DocumentList() {
             const s3 = new ReactS3Client(s3Config);
             try {
                 const fileList = await s3.listFiles();
-                console.log('File list:', fileList);
                 fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
                     const check = file.Key.split("/");
                     if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "users") && (check[2] === String(userSession?.userId))) {
                         setUserFiles((prev) => {
-                            if (!prev.some(existingFile => existingFile.Key === check[3])) {
+                            if (!prev.some(existingFile => existingFile.Key === check[3]) && check[3].includes(privateSearch)) {
                                 file.Key = check.slice(3).join("/");
                                 return [...prev, file];
                             }
@@ -93,7 +94,7 @@ export function DocumentList() {
                     }
                     if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "public")) {
                         setPublicFiles((prev) => {
-                            if (!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") {
+                            if ((!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") && check[2].includes(publicSearch)) {
                                 file.Key = check.slice(2).join("/");
                                 return [...prev, file];
                             }
@@ -124,6 +125,16 @@ export function DocumentList() {
             uploadFile();
         }
     };
+
+    const searchPrivate = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchPrivate(event.target.value);
+        setUploaded(!uploaded);
+    }
+
+    const searchPublic = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchPublic(event.target.value);
+        setUploaded(!uploaded);
+    }
 
     const uploadFile = async () => {
 
@@ -285,8 +296,9 @@ export function DocumentList() {
             <div className="file-lists">
                 <div className="file-list">
                     <h2>Fichiers privés :</h2>
+                    <TextField id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}/>
                     <ul className="file-list-ul">
-                        {userFiles.length === 0 && <h4>Aucun fichier privé</h4>}
+                        {userFiles.length === 0 && <h4>Aucun fichier privé ou aucun fichier trouvé</h4>}
                         {userFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
@@ -310,8 +322,9 @@ export function DocumentList() {
                 </div>
                 <div className="file-list">
                     <h2>Fichiers publics :</h2>
+                    <TextField id="outlined-basic" label="Rechercher un fichier public" variant="outlined" onChange={searchPublic}/>
                     <ul className="file-list-ul">
-                        {publicFiles.length === 0 && <h4>Aucun fichier public</h4>}
+                        {publicFiles.length === 0 && <h4>Aucun fichier public ou aucun fichier trouvé</h4>}
                         {publicFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
