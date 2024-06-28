@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState, useRef} from "react";
 import {UserSessionContext} from "./../contexts/user-session";
-import {Alert, Button, IconButton, Modal, Paper, Snackbar, Tooltip} from "@mui/material";
+import {Alert, Button, IconButton, InputAdornment, Modal, Paper, Snackbar, TextField, Tooltip} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
@@ -14,6 +14,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import LockIcon from '@mui/icons-material/Lock';
 import HelpIcon from "@mui/icons-material/Help";
 import timeout from "../utils/timeout";
+import SearchIcon from '@mui/icons-material/Search';
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -85,6 +86,9 @@ export function DocumentListAdmin() {
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [privateSearch, setSearchPrivate] = useState("");
+    const [publicSearch, setSearchPublic] = useState("");
+    const [userSearch, setSearchUser] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -98,7 +102,7 @@ export function DocumentListAdmin() {
                     const check = file.Key.split("/");
                     if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "private")) {
                         setPrivateFiles((prev) => {
-                            if (!prev.some(existingFile => existingFile.Key === check[2])) {
+                            if (!prev.some(existingFile => existingFile.Key === check[2]) && check[2].includes(privateSearch)) {
                                 file.Key = check.slice(2).join("/");
                                 return [...prev, file];
                             }
@@ -107,7 +111,7 @@ export function DocumentListAdmin() {
                     }
                     if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "public")) {
                         setPublicFiles((prev) => {
-                            if (!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") {
+                            if ((!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") && check[2].includes(publicSearch)) {
                                 file.Key = check.slice(2).join("/");
                                 return [...prev, file];
                             }
@@ -117,7 +121,7 @@ export function DocumentListAdmin() {
                     if (selectedUser) {
                         if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "users") && (check[2] === String(selectedUser.id))) {
                             setUserFiles((prev) => {
-                                if (!prev.some(existingFile => existingFile.Key === check[3]) && check[3] !== "") {
+                                if ((!prev.some(existingFile => existingFile.Key === check[3]) && check[3] !== "") && check[3].includes(userSearch)) {
                                     file.Key = check.slice(3).join("/");
                                     return [...prev, file];
                                 }
@@ -233,6 +237,21 @@ export function DocumentListAdmin() {
         setOpenVideoModal(false);
     }
 
+    const searchPrivate = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchPrivate(event.target.value);
+        setUploaded(!uploaded);
+    }
+
+    const searchPublic = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchPublic(event.target.value);
+        setUploaded(!uploaded);
+    }
+
+    const searchUser = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchUser(event.target.value);
+        setUploaded(!uploaded);
+    }
+
     const handleDownload = async (url: string, fileName: string) => {
         try {
             const response = await fetch(url);
@@ -328,8 +347,13 @@ export function DocumentListAdmin() {
                             onChange={(e) => handleFileChange(e, "public")}
                         />
                     </Button>
+                    <TextField InputProps={{startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        )}} id="outlined-basic" label="Rechercher un fichier public" variant="outlined" onChange={searchPublic}/>
                     <ul className="file-list-ul">
-                        {publicFiles.length === 0 && <h4>Aucun fichier pulic</h4>}
+                        {publicFiles.length === 0 && <h4>Aucun fichier public ou aucun fichier trouvé</h4>}
                         {publicFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
@@ -368,8 +392,13 @@ export function DocumentListAdmin() {
                             onChange={(e) => handleFileChange(e, "private")}
                         />
                     </Button>
+                    <TextField InputProps={{startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        )}} id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}/>
                     <ul className="file-list-ul">
-                        {privateFiles.length === 0 && <h4>Aucun fichier public</h4>}
+                        {privateFiles.length === 0 && <h4>Aucun fichier privé ou aucun fichier trouvé</h4>}
                         {privateFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
@@ -421,9 +450,14 @@ export function DocumentListAdmin() {
                             onChange={(e) => handleFileChange(e, "users/" + String(selectedUser.id))}
                         />
                     </Button>
+                    <TextField InputProps={{startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        )}} id="outlined-basic" label="Rechercher un fichier utilisateur" variant="outlined" onChange={searchUser}/>
                         <ul className="file-list-ul">
                             {userFiles.length === 0 &&
-                                <h4>{selectedUser.firstName + " " + selectedUser.surname} n'a pas de documents</h4>}
+                                <h4>{selectedUser.firstName + " " + selectedUser.surname} n'a pas de documents ou pas de fichier trouvé</h4>}
                             {userFiles.map((file) => (
                                 <li key={file.Key} className="file-list-li">
                                     {file.Key}

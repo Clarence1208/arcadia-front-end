@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState, useRef} from "react";
 import {UserSessionContext} from "./../contexts/user-session";
-import {Alert, Button, Modal, Paper, Snackbar, TextField} from "@mui/material";
+import {Alert, Button, InputAdornment, Modal, Paper, Snackbar, TextField} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
@@ -11,6 +11,7 @@ import {wait} from "@testing-library/user-event/dist/utils";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import LoadingSpinner from "../routes/components/LoadingSpinner";
 import timeout from "../utils/timeout";
+import SearchIcon from '@mui/icons-material/Search';
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -295,8 +296,14 @@ export function DocumentList() {
             </div>
             <div className="file-lists">
                 <div className="file-list">
-                    <h2>Fichiers privés :</h2>
-                    <TextField id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}/>
+                    <div>
+                        <h2>Fichiers privés :</h2>
+                        <TextField InputProps={{startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        )}} id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}/>
+                    </div>
                     <ul className="file-list-ul">
                         {userFiles.length === 0 && <h4>Aucun fichier privé ou aucun fichier trouvé</h4>}
                         {userFiles.map((file) => (
@@ -321,8 +328,14 @@ export function DocumentList() {
                     </ul>
                 </div>
                 <div className="file-list">
-                    <h2>Fichiers publics :</h2>
-                    <TextField id="outlined-basic" label="Rechercher un fichier public" variant="outlined" onChange={searchPublic}/>
+                    <div>
+                        <h2>Fichiers publics :</h2>
+                        <TextField InputProps={{startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        )}} id="outlined-basic" label="Rechercher un fichier public" variant="outlined" onChange={searchPublic}/>
+                    </div>
                     <ul className="file-list-ul">
                         {publicFiles.length === 0 && <h4>Aucun fichier public ou aucun fichier trouvé</h4>}
                         {publicFiles.map((file) => (
