@@ -308,23 +308,23 @@ export function WebsiteSettings() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {settings.map((setting) => (
-                                <TableRow
-                                    key={setting.id}
-                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                >
-                                    <TableCell scope="row">
-                                        {setting.name}
-                                    </TableCell>
-                                    <TableCell align="right">{setting.description}</TableCell>
-                                    <TableCell align="right">{setting.value}</TableCell>
-                                    <TableCell align="right">{setting.type}</TableCell>
-                                    <TableCell align="right">
-                                        <Button title={"Modifier"} onClick={()=>handleEditClicked(setting)}><Edit/></Button>
-                                        {/*<Button title={"Supprimer"}>{<Delete/>}</Button>*/}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                        {settings.filter(setting => setting.name !== "chatbot_description").map((setting) => (
+                            <TableRow
+                                key={setting.id}
+                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                            >
+                                <TableCell scope="row">
+                                    {setting.name}
+                                </TableCell>
+                                <TableCell align="right">{setting.description}</TableCell>
+                                <TableCell align="right">{setting.value}</TableCell>
+                                <TableCell align="right">{setting.type}</TableCell>
+                                <TableCell align="right">
+                                    <Button title={"Modifier"} onClick={()=>handleEditClicked(setting)}><Edit/></Button>
+                                    {/*<Button title={"Supprimer"}>{<Delete/>}</Button>*/}
+                                </TableCell>
+                            </TableRow>
+                        ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

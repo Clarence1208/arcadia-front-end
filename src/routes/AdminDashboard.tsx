@@ -14,6 +14,7 @@ import {PollList} from "./polls/PollList";
 import {PremisesList} from "./premises/PremisesList";
 import { DocumentList } from "../documents/DocumentList";
 import { DocumentListAdmin } from "../documents/DocumentListAdmin";
+import { ChatBotConfig } from "./components/ChatBotConfig";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -72,6 +73,7 @@ export function Dashboard(){
                     <Tab label="Gestions des paramètres globaux du site" {...a11yProps(4)}/>
                     <Tab label="Gestions des sondages" {...a11yProps(5)}/>
                     <Tab label="Gestions des documents" {...a11yProps(6)}/>
+                    <Tab label="Gestion du ChatBot" {...a11yProps(6)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -103,6 +105,11 @@ export function Dashboard(){
                     <TabPanel value={tabsValue} index={6}>
                         <div className="board-documents">
                             <DocumentListAdmin />
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={tabsValue} index={7}>
+                        <div className="board-chatbot">
+                            <ChatBotConfig />
                         </div>
                     </TabPanel>
                 </div>
