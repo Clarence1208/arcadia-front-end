@@ -44,12 +44,12 @@ export default function Header() {
 
     return (
         <div>
-      <div className="main-header">
+      <div className="main-header"> 
         <div className="header-logo">
             <a href="/"><img src={logo} alt="logo" /></a>
         </div>
           <div className="nav-header">
-             <CustomNavItem link="/" text="Accueil" expand={true} />
+             <CustomNavItem link="/" text="Accueil"/>
               <CustomNavItem link="/blog" text="Actualités" />
                 <CustomNavItem link="/donate" text="Nous soutenir" />
 

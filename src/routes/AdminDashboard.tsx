@@ -69,10 +69,9 @@ export function Dashboard(){
                     <Tab label="Gestion des Assemblées Générales" {...a11yProps(0)}/>
                     <Tab label="Gestion des utilisateurs" {...a11yProps(1)}/>
                     <Tab label="Gestions des salles" {...a11yProps(2)}/>
-                    <Tab label="Gestions des événements" {...a11yProps(3)}/>
-                    <Tab label="Gestions des paramètres globaux du site" {...a11yProps(4)}/>
-                    <Tab label="Gestions des sondages" {...a11yProps(5)}/>
-                    <Tab label="Gestions des documents" {...a11yProps(6)}/>
+                    <Tab label="Gestions des paramètres globaux du site" {...a11yProps(3)}/>
+                    <Tab label="Gestions des sondages" {...a11yProps(4)}/>
+                    <Tab label="Gestions des documents" {...a11yProps(5)}/>
                     <Tab label="Gestion du ChatBot" {...a11yProps(6)}/>
                 </Tabs>
 
@@ -90,24 +89,21 @@ export function Dashboard(){
                         <Button href="/createPremise" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle salle</Button>
                             <PremisesList />
                     </TabPanel>                    
-                    <TabPanel value={tabsValue} index={3}>  
-                        <h1>3   </h1>
-                    </TabPanel>
-                    <TabPanel value={tabsValue} index={4}>
+                    <TabPanel value={tabsValue} index={3}>
                         <WebsiteSettings />
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={5}>
+                    <TabPanel value={tabsValue} index={4}>
                     <Button href="/createPoll" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
                         <div className={"board"}>
                             <PollList />
                         </div>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={6}>
+                    <TabPanel value={tabsValue} index={5}>
                         <div className="board-documents">
                             <DocumentListAdmin />
                         </div>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={7}>
+                    <TabPanel value={tabsValue} index={6}>
                         <div className="board-chatbot">
                             <ChatBotConfig />
                         </div>

@@ -1,11 +1,11 @@
-import {Alert, Button, IconButton, TextField, Tooltip} from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
 import "../../styles/Chatbot.css"
 import ChatIcon from '@mui/icons-material/Chat';
 import HelpIcon from "@mui/icons-material/Help";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import SendIcon from '@mui/icons-material/Send';
 import {ConfigContext} from "../../index";
+import { Alert, Button, CircularProgress, IconButton, TextField, Tooltip } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
 import OpenAI from "openai";
 import { SyntheticEvent, useEffect, useState, useContext } from "react";
 import "../../styles/Chatbot.css";
@@ -40,6 +40,7 @@ export function Chatbot() {
     const openai = new OpenAI({apiKey: API_KEY, dangerouslyAllowBrowser:true});
     const [assistant, setAssistant] = useState<OpenAI.Beta.Assistants.Assistant>()
     const [thread, setThread] = useState<OpenAI.Beta.Threads.Thread>()
+    const [isLoading, setIsLoading] = useState(false)
     
     useEffect(() => {
         const getSettings = async (): Promise<WebsiteSettings[]> => {
@@ -81,12 +82,13 @@ export function Chatbot() {
         setShowChatBot(!showChatBot)
         if (!thread || !assistant) {
             await setNewAssistant()
+            await setNewThread()
         }
     }
     const setNewAssistant = async () => {
         try {
             setAssistant(await openai.beta.assistants.create({
-                name: APP_NAME + " Chatbot",
+                name: APP_NAME + " Assistant IA",
                 instructions: chatbotConfig,
                 model: "gpt-3.5-turbo"
             }));
@@ -96,60 +98,56 @@ export function Chatbot() {
             setOpen(true)
         }
     }
-    const setNewThread = async (message: string) => {
+    const setNewThread = async () => {
         try {
-            return await openai.beta.threads.create({messages: [{role: "user", content: message}]})
+            setThread(await openai.beta.threads.create());
         }catch (error){
             console.error(error);
             setErrorMessage("Erreur de l'API OpenAI");
             setOpen(true)
         }
     }
-    const chat = async (newThread: OpenAI.Beta.Threads.Thread) => {
+    const chat = async () => {
 
         try{
-            if(!assistant){
+            if(!assistant || !thread){
                 setErrorMessage("Erreur de l'API OpenAI");
                 setOpen(true)
                 return;
             }
 
+            setIsLoading(true)
+
             let run = await openai.beta.threads.runs.create(
-                newThread.id,
+                thread.id,
                 { assistant_id: assistant.id }
             );
 
             while (run.status !== 'completed' && run.status !== 'failed') {
                 run = await openai.beta.threads.runs.retrieve(
-                    newThread.id,
+                    thread.id,
                     run.id
                 );
-                console.log(run.status);
-                await timeout(100);
+                await timeout(500);
             }
 
-            if (run.status === 'completed') {
-                const messages = await openai.beta.threads.messages.list(
-                  run.thread_id
-                );
-                for (const message of messages.data.reverse()) {
-                  console.log(`${message.role} > ${message.content[0]}`);
-                }
-              } else {
-                console.log(run.status);
-              }
-
-            console.log(run)
+            if (run.status === 'failed') {    
+                setErrorMessage("Erreur de l'API OpenAI");
+                setOpen(true)
+                return;
+            }
 
             const threadMessages = await openai.beta.threads.messages.list(
-                newThread.id
+                thread.id
             );
 
-            for (const message of threadMessages.data.reverse()) {
-                console.log(`${message.role} > ${message.content[0]}`);
+            for (const message of threadMessages.data) {
+                if (message["content"][0]["type"] === "text") {
+                    setIsLoading(false)
+                    return message.content[0].text.value;
+                }
             }
 
-            return run
         }catch (error){
             console.error(error);
             setErrorMessage("Erreur de l'API OpenAI");
@@ -185,7 +183,7 @@ export function Chatbot() {
             return;
         }
 
-        if(!assistant){
+        if(!assistant || !thread){
             setErrorMessage("Erreur de l'API OpenAI");
             setOpen(true)
             return;
@@ -199,22 +197,14 @@ export function Chatbot() {
             },
         ]);
 
-        const newThread = await setNewThread(message)
+        await createMessage(message)
 
-        if (!newThread) {
-            setErrorMessage("Erreur de l'API OpenAI");
-            setOpen(true)
-            return;
-        }
-
-        // await createMessage(message)
-
-        chat(newThread).then((response) => {
+        chat().then((response) => {
             setMessages((prevMessages) => [
                 ...prevMessages,
                 {
                     role: "assistant",
-                    content: "la réponse de l'IA",
+                    content: response as string,
                 },
             ]);
         });
@@ -249,8 +239,8 @@ export function Chatbot() {
                     </Snackbar>
 
                     <div className={"close-icon"} onClick={handleShowChatBot}><HighlightOffIcon/></div>
-                        <h1>{APP_NAME} Chatbot
-                            <Tooltip title="Posez une question à l'assistant IA (service externe OPENAI).">
+                        <h1>{APP_NAME} Assistant IA
+                            <Tooltip title="Posez une question à l'assistant d'intelligence articielle (service externe OPENAI).">
                                 <IconButton>
                                     <HelpIcon/>
                                 </IconButton>
@@ -265,15 +255,19 @@ export function Chatbot() {
                         ))
                         }
                     </div>
+                    { isLoading && (
+                        <div className='loader-chatbot'>
+                            <CircularProgress />
+                        </div>
+                    )}
                     <form onSubmit={handleSubmit}>
                         <TextField name={"userMessage"} variant={"filled"} label={"Message"}
                                    placeholder={"Ex: Qu'est ce qu'un adhérent ?"}
                                    fullWidth multiline/>
-                        <Button variant={"contained"} type={"submit"}>
+                        <Button variant={"contained"} type={"submit"} style={{maxHeight: "5vh", minHeight: "5vh"}}>
                             <SendIcon/>
                         </Button>
                     </form>
-
                 </div>
             );
         }
@@ -281,9 +275,11 @@ export function Chatbot() {
 
     function MessageBox({message, role, key}: {message: string, role: string, key: number}) {
 
+    const APP_NAME = process.env.REACT_APP_ASSOCIATION_NAME;
+
     let sender = "";
     if (role === "assistant") {
-        sender = "Arcadia Bot";
+        sender = APP_NAME +" Assistant IA";
     }else {
         sender = "Vous";
     }
