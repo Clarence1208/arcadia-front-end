@@ -334,6 +334,7 @@ export function DocumentListAdmin() {
             <div className="file-lists">
                 <div className="file-list">
                     <h2><PublicIcon/> Documents publics :</h2>
+                    <div className="header-public-safe">
                     <Button
                         component="label"
                         role="button"
@@ -351,7 +352,10 @@ export function DocumentListAdmin() {
                             <InputAdornment position="start">
                                 <SearchIcon />
                             </InputAdornment>
-                        )}} id="outlined-basic" label="Rechercher un fichier public" variant="outlined" onChange={searchPublic}/>
+                        )}} id="search-bar-public" label="Rechercher un fichier public" variant="outlined" onChange={searchPublic}
+                        style={{marginTop: "2em"}}
+                    />
+                    </div>
                     <ul className="file-list-ul">
                         {publicFiles.length === 0 && <h4>Aucun fichier public ou aucun fichier trouvé</h4>}
                         {publicFiles.map((file) => (
@@ -379,6 +383,7 @@ export function DocumentListAdmin() {
                                                                   children={<IconButton>
                                                                       <HelpIcon/>
                                                                   </IconButton>}/></h2>
+                    <div className="header-public-safe">
                     <Button
                         component="label"
                         role="button"
@@ -396,7 +401,9 @@ export function DocumentListAdmin() {
                             <InputAdornment position="start">
                                 <SearchIcon />
                             </InputAdornment>
-                        )}} id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}/>
+                        )}} id="search-bar-private" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}
+                               style={{marginTop: "2em"}}/>
+                    </div>
                     <ul className="file-list-ul">
                         {privateFiles.length === 0 && <h4>Aucun fichier privé ou aucun fichier trouvé</h4>}
                         {privateFiles.map((file) => (
@@ -435,26 +442,32 @@ export function DocumentListAdmin() {
                 </div>
                 {selectedUser ?
                     <div className="user-files">
+                        <div className="header-safe">
                         <h2>Documents de {selectedUser?.firstName + " " + selectedUser?.surname} :</h2>
                         <Button
-                        component="label"
-                        role="button"
-                        variant="contained"
-                        tabIndex={-1}
-                        startIcon={<CloudUploadIcon/>}
-                        sx={{marginBottom: "10px"}}
-                    >
-                        Charger un document dans le dossier de {selectedUser?.firstName + " " + selectedUser?.surname}
-                        <VisuallyHiddenInput
-                            type="file"
-                            onChange={(e) => handleFileChange(e, "users/" + String(selectedUser.id))}
+                            component="label"
+                            role="button"
+                            variant="contained"
+                            tabIndex={-1}
+                            startIcon={<CloudUploadIcon/>}
+                        >
+                            Charger un document
+                            <VisuallyHiddenInput
+                                type="file"
+                                onChange={(e) => handleFileChange(e, "users/" + String(selectedUser.id))}
+                            />
+                        </Button>
+                        </div>
+
+                        <div className="documents-actions">
+                        <TextField InputProps={{startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            )}} id="search-bar-user-files" label="Rechercher un fichier" variant="outlined" onChange={searchUser}
                         />
-                    </Button>
-                    <TextField InputProps={{startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon />
-                            </InputAdornment>
-                        )}} id="outlined-basic" label="Rechercher un fichier utilisateur" variant="outlined" onChange={searchUser}/>
+                        </div>
+
                         <ul className="file-list-ul">
                             {userFiles.length === 0 &&
                                 <h4>{selectedUser.firstName + " " + selectedUser.surname} n'a pas de documents ou pas de fichier trouvé</h4>}
