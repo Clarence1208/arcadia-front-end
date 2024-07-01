@@ -19,7 +19,7 @@ import {UserSessionContext} from "./../contexts/user-session";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "../styles/WebsiteSettings.css";
 import {ConfigContext} from "./../index";
-import {s3Config} from './../utils/s3Config';
+import {getS3Config} from './../utils/s3Config';
 import ReactS3Client from 'react-aws-s3-typescript';
 
 const VisuallyHiddenInput = styled('input')({
@@ -341,6 +341,7 @@ export function WebsiteSettings() {
     const [selectedSetting, setSelectedSetting] = useState<WebsiteSettings>()
     const config = useContext(ConfigContext);
     const fileRef = useRef<File | null>(null);
+    const s3Config = getS3Config();
 
     function handleEditClicked(setting: WebsiteSettings) {
         setSelectedSetting(setting)

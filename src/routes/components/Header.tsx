@@ -8,7 +8,7 @@ import {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
 import ReactS3Client from 'react-aws-s3-typescript';
 import { Alert, Snackbar } from "@mui/material";
-import { s3Config } from "../../utils/s3Config";
+import { getS3Config } from "../../utils/s3Config";
 import { ConfigContext } from "../../index";
 
 interface CustomNavItemProps {
@@ -49,7 +49,8 @@ export default function Header() {
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     const config = useContext(ConfigContext);
-
+    const s3Config = getS3Config();
+    
     useEffect(() => {
         const fetchData = async () => {
             const s3 = new ReactS3Client(s3Config);

@@ -11,7 +11,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 import {ArrowBack, FileUpload} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import {ConfigContext} from "../../index";
-import { s3Config } from './../../utils/s3Config';
+import { getS3Config } from './../../utils/s3Config';
 import ReactS3Client from "react-aws-s3-typescript";
 
 type CreateArticleData = {
@@ -52,6 +52,7 @@ function CreateArticleForm() {
     const [data, setData] = useState(body)
     const fileRef = useRef<File | null>(null);
     const [fileName, setFileName] = useState<string>("");
+    const s3Config = getS3Config();
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')

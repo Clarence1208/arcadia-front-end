@@ -4,7 +4,7 @@ import {Alert, Button, IconButton, InputAdornment, Modal, Paper, Snackbar, TextF
 import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
-import {s3Config} from './../utils/s3Config';
+import {getS3Config} from './../utils/s3Config';
 import './../styles/DocumentListAdmin.css';
 import {Delete, Download} from '@mui/icons-material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -91,6 +91,7 @@ export function DocumentListAdmin() {
     const [publicSearch, setSearchPublic] = useState("");
     const [userSearch, setSearchUser] = useState("");
     const config = useContext(ConfigContext);
+    const s3Config = getS3Config();
 
     useEffect(() => {
         const fetchData = async () => {

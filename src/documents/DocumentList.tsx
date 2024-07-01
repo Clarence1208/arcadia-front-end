@@ -4,7 +4,7 @@ import {Alert, Button, InputAdornment, Modal, Paper, Snackbar, TextField} from "
 import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
-import {s3Config} from './../utils/s3Config';
+import {getS3Config} from './../utils/s3Config';
 import './../styles/DocumentList.css';
 import {Delete, Download} from '@mui/icons-material';
 import {wait} from "@testing-library/user-event/dist/utils";
@@ -76,6 +76,7 @@ export function DocumentList() {
     const [video, setVideo] = useState<string>("");
     const [loading, setLoading] = useState(false);
     const config = useContext(ConfigContext);
+    const s3Config = getS3Config();
 
     useEffect(() => {
         const fetchData = async () => {

@@ -9,7 +9,7 @@ import {ConfigContext} from "../../index";
 import { Alert, Snackbar, useTheme, CircularProgress, Box } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import ReactS3Client from "react-aws-s3-typescript";
-import { s3Config } from './../../utils/s3Config';
+import { getS3Config } from './../../utils/s3Config';
 
 type Article = {
     id: number,
@@ -29,6 +29,7 @@ export function ShowArticle() {
     const [file, setFile] = useState("");
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const config = useContext(ConfigContext);
+    const s3Config = getS3Config();
 
     const handleClose = () => {
         setOpen(false);
