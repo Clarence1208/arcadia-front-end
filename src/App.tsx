@@ -31,11 +31,8 @@ import { VoteResults } from './routes/meetings/VoteResults';
 import { CreatePoll } from './routes/polls/CreatePoll';
 import { PollVoteApply } from './routes/polls/PollVoteApply';
 import { PollResults } from './routes/polls/PollResults';
-<<<<<<< HEAD
 import {ConfigContext} from "./index";
-=======
 import { CreatePremise } from './routes/premises/CreatePremise';
->>>>>>> 95e44cb (added premises and fixed global error handling missing)
 
 
 function App() {
