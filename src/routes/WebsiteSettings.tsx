@@ -15,11 +15,11 @@ import {
 } from "@mui/material";
 import {AddCircleOutline, Delete, Edit, Settings} from "@mui/icons-material";
 import React, {useContext, useEffect, useRef, useState} from "react";
-import {UserSessionContext} from "../contexts/user-session";
+import {UserSessionContext} from "./src/contexts/user-session";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "../styles/WebsiteSettings.css";
-import {ConfigContext} from "../index";
-import {s3Config} from './../utils/s3Config';
+import {ConfigContext} from "./src/index";
+import {s3Config} from './src/utils/s3Config';
 import ReactS3Client from 'react-aws-s3-typescript';
 
 const VisuallyHiddenInput = styled('input')({

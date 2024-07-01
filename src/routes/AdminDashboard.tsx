@@ -9,7 +9,7 @@ import "../styles/Dashboard.css";
 import {UsersDashboard} from "./UsersDashboard";
 import { MeetingsList } from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import {WebsiteSettings} from "./WebsiteSettings";
+import {WebsiteSettings} from "../../WebsiteSettings";
 import {PollList} from "./polls/PollList";
 import {PremisesList} from "./premises/PremisesList";
 import { DocumentList } from "../documents/DocumentList";
