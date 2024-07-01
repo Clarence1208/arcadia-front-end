@@ -1,12 +1,7 @@
-import { useContext } from "react";
-import { ConfigContext } from "../index";
-
-const config = useContext(ConfigContext);
-
 export const s3Config = {
     bucketName:  'arcadia-bucket',
-    dirName: config.associationName || "",
+    dirName: import.meta.env.VITE_APP_NAME || "",
     region: 'eu-west-3',
-    accessKeyId: config.s3AccessKeyId || "",
-    secretAccessKey: config.s3SecretAccessKey || "",
+    accessKeyId: import.meta.env.VITE_S3_ACCESS_KEY_ID || "",
+    secretAccessKey: import.meta.env.VITE_S3_SECRET_ACCESS_KEY || "",
 }

@@ -18,6 +18,12 @@ export function Home() {
     const config = useContext(ConfigContext);
 
     useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+
+    useEffect(() => {
         const fetchData = async () => {
             const s3 = new ReactS3Client(s3Config);
             try {
@@ -36,12 +42,6 @@ export function Home() {
         };
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if (image) {
-            setIsPageLoaded(true);
-        }
-    }, [image]);
 
     const handleClose = () => {
         setOpen(false);
