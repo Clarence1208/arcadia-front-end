@@ -18,9 +18,7 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "../styles/WebsiteSettings.css";
-<<<<<<< HEAD
 import {ConfigContext} from "../index";
-=======
 import {s3Config} from './../utils/s3Config';
 import ReactS3Client from 'react-aws-s3-typescript';
 
@@ -35,7 +33,6 @@ const VisuallyHiddenInput = styled('input')({
     whiteSpace: 'nowrap',
     width: 1,
 });
->>>>>>> 1b1762a (lotta things honnedtly)
 
 type WebsiteSettings = {
     id?: number,
@@ -341,11 +338,8 @@ export function WebsiteSettings() {
     const userToken = userSession?.loginToken
     const userId = userSession?.userId
     const [selectedSetting, setSelectedSetting] = useState<WebsiteSettings>()
-<<<<<<< HEAD
     const config = useContext(ConfigContext);
-=======
     const fileRef = useRef<File | null>(null);
->>>>>>> 1b1762a (lotta things honnedtly)
 
     function handleEditClicked(setting: WebsiteSettings) {
         setSelectedSetting(setting)

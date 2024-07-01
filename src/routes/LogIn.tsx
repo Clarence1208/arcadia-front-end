@@ -1,13 +1,8 @@
 import {Alert, Button, Link, TextField, useTheme} from "@mui/material";
 import '../styles/LogIn.css';
 import '../styles/App.css';
-<<<<<<< HEAD
-import {FormEvent, useContext, useState} from "react";
-import {useNavigate, useSearchParams} from "react-router-dom";
-=======
 import {FormEvent, Fragment, useContext, useEffect, useState} from "react";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
->>>>>>> 1b1762a (lotta things honnedtly)
 import {UserSessionContext} from "../contexts/user-session";
 import Collapse from "@mui/material/Collapse";
 import Snackbar from '@mui/material/Snackbar';
@@ -27,11 +22,7 @@ function LogInForm() {
     let navigate = useNavigate();
     const [open, setOpen] = useState(true);
     const sessionContext = useContext(UserSessionContext)
-<<<<<<< HEAD
     const config = useContext(ConfigContext);
-
-=======
->>>>>>> 1b1762a (lotta things honnedtly)
     const [ErrorMessage, setErrorMessage] = useState("")
     const [data, setData] = useState(body)
     
@@ -125,31 +116,9 @@ export function LogIn() {
     };
 
     return (
-<<<<<<< HEAD
-        <div className="containerRow">
-            {/*<div style={{backgroundImage: `url(${heart})`,backgroundPosition:"center", backgroundSize: "50px 50px",opacity:0.2, backgroundRepeat: "repeat", position:"absolute", top:0,left:0, height:"100vh", width:"20vw"}}></div>*/}
-            <div className="rotated-text" style={{color: theme.palette.primary.main}}>ADMIN</div>
-            <div className="green-separator" style={{backgroundColor: theme.palette.primary.main}}/>
-            <div className="containerCol">
-                <Snackbar
-                    open={open}
-                    autoHideDuration={3000}
-                    onClose={handleClose}
-                    anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-                >
-                    <Alert
-                        onClose={handleClose}
-                        severity="success"
-                        variant="filled"
-                        sx={{width: '100%'}}
-                    >Le compte a été créé avec succès</Alert>
-                </Snackbar>
-                <LogInForm/>
-=======
         <div>
             {isPageLoaded && 
             <div className="containerRow">
-                    {/*<div style={{backgroundImage: `url(${heart})`,backgroundPosition:"center", backgroundSize: "50px 50px",opacity:0.2, backgroundRepeat: "repeat", position:"absolute", top:0,left:0, height:"100vh", width:"20vw"}}></div>*/}
                     <div className="rotated-text" style={{color: theme.palette.primary.main}}>ADMIN</div>
                     <div className="green-separator" style={{backgroundColor: theme.palette.primary.main}} />
                     <div className="containerCol">
@@ -168,7 +137,6 @@ export function LogIn() {
                         </Snackbar>
                         <LogInForm />
                     </div>
->>>>>>> 1b1762a (lotta things honnedtly)
             </div>
         }
         </div>

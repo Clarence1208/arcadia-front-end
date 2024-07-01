@@ -1,0 +1,9 @@
+{
+    "associationName": "Association des malades",
+    "port": 8080,
+    "apiURL": "http://localhost:3000/",
+    "openaiAPIKey": "sk-proj-QwUXbJlab8GDLWoKW4sET3BlbkFJBQL9CSYfbqs7x3l2XiO9",
+    "s3SecretAccessKey":"M9iT62L+M1SM1QRPyKDPUI+2b6cGkSqCMTU08RR1",
+    "s3AccessKeyId":"AKIA4MTWN7WFP2CEBT7K",
+    "stripePublicKey": "pk_test_51PPPaZBvbnM6p69y9VGLCmAkev3tT3Plbw8JPtnf78iiJxiGtsTXNPOEPn3M9OktpiKeuTqx1XwcoKoVUty97nr600GCnOjcBt"
+}
