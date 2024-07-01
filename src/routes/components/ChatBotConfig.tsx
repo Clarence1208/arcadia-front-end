@@ -36,6 +36,7 @@ function ChatBotConfigForm() {
     const [open, setOpen] = useState(false);
     const [data, setData] = useState(body)
     const [changed, setChanged] = useState(true)
+    const [isCreated, setIsCreated] = useState(false)
 
     useEffect(() => {
         if (userSession?.loginToken) {
@@ -64,11 +65,11 @@ function ChatBotConfigForm() {
             getSettings().then(setSettings)
         }
     }
-    , [userSession?.loginToken])
+    , [userSession?.loginToken, isCreated])
 
     useEffect(() => {
         for (const setting of settings) {
-            if (setting.name === "chatbot_description") {
+            if (setting.name === "chatbot_configuration") {
                 setData(prev => {
                     return { ...prev, value: setting.value, id: setting.id}
                 })
@@ -93,6 +94,37 @@ function ChatBotConfigForm() {
 
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
+
+        if (data.id === 0) {
+
+            const newWebsiteSettings: WebsiteSettings = {
+                id: 0,
+                name: "chatbot_configuration",
+                description: "Configuration du ChatBot",
+                value: data.value,
+                type: "config"
+            }
+
+            const bearer = "Bearer " + userSession?.loginToken;
+            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings", {method: "POST", body: JSON.stringify(newWebsiteSettings),
+                headers: {
+                    "Authorization": bearer,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!response.ok) {
+                const error =  await response.json()
+                setErrorMessage("Erreur : " + await error.message);
+                setOpen(true)
+                return
+            }
+            setErrorMessage("Configuration du ChatBot mise à jour");
+            setOpen(true)
+            navigate('/adminDashboard')
+            setIsCreated(true)
+            return
+        }
+
         const bearer = "Bearer " + userSession?.loginToken;
         const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings/" + data.id, {method: "PATCH", body: JSON.stringify(data),
             headers: {

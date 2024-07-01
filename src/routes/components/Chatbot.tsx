@@ -69,7 +69,7 @@ export function Chatbot() {
 
     useEffect(() => {
         for (const setting of settings) {
-            if (setting.name === "chatbot_description") {
+            if (setting.name === "chatbot_configuration") {
                 setChatbotConfig(setting.value)
             }
         }

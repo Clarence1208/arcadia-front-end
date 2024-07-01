@@ -308,7 +308,7 @@ export function WebsiteSettings() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        {settings.filter(setting => setting.name !== "chatbot_description").map((setting) => (
+                        {settings.filter(setting => setting.name !== "chatbot_configuration").map((setting) => (
                             <TableRow
                                 key={setting.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
