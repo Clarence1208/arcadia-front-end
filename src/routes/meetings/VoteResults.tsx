@@ -49,6 +49,13 @@ export function VoteResults() {
     const [isLastVote , setIsLastVote] = useState<boolean>(false);
     const [isVoteResultVisible, setIsVoteResultVisible] = useState<boolean>(false);
     const config = useContext(ConfigContext);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     useEffect(() => {
         // Fetch vote data and vote choices
@@ -203,6 +210,8 @@ export function VoteResults() {
 
     return (
         <div>
+            {isPageLoaded &&
+            <div>
             <Header />
             <div className="main">
                 {vote?.users.length === 0 ? (
@@ -281,6 +290,8 @@ export function VoteResults() {
                 )}
             </div>
             <Footer />
+            </div>
+            }
         </div>
     );
 }

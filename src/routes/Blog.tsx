@@ -1,14 +1,14 @@
-import {Footer} from "./components/Footer";
+import { Footer } from "./components/Footer";
 import Header from "./components/Header";
-import React, {useContext, useEffect, useState} from "react";
-import {UserSessionContext} from "../contexts/user-session";
-import {ArticleList} from "./articles/ArticleList";
-import {Pagination, List, Button, Alert} from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { UserSessionContext } from "../contexts/user-session";
+import { ArticleList } from "./articles/ArticleList";
+import { Pagination, Button, Alert, CircularProgress, Box } from "@mui/material";
 import '../styles/Blog.css';
 import { Add } from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
-import {useNavigate} from "react-router-dom";
-import {Chatbot} from "./components/Chatbot";
+import { useNavigate } from "react-router-dom";
+import { Chatbot } from "./components/Chatbot";
 import { PollList } from "./polls/PollList";
 import theme from "../utils/theme";
 import {ConfigContext} from "../index";
@@ -25,20 +25,22 @@ type Filters = {
     page?: number,
     limit?: number,
 }
-export function Blog(){
 
-    const userSession = useContext(UserSessionContext)?.userSession
-    const [articles, setArticles] = useState<Article[]>([])
+export function Blog() {
+    const userSession = useContext(UserSessionContext)?.userSession;
+    const [articles, setArticles] = useState<Article[]>([]);
     const [page, setPage] = useState(1);
-    const [flashMessage, setFlashMessage] = useState<string>("")
+    const [flashMessage, setFlashMessage] = useState<string>("");
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const config = useContext(ConfigContext);
     const [ErrorMessage, setErrorMessage] = useState("")
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     const handleClose = () => {
-        setOpen(false)
+        setOpen(false);
     }
+
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
@@ -54,16 +56,18 @@ export function Blog(){
                     }
                 });
                 if (!response.ok) {
-                    const error = await response.json()
-                    console.log(error)
+                    const error = await response.json();
+                    console.log(error);
                     setFlashMessage("Erreur : " + await error.message);
-                    return []
+                    return [];
                 }
                 const res = await response.json();
                 return res;
             }
-            getArticles({page: page}).then(setArticles)
-            console.log(articles)
+            getArticles({ page: page }).then((data) => {
+                setArticles(data);
+                setIsPageLoaded(true);
+            });
         }
     }, [page, userSession?.loginToken]);
 
@@ -77,64 +81,80 @@ export function Blog(){
             }
         });
         if (!response.ok) {
-            const error = await response.json()
+            const error = await response.json();
             setFlashMessage("Erreur : " + await error.message);
-            setOpen(true)
-            return
+            setOpen(true);
+            return;
         }
-        const res = await response.json();
-        setFlashMessage("Article supprimé")
-        setOpen(true)
-        setArticles(articles.filter((article) => article.id !== id))
+        await response.json();
+        setFlashMessage("Article supprimé");
+        setOpen(true);
+        setArticles(articles.filter((article) => article.id !== id));
     }
 
     return (
-        <div>
-          <Header />
+        <>
+            {/* Conditional Rendering for the Entire Page */}
+            {!isPageLoaded ? (
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
+                    <CircularProgress />
+                    <div>Loading...</div>
+                </Box>
+            ) : (
+                <div>
+                    <Header />
 
-            <Snackbar
-                open={open}
-                autoHideDuration={3000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                <Alert
-                    onClose={handleClose}
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >{flashMessage}</Alert>
-            </Snackbar>
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={3000}
+                        onClose={handleClose}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    >
+                        <Alert
+                            onClose={handleClose}
+                            severity="success"
+                            variant="filled"
+                            sx={{ width: '100%' }}
+                        >{flashMessage}</Alert>
+                    </Snackbar>
 
-            <div className={"main article-page"}>
-                <div id={"title-blog"}>
-                    <h1>Actualités</h1>
-                    {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
-                        <div className={"create-article"}>
-                            <Button
-                                href={"/createArticle"}
-                                variant="contained"
-                                startIcon={<Add />}>
-                                Créer un article
-                            </Button>
-                        </div> : null
-                    }
+                    <div className={"main article-page"}>
+                        <div id={"title-blog"}>
+                            <h1>Actualités</h1>
+                            {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) && (
+                                <div className={"create-article"}>
+                                    <Button
+                                        href={"/createArticle"}
+                                        variant="contained"
+                                        startIcon={<Add />}
+                                    >
+                                        Créer un article
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+
+                        {articles.length === 0 ? (
+                            <div>No articles available. Please check back later.</div>
+                        ) : (
+                            <ArticleList articles={articles} deleteItem={deleteItem} />
+                        )}
+                        <Pagination
+                            style={{ alignSelf: "center" }}
+                            count={10}
+                            page={page}
+                            onChange={handleChangePage}
+                        />
+
+                        <div style={{ backgroundColor: "pink", height: "0.25em", width: "auto", margin: "6em 0" }}></div>
+                        {/* TODO: CHANGE COLOR LA JE VAIS CHERCHER MA PIZZA */}
+
+                        <PollList />
+                    </div>
+                    <Chatbot />
+                    <Footer />
                 </div>
-
-                    {
-                        articles.length === 0 ?
-                        <div>Loading or no articles...</div> :
-                        <ArticleList articles={articles} deleteItem={deleteItem}/>
-                    }
-                <Pagination style={{alignSelf: "center"}} count={10} page={page} onChange={handleChangePage} />
-
-                <div style={{backgroundColor: "pink", height:"0.25em", width:"auto", margin:"6em 0"}}></div>
-                {/*TODO: CHANGE COLOR LA JE VAIS CHERCHER MA PIZZA*/}
-
-                <PollList />
-            </div>
-            <Chatbot />
-          <Footer />
-        </div>
-    )
+            )}
+        </>
+    );
 }

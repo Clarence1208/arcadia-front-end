@@ -6,8 +6,8 @@ import Paper from '@mui/material/Paper';
 import { UserSessionContext } from "../../contexts/user-session";
 import LoadingSpinner from "../components/LoadingSpinner";
 import {ConfigContext} from "../../index";
+import { Alert, Snackbar, useTheme, CircularProgress, Box } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import { Alert, Snackbar, useTheme } from "@mui/material";
 import ReactS3Client from "react-aws-s3-typescript";
 import { s3Config } from './../../utils/s3Config';
 
@@ -27,6 +27,7 @@ export function ShowArticle() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState("");
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
@@ -51,6 +52,7 @@ export function ShowArticle() {
             }
             return await response.json();
         };
+
         getArticle().then(setArticle).catch((error) => {
             setErrorMessage(error.message);
             setOpen(true);
@@ -75,48 +77,58 @@ export function ShowArticle() {
                 setOpen(true);
             }
         };
+
         if (articleId) {
-            fetchData();
+            fetchData().then(() => setIsPageLoaded(true));
         }
     }, [articleId, article]);
 
     return (
-        <div>
-            <Snackbar
-                open={open}
-                autoHideDuration={3000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                <Alert
-                    onClose={handleClose}
-                    severity={errorMessage.includes("Erreur") ? "error" : "success"}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {errorMessage}
-                </Alert>
-            </Snackbar>
-            <Header />
-            <div className={"main"}>
-                <div onClick={() => window.history.back()} style={{ alignItems: "center", display: "flex", cursor: "pointer", width: "20vw" }}>
-                    <ArrowBack />
-                    <p style={{ marginLeft: "1em" }}>Retour</p>
-                </div>
-                <Paper elevation={1}>
-                    {file && <img src={file} alt="article banner" style={{ width: "100%", height: "30vh", objectFit: "cover" }} />}
-                    {article ? (
-                        <div style={{ padding: "4vh" }}>
-                            <h1>Article {article.title}</h1>
-                            <h4>Publié le {new Date(article.createdAt).toLocaleDateString()}</h4>
-                            <p>{article.text}</p>
+        <>
+            {!isPageLoaded ? (
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
+                    <CircularProgress />
+                    <div>Loading...</div>
+                </Box>
+            ) : (
+                <div>
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={3000}
+                        onClose={handleClose}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    >
+                        <Alert
+                            onClose={handleClose}
+                            severity={errorMessage.includes("Erreur") ? "error" : "success"}
+                            variant="filled"
+                            sx={{ width: '100%' }}
+                        >
+                            {errorMessage}
+                        </Alert>
+                    </Snackbar>
+                    <Header />
+                    <div className={"main"}>
+                        <div onClick={() => window.history.back()} style={{ alignItems: "center", display: "flex", cursor: "pointer", width: "20vw" }}>
+                            <ArrowBack />
+                            <p style={{ marginLeft: "1em" }}>Retour</p>
                         </div>
-                    ) : (
-                        <div>{errorMessage}</div>
-                    )}
-                </Paper>
-            </div>
-            <Footer />
-        </div>
+                        <Paper elevation={1}>
+                            {file && <img src={file} alt="article banner" style={{ width: "100%", height: "30vh", objectFit: "cover" }} />}
+                            {article ? (
+                                <div style={{ padding: "4vh" }}>
+                                    <h1>Article {article.title}</h1>
+                                    <h4>Publié le {new Date(article.createdAt).toLocaleDateString()}</h4>
+                                    <p>{article.text}</p>
+                                </div>
+                            ) : (
+                                <div>{errorMessage}</div>
+                            )}
+                        </Paper>
+                    </div>
+                    <Footer />
+                </div>
+            )}
+        </>
     );
 }

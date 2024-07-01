@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
-import {SyntheticEvent, useContext, useState} from "react";
+import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 // import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";
 import {Tab, Tabs} from "@mui/material";
@@ -39,13 +39,22 @@ function TabPanel(props: any) {
 export function MemberDashboard(){
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
 
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+    
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTabsValue(newValue);
         event.currentTarget.className = "active"; //doesn't seem to work as intended
     };
     return (
         <div>
+            { isPageLoaded &&
+            <div>
             <Header />
 
             <div id="dahsboard-main" className="main">
@@ -86,6 +95,8 @@ export function MemberDashboard(){
             </div>
 
             <Footer />
+            </div>
+            }
         </div>
     );
 }

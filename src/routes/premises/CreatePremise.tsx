@@ -153,11 +153,23 @@ function CreatePremiseForm() {
     );
 }
 export function CreatePremise() {
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+
     return (
         <div>
-            <Header />
-                <CreatePremiseForm />
-            <Footer />
+            { isPageLoaded && 
+            <div>
+                <Header />
+                    <CreatePremiseForm />
+                <Footer />
+            </div>
+            }
         </div>
     );
 }

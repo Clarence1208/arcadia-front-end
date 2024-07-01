@@ -59,6 +59,13 @@ export function PollVoteApply() {
     const [open, setOpen] = useState(false);
     const {id} = useParams()
     const config = useContext(ConfigContext);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     async function updateFields(voteChoiceData: VoteChoice, limit: number) {
         setData(prev => {
@@ -185,6 +192,8 @@ export function PollVoteApply() {
 
     return (
         <div>
+            {isPageLoaded && 
+            <div>
             <Header />
                 <div id={"create-website-page"} className={"main"}>
                     <div>
@@ -235,6 +244,8 @@ export function PollVoteApply() {
                         </div>
                 </div>
             <Footer />
+            </div>
+            }
         </div>
     )
 }

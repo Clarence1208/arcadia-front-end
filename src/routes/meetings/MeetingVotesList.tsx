@@ -51,6 +51,13 @@ export function MeetingVotesList() {
     const [time, setTime] = useState(new Date());
     const config = useContext(ConfigContext);
     const [open, setOpen] = useState(false);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     useEffect(() => {
         if (userSession?.loginToken) {
@@ -117,6 +124,8 @@ export function MeetingVotesList() {
 
     return (
         <div>
+            { isPageLoaded && 
+            <div>
             <Header />
                 <div className={"main"}>
                 <Snackbar
@@ -163,6 +172,8 @@ export function MeetingVotesList() {
                     </div>
                 </div>
             <Footer />
+            </div>
+            }
         </div>
     )
 }

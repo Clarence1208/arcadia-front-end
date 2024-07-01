@@ -155,86 +155,102 @@ function CreateArticleForm() {
 
     return (
         <div id="create-article" className="main">
-            <Snackbar
-                open={open}
-                autoHideDuration={3000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                <Alert
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
                     onClose={handleClose}
-                    severity={ErrorMessage.includes("Erreur") ? "error" : "success"}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >{ErrorMessage}</Alert>
-            </Snackbar>
-            <div onClick={() => window.history.back()} style={{ alignItems:"center" ,display: "flex", cursor: "pointer", width:"20vw"}}>
-                <ArrowBack />
-                <p style={{marginLeft:"1em"}}>Retour</p>
-            </div>
-            <Paper elevation={1} className={"paper"} >
-            <h1><FeedIcon />  Créer un article </h1>
-            <form id="create-article-form" onSubmit={onSubmit}>
-                <TextField
-                    id="create-article-title" 
-                    label="Titre" 
-                    variant="outlined"
-                    size="small"
-                    onChange={e => updateFields({ title: e.target.value })} 
-                />
-                <TextField 
-                    label="Texte" 
-                    variant="outlined"
-                    multiline
-                    rows={10}
-                    style={{ width: "60vw"}}
-                    onChange={e => updateFields({ text: e.target.value })} 
-                />
-                <div style={{display: "flex", flexDirection: "column", alignItems:"center", justifyContent: "center"}}>
-                    {fileRef.current && 
-                    <div style={{display: "flex", alignItems:"center", justifyContent: "center"}}>
-                        <Button
-                            component="label"
-                            onClick={updateFile}
-                        >X</Button>
-                        <p>{fileRef.current?.name}</p>
-                    </div>
-                    }
-                    <Button
-                    component="label"
-                    role="button"
-                    variant="contained"
-                    tabIndex={-1}
-                    startIcon={<FileUpload />}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                    Ajouter un média (jpg, png, jpeg, bmp, webp)
-                    <VisuallyHiddenInput
-                        type="file"
-                        onChange={(event) => handleFileChange(event)}
-                    />
-                </Button>
+                    <Alert
+                        onClose={handleClose}
+                        severity={ErrorMessage.includes("Erreur") ? "error" : "success"}
+                        variant="filled"
+                        sx={{ width: '100%' }}
+                    >{ErrorMessage}</Alert>
+                </Snackbar>
+                <div onClick={() => window.history.back()} style={{ alignItems:"center" ,display: "flex", cursor: "pointer", width:"20vw"}}>
+                    <ArrowBack />
+                    <p style={{marginLeft:"1em"}}>Retour</p>
                 </div>
+                <Paper elevation={1} className={"paper"} >
+                <h1><FeedIcon />  Créer un article </h1>
+                <form id="create-article-form" onSubmit={onSubmit}>
+                    <TextField
+                        id="create-article-title" 
+                        label="Titre" 
+                        variant="outlined"
+                        size="small"
+                        onChange={e => updateFields({ title: e.target.value })} 
+                    />
+                    <TextField 
+                        label="Texte" 
+                        variant="outlined"
+                        multiline
+                        rows={10}
+                        style={{ width: "60vw"}}
+                        onChange={e => updateFields({ text: e.target.value })} 
+                    />
+                    <div style={{display: "flex", flexDirection: "column", alignItems:"center", justifyContent: "center"}}>
+                        {fileRef.current && 
+                        <div style={{display: "flex", alignItems:"center", justifyContent: "center"}}>
+                            <Button
+                                component="label"
+                                onClick={updateFile}
+                            >X</Button>
+                            <p>{fileRef.current?.name}</p>
+                        </div>
+                        }
+                        <Button
+                        component="label"
+                        role="button"
+                        variant="contained"
+                        tabIndex={-1}
+                        startIcon={<FileUpload />}
+                    >
+                        Ajouter un média (jpg, png, jpeg, bmp, webp)
+                        <VisuallyHiddenInput
+                            type="file"
+                            onChange={(event) => handleFileChange(event)}
+                        />
+                    </Button>
+                    </div>
 
-                <Button 
-                type="submit" 
-                variant="contained" 
-                color="primary"
-                onClick={onSubmit}
-                >
-                    Soumettre
-                </Button>
-            </form>
-            </Paper>
+                    <Button 
+                    type="submit" 
+                    variant="contained" 
+                    color="primary"
+                    onClick={onSubmit}
+                    >
+                        Soumettre
+                    </Button>
+                </form>
+                </Paper>
         </div>
     );
 }
 
 export function CreateArticle() {
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+
     return (
         <div>
-            <Header />
-                <CreateArticleForm />
-            <Footer />
+            { isPageLoaded ? (
+                <div>
+                    <Header />
+                        <CreateArticleForm />
+                    <Footer />
+                </div>
+            ) : (
+                <div className="loading">
+                    <div>Loading...</div>
+                </div>
+            )}
         </div>
     );
 }

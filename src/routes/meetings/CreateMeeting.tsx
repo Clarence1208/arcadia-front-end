@@ -246,11 +246,23 @@ function CreateMeetingForm() {
     );
 }
 export function CreateMeeting() {
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+
     return (
         <div>
-            <Header />
-                <CreateMeetingForm />
-            <Footer />
+            { isPageLoaded && 
+            <div>
+                <Header />
+                    <CreateMeetingForm />
+                <Footer />
+            </div>
+            }
         </div>
     );
 }

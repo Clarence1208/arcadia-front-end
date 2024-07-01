@@ -46,6 +46,13 @@ export function MeetingVoteApply() {
     const [results, setResults] = useState<VoteChoice[]>([]);
     const [open, setOpen] = useState(false);
     const config = useContext(ConfigContext);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     const navigate = useNavigate();
     const {voteId, id} = useParams();
@@ -171,8 +178,10 @@ export function MeetingVoteApply() {
 
     return (
         <div>
-            <Header/>
-            <div className={"main"}>
+            { isPageLoaded && 
+            <div>
+            <Header />
+                <div className={"main"}>
                 <Snackbar
                     open={open}
                     autoHideDuration={3000}
@@ -223,17 +232,19 @@ export function MeetingVoteApply() {
                             <Switch checked={data.isWhiteVote} onChange={e => changeWhiteVote()} color="primary"/>
                         </div>
                     </div>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        size={"large"}
-                        style={{width: "20vw", alignSelf: "center", height: "5vh"}}
-                        onClick={onSubmit}
-                    >Soumettre</Button>
-                </Paper>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size={"large"}
+                            style={{width: "20vw", alignSelf:"center", height: "5vh"}}
+                            onClick={onSubmit}
+                        >Soumettre</Button>
+                    </Paper>
+                </div>
+            <Footer />
             </div>
-            <Footer/>
+            }
         </div>
     )
 }

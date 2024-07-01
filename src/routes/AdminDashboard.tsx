@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
-import {SyntheticEvent, useContext, useState} from "react";
+import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 /*import {WebsitesPanel} from "../components/features/dashboard/WebsitesPanel";
 import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";*/
@@ -46,6 +46,13 @@ function TabPanel(props: any) {
 export function Dashboard(){
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTabsValue(newValue);
@@ -53,6 +60,8 @@ export function Dashboard(){
     };
     return (
         <div>
+            {isPageLoaded &&
+            <div> 
             <Header />
 
             <div id="dahsboard-main" className="main">
@@ -113,6 +122,8 @@ export function Dashboard(){
             </div>
 
             <Footer />
+            </div>
+            }
         </div>
     );
 }
