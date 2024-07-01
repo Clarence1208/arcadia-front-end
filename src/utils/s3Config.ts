@@ -1,7 +1,12 @@
+import { useContext } from "react";
+import { ConfigContext } from "../index";
+
+const config = useContext(ConfigContext);
+
 export const s3Config = {
     bucketName:  'arcadia-bucket',
-    dirName: process.env.REACT_APP_ASSOCIATION_NAME || "",
+    dirName: config.associationName || "",
     region: 'eu-west-3',
-    accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY_ID || "",
-    secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY || "",
+    accessKeyId: config.s3AccessKeyId || "",
+    secretAccessKey: config.s3SecretAccessKey || "",
 }

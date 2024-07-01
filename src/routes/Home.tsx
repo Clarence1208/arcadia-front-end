@@ -68,7 +68,7 @@ export function Home() {
                     <Header />
                         <div className={"main home"}>
                             <div>
-                                <h1>{process.env.REACT_APP_ASSOCIATION_NAME}</h1>
+                                <h1>{config.associationName}</h1>
                                 <h2>Association française des personnes malades</h2>
                                 <h3>Vous nous avez vu mais nous avez vous regardé ?</h3>
                             </div>

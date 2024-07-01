@@ -232,6 +232,7 @@ function EditFileSettingModal({settings, setSettings,setting, open, handleClose,
 
     const [data, setData] = useState<WebsiteSettings |undefined>(setting)
     const [isLoaded, setIsLoaded] = useState(false)
+    const config = useContext(ConfigContext);
 
     useEffect(
         () => {
@@ -244,7 +245,7 @@ function EditFileSettingModal({settings, setSettings,setting, open, handleClose,
         e.preventDefault()
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings/"+data?.id, {
+        const response: Response = await fetch( config.apiURL+"/websiteSettings/"+data?.id, {
             method: "PATCH",
             body: JSON.stringify(data),
             headers: {

@@ -67,7 +67,7 @@ function CreateMeetingForm() {
         }
         const getPremises = async (): Promise<Premise[]> => {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/premises`, {
+            const response: Response = await fetch(`${config.apiURL}/premises`, {
             headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

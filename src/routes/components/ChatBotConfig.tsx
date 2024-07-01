@@ -1,12 +1,12 @@
-import {Alert, Button, IconButton, Input, InputLabel, Link, MenuItem, Select, TextField, Tooltip} from "@mui/material";
+import {Alert, Button, IconButton, TextField, Tooltip} from "@mui/material";
 import '../../styles/ChatBotConfig.css';
 import '../../styles/App.css';
-import React, {FormEvent, useContext, useEffect, useState} from "react";
+import {FormEvent, useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {UserSessionContext} from "../../contexts/user-session";
 import Snackbar from "@mui/material/Snackbar";
 import HelpIcon from '@mui/icons-material/Help';
-import { cp } from "fs";
+import {ConfigContext} from "../../index";
 
 
 type ChatBotConfigData = {
@@ -37,12 +37,13 @@ function ChatBotConfigForm() {
     const [data, setData] = useState(body)
     const [changed, setChanged] = useState(true)
     const [isCreated, setIsCreated] = useState(false)
+    const config = useContext(ConfigContext);
 
     useEffect(() => {
         if (userSession?.loginToken) {
             const getSettings = async (): Promise<WebsiteSettings[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
-                const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`, {
+                const response: Response = await fetch(`${config.apiURL}/websiteSettings`, {
                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
@@ -106,7 +107,7 @@ function ChatBotConfigForm() {
             }
 
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings", {method: "POST", body: JSON.stringify(newWebsiteSettings),
+            const response: Response = await fetch( config.apiURL+"/websiteSettings", {method: "POST", body: JSON.stringify(newWebsiteSettings),
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
@@ -126,7 +127,7 @@ function ChatBotConfigForm() {
         }
 
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings/" + data.id, {method: "PATCH", body: JSON.stringify(data),
+        const response: Response = await fetch( config.apiURL+"/websiteSettings/" + data.id, {method: "PATCH", body: JSON.stringify(data),
             headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

@@ -15,6 +15,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import HelpIcon from "@mui/icons-material/Help";
 import timeout from "../utils/timeout";
 import SearchIcon from '@mui/icons-material/Search';
+import {ConfigContext} from "./../index";
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -89,6 +90,7 @@ export function DocumentListAdmin() {
     const [privateSearch, setSearchPrivate] = useState("");
     const [publicSearch, setSearchPublic] = useState("");
     const [userSearch, setSearchUser] = useState("");
+    const config = useContext(ConfigContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -100,7 +102,7 @@ export function DocumentListAdmin() {
                 const fileList = await s3.listFiles();
                 fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
                     const check = file.Key.split("/");
-                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "private")) {
+                    if ((check[0] === config.associationName) && (check[1] === "private")) {
                         setPrivateFiles((prev) => {
                             if (!prev.some(existingFile => existingFile.Key === check[2]) && check[2].includes(privateSearch)) {
                                 file.Key = check.slice(2).join("/");
@@ -109,7 +111,7 @@ export function DocumentListAdmin() {
                             return prev;
                         });
                     }
-                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "public")) {
+                    if ((check[0] === config.associationName) && (check[1] === "public")) {
                         setPublicFiles((prev) => {
                             if ((!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") && check[2].includes(publicSearch)) {
                                 file.Key = check.slice(2).join("/");
@@ -119,7 +121,7 @@ export function DocumentListAdmin() {
                         });
                     }
                     if (selectedUser) {
-                        if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "users") && (check[2] === String(selectedUser.id))) {
+                        if ((check[0] === config.associationName) && (check[1] === "users") && (check[2] === String(selectedUser.id))) {
                             setUserFiles((prev) => {
                                 if ((!prev.some(existingFile => existingFile.Key === check[3]) && check[3] !== "") && check[3].includes(userSearch)) {
                                     file.Key = check.slice(3).join("/");
@@ -142,7 +144,7 @@ export function DocumentListAdmin() {
             if (userSession?.loginToken) {
                 const getUsers = async (): Promise<User[]> => {
                     const bearer = "Bearer " + userSession?.loginToken;
-                    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+                    const response: Response = await fetch(`${config.apiURL}/users`, {
                         headers: {
                             "Authorization": bearer,
                             "Content-Type": "application/json"
@@ -211,7 +213,7 @@ export function DocumentListAdmin() {
 
     const deleteFile = async (fileName: string, directory: string) => {
         const s3 = new ReactS3Client(s3Config);
-        const filepath = '' + process.env.REACT_APP_ASSOCIATION_NAME + '/' + directory + '/' + fileName;
+        const filepath = '' + config.associationName + '/' + directory + '/' + fileName;
 
         try {
             await s3.deleteFile(filepath);
@@ -329,7 +331,7 @@ export function DocumentListAdmin() {
                 >{errorMessage}</Alert>
             </Snackbar>
             <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                <h1>Gestion des documents de {process.env.REACT_APP_ASSOCIATION_NAME} :</h1>
+                <h1>Gestion des documents de {config.associationName} :</h1>
             </div>
             <div className="file-lists">
                 <div className="file-list">

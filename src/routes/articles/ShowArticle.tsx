@@ -28,6 +28,7 @@ export function ShowArticle() {
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState("");
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const config = useContext(ConfigContext);
 
     const handleClose = () => {
         setOpen(false);
@@ -40,7 +41,7 @@ export function ShowArticle() {
         }
         const getArticle = async (): Promise<Article> => {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${articleId}`, {
+            const response: Response = await fetch(`${config.apiURL}/articles/${articleId}`, {
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
@@ -66,7 +67,7 @@ export function ShowArticle() {
                 const fileList = await s3.listFiles();
                 for (const file of fileList.data.Contents) {
                     const check = file.Key.split("/");
-                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "articles") && (check[2] === article?.id.toString())) {
+                    if ((check[0] === config.associationName) && (check[1] === "articles") && (check[2] === article?.id.toString())) {
                         setFile(file.publicUrl);
                         return;
                     }

@@ -9,6 +9,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import ReactS3Client from 'react-aws-s3-typescript';
 import { Alert, Snackbar } from "@mui/material";
 import { s3Config } from "../../utils/s3Config";
+import { ConfigContext } from "../../index";
 
 interface CustomNavItemProps {
     link: string;
@@ -47,6 +48,7 @@ export default function Header() {
     const [s3Logo, sets3Logo] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
+    const config = useContext(ConfigContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,7 +57,7 @@ export default function Header() {
                 const fileList = await s3.listFiles();
                 fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
                     const check = file.Key.split("/");
-                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "common") && (check[2].startsWith("logo-"))) {
+                    if ((check[0] === config.associationName) && (check[1] === "common") && (check[2].startsWith("logo-"))) {
                         sets3Logo(file.publicUrl);
                     }
                 });

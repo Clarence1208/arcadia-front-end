@@ -29,7 +29,7 @@ type WebsiteSettings = {
 export function Chatbot() {
     const config = useContext(ConfigContext);
     const API_KEY = config.openaiAPIKey;
-    const APP_NAME = process.env.REACT_APP_ASSOCIATION_NAME;
+    const APP_NAME = config.associationName;
     
     const [messages, setMessages] = useState<PromptMessages>(initialMessages);
     const [open, setOpen] = useState(false);
@@ -44,7 +44,7 @@ export function Chatbot() {
     
     useEffect(() => {
         const getSettings = async (): Promise<WebsiteSettings[]> => {
-            const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/websiteSettings`, {
+            const response: Response = await fetch(`${config.apiURL}/websiteSettings`, {
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -275,7 +275,9 @@ export function Chatbot() {
 
     function MessageBox({message, role, key}: {message: string, role: string, key: number}) {
 
-    const APP_NAME = process.env.REACT_APP_ASSOCIATION_NAME;
+    const config = useContext(ConfigContext);
+
+    const APP_NAME = config.associationName;
 
     let sender = "";
     if (role === "assistant") {
