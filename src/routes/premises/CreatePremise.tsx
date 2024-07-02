@@ -11,6 +11,7 @@ import { Dayjs, isDayjs } from "dayjs";
 import Paper from "@mui/material/Paper";
 import {Groups3} from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
+import {ConfigContext} from "../../index";
 
 
 type CreatePremiseData = {
@@ -36,6 +37,7 @@ function CreatePremiseForm() {
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
     const [data, setData] = useState(body)
+    const config = useContext(ConfigContext);
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')
@@ -54,7 +56,7 @@ function CreatePremiseForm() {
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
         const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/premises", {method: "POST", body: JSON.stringify(data),
+        const response: Response = await fetch( config.apiURL+"/premises", {method: "POST", body: JSON.stringify(data),
             headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

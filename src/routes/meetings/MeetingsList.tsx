@@ -36,13 +36,13 @@ export function MeetingsList() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")
+    const config = useContext(ConfigContext);
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
 
     useEffect(() => {
-        const config = useContext(ConfigContext);
         if (!userSession?.loginToken) {
             return;
         }

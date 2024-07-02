@@ -25,7 +25,6 @@ function LogInForm() {
     const config = useContext(ConfigContext);
     const [ErrorMessage, setErrorMessage] = useState("")
     const [data, setData] = useState(body)
-    
     function updateFields(fields: Partial<LogInData>) {
         setData(prev => {
             return {...prev, ...fields}
@@ -138,7 +137,7 @@ export function LogIn() {
                         <LogInForm />
                     </div>
             </div>
-        }
+            }
         </div>
     );
 }

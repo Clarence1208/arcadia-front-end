@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import '../../styles/MeetingsList.css';
 import { UserSessionContext } from "../../contexts/user-session";
 import { Premise } from "./Premise";
+import { ConfigContext } from "../../index";
 
 interface Premise {
     name: string,
@@ -25,6 +26,7 @@ export function PremisesList() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")
+    const config = useContext(ConfigContext);
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -36,7 +38,7 @@ export function PremisesList() {
         }
         const getPremises = async (filters?: Filters): Promise<Premise[]> => {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/premises${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
+            const response: Response = await fetch(`${config.apiURL}/premises${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
             headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

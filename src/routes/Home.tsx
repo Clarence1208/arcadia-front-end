@@ -6,16 +6,23 @@ import "../styles/Home.css";
 import { useContext, useEffect, useState } from "react";
 import ReactS3Client from 'react-aws-s3-typescript';
 import { Alert, Snackbar } from "@mui/material";
-import { s3Config } from "../utils/s3Config";
+import { getS3Config } from "../utils/s3Config";
 import { ConfigContext } from "../index";
 
 export function Home() {
 
+    const s3Config = getS3Config();
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     const [image, setImage] = useState<string>("");
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const config = useContext(ConfigContext);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,12 +43,6 @@ export function Home() {
         };
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if (image) {
-            setIsPageLoaded(true);
-        }
-    }, [image]);
 
     const handleClose = () => {
         setOpen(false);
@@ -68,7 +69,7 @@ export function Home() {
                     <Header />
                         <div className={"main home"}>
                             <div>
-                                <h1>{process.env.REACT_APP_ASSOCIATION_NAME}</h1>
+                                <h1>{config.associationName}</h1>
                                 <h2>Association française des personnes malades</h2>
                                 <h3>Vous nous avez vu mais nous avez vous regardé ?</h3>
                             </div>

@@ -15,11 +15,11 @@ import {
 } from "@mui/material";
 import {AddCircleOutline, Delete, Edit, Settings} from "@mui/icons-material";
 import React, {useContext, useEffect, useRef, useState} from "react";
-import {UserSessionContext} from "../contexts/user-session";
+import {UserSessionContext} from "./../contexts/user-session";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "../styles/WebsiteSettings.css";
-import {ConfigContext} from "../index";
-import {s3Config} from './../utils/s3Config';
+import {ConfigContext} from "./../index";
+import {getS3Config} from './../utils/s3Config';
 import ReactS3Client from 'react-aws-s3-typescript';
 
 const VisuallyHiddenInput = styled('input')({
@@ -232,6 +232,7 @@ function EditFileSettingModal({settings, setSettings,setting, open, handleClose,
 
     const [data, setData] = useState<WebsiteSettings |undefined>(setting)
     const [isLoaded, setIsLoaded] = useState(false)
+    const config = useContext(ConfigContext);
 
     useEffect(
         () => {
@@ -244,7 +245,7 @@ function EditFileSettingModal({settings, setSettings,setting, open, handleClose,
         e.preventDefault()
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( process.env.REACT_APP_API_URL+"/websiteSettings/"+data?.id, {
+        const response: Response = await fetch( config.apiURL+"/websiteSettings/"+data?.id, {
             method: "PATCH",
             body: JSON.stringify(data),
             headers: {
@@ -340,6 +341,7 @@ export function WebsiteSettings() {
     const [selectedSetting, setSelectedSetting] = useState<WebsiteSettings>()
     const config = useContext(ConfigContext);
     const fileRef = useRef<File | null>(null);
+    const s3Config = getS3Config();
 
     function handleEditClicked(setting: WebsiteSettings) {
         setSelectedSetting(setting)

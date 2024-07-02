@@ -23,7 +23,7 @@ const RootComponent = () => {
     }, []);
 
     if (!config) {
-        return <div>Loading configuration...</div>; // Optionally add a spinner here
+        return <div>Loading configuration...</div>;
     }
 
     return (
@@ -37,7 +37,4 @@ const RootComponent = () => {
 
 root.render(<RootComponent/>);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

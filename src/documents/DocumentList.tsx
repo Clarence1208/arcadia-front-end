@@ -4,7 +4,7 @@ import {Alert, Button, InputAdornment, Modal, Paper, Snackbar, TextField} from "
 import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ReactS3Client from 'react-aws-s3-typescript';
-import {s3Config} from './../utils/s3Config';
+import {getS3Config} from './../utils/s3Config';
 import './../styles/DocumentList.css';
 import {Delete, Download} from '@mui/icons-material';
 import {wait} from "@testing-library/user-event/dist/utils";
@@ -12,6 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import LoadingSpinner from "../routes/components/LoadingSpinner";
 import timeout from "../utils/timeout";
 import SearchIcon from '@mui/icons-material/Search';
+import {ConfigContext} from "./../index";
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -74,6 +75,8 @@ export function DocumentList() {
     const [image, setImage] = useState<string>("");
     const [video, setVideo] = useState<string>("");
     const [loading, setLoading] = useState(false);
+    const config = useContext(ConfigContext);
+    const s3Config = getS3Config();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -84,7 +87,7 @@ export function DocumentList() {
                 const fileList = await s3.listFiles();
                 fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
                     const check = file.Key.split("/");
-                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "users") && (check[2] === String(userSession?.userId))) {
+                    if ((check[0] === config.associationName) && (check[1] === "users") && (check[2] === String(userSession?.userId))) {
                         setUserFiles((prev) => {
                             if (!prev.some(existingFile => existingFile.Key === check[3]) && check[3].includes(privateSearch)) {
                                 file.Key = check.slice(3).join("/");
@@ -93,7 +96,7 @@ export function DocumentList() {
                             return prev;
                         });
                     }
-                    if ((check[0] === process.env.REACT_APP_ASSOCIATION_NAME) && (check[1] === "public")) {
+                    if ((check[0] === config.associationName) && (check[1] === "public")) {
                         setPublicFiles((prev) => {
                             if ((!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") && check[2].includes(publicSearch)) {
                                 file.Key = check.slice(2).join("/");
@@ -174,7 +177,7 @@ export function DocumentList() {
 
     const deleteFile = async (fileName: string, directory: string) => {
         const s3 = new ReactS3Client(s3Config);
-        const filepath = '' + process.env.REACT_APP_ASSOCIATION_NAME + '/' + directory + '/' + fileName;
+        const filepath = '' + config.associationName + '/' + directory + '/' + fileName;
 
         try {
             await s3.deleteFile(filepath);
