@@ -1,14 +1,66 @@
 import "../../styles/Footer.css";
-import Logo from "../../images/logo.png";
+import logo from "../../images/logo.png";
 import {useTheme} from "@mui/material";
+import ReactS3Client from 'react-aws-s3-typescript';
+import { Alert, Snackbar } from "@mui/material";
+import {useContext, useEffect, useState} from "react";
+import {UserSessionContext} from "../../contexts/user-session";
+import { getS3Config } from "../../utils/s3Config";
+import { ConfigContext } from "../../index";
 export function Footer() {
 
     const theme = useTheme();
+
+    const [s3Logo, sets3Logo] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [open, setOpen] = useState(false);
+    const config = useContext(ConfigContext);
+    const s3Config = getS3Config();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const s3 = new ReactS3Client(s3Config);
+            try {
+                const fileList = await s3.listFiles();
+                fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
+                    const check = file.Key.split("/");
+                    if ((check[0] === config.associationName) && (check[1] === "common") && (check[2].startsWith("logo-"))) {
+                        sets3Logo(file.publicUrl);
+                    }
+                });
+            } catch (error) {
+                console.error('List error:', error);
+                setErrorMessage("Erreur : " + error);
+                setOpen(true);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+    const handleClose = () => {
+        setOpen(false);
+        setErrorMessage("");
+    };
+
     return (
         <footer>
+            <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+            >
+                <Alert
+                    onClose={handleClose}
+                    severity={errorMessage.includes("Erreur") ? "error" : "success"}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >{errorMessage}</Alert>
+            </Snackbar>
             <div className="green-line" style={{backgroundColor: theme.palette.primary.main}}></div>
             <div className="footer-content">
-                <img src={Logo} alt={"logo"} />
+                <img src={s3Logo ? s3Logo : logo } alt={"logo"} style={{maxHeight:"10vh"}} />
                 <div className="raccourcis">
                     <a href="/termsOfServices">Mentions légales</a>
                     <a href="/">CGU</a>

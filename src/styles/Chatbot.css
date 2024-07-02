@@ -87,3 +87,10 @@
     background-color: #074032;
     color: #F5F5F5;
 }
+
+.loader-chatbot{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

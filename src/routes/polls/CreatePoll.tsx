@@ -358,11 +358,23 @@ function CreatePollForm() {
 }
 
 export function CreatePoll() {
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+    
     return (
         <div>
-            <Header />
-                <CreatePollForm />
-            <Footer />
+            {isPageLoaded &&
+            <div>
+                <Header />
+                    <CreatePollForm />
+                <Footer />
+            </div>
+            }
         </div>
     );
 }

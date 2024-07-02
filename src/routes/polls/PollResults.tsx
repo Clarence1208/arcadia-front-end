@@ -50,6 +50,13 @@ export function PollResults() {
     const [open, setOpen] = useState(false);
     const config = useContext(ConfigContext);
     const {id} = useParams()
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     useEffect(() => {
         if(userSession?.loginToken) {
@@ -124,6 +131,8 @@ export function PollResults() {
 
     return (
         <div>
+            {isPageLoaded && 
+            <div>
             <Header />
                 <div id={"create-website-page"}>
                     <div style={{ display: "flex", justifyContent: "center"}}>
@@ -175,6 +184,8 @@ export function PollResults() {
                     </div>
                 </div>
             <Footer />
+            </div>
+            }
         </div>
     )
 }

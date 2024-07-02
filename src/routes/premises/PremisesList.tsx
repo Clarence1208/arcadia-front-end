@@ -1,20 +1,10 @@
-import '../../styles/MeetingsList.css';
-import {ConfigContext} from "../../index";
 import { Alert, Pagination, Snackbar } from "@mui/material";
-import { Meeting } from "./Meeting";
+import { Meeting } from "../meetings/Meeting";
 import { useContext, useEffect, useState } from "react";
 import '../../styles/MeetingsList.css';
 import { UserSessionContext } from "../../contexts/user-session";
-
-interface Meeting {
-    id: number,
-    name: string,
-    description: string,
-    startDate: Date,
-    endDate: Date,
-    capacity: number,
-    premise : Premise,
-}
+import { Premise } from "./Premise";
+import { ConfigContext } from "../../index";
 
 interface Premise {
     name: string,
@@ -22,16 +12,16 @@ interface Premise {
     adress: string,
     type: string,
     capacity: number,
-}  
+}
 
 type Filters = {
     page?: number,
     limit?: number,
 }
 
-export function MeetingsList() {
+export function PremisesList() {
 
-    const [meetings, setMeetings] = useState<Meeting[]>([])
+    const [premises, setPremises] = useState<Premise[]>([])
     const [page, setPage] = useState(1);
     const userSession = useContext(UserSessionContext)?.userSession
     const [open, setOpen] = useState(false);
@@ -46,9 +36,9 @@ export function MeetingsList() {
         if (!userSession?.loginToken) {
             return;
         }
-        const getMeetings = async (filters?: Filters): Promise<Meeting[]> => {
+        const getPremises = async (filters?: Filters): Promise<Premise[]> => {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch(`${config.apiURL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
+            const response: Response = await fetch(`${config.apiURL}/premises${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
             headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"
@@ -61,11 +51,11 @@ export function MeetingsList() {
         }
         const res = await response.json();
         if (res.length === 0) {
-            setErrorMessage("Aucun site web trouvé")
+            setErrorMessage("Aucune salle trouvée")
         }
         return res;
         }
-        getMeetings({ page: page }).then(setMeetings)
+        getPremises({ page: page }).then(setPremises)
     }, [page, userSession?.loginToken]);
 
     const handleClose = () => {
@@ -87,10 +77,10 @@ export function MeetingsList() {
                 sx={{ width: '100%' }}
             >{ErrorMessage}</Alert>
         </Snackbar>
-            {meetings.length === 0 ? <div>Chargement ou pas d'assemblée générale...</div> :
+            {premises.length === 0 ? <div>Chargement ou pas de salles...</div> :
                 <div>
-                    {meetings.map((meeting) => (
-                        <Meeting meeting={meeting} />
+                    {premises.map((premise) => (
+                        <Premise premise={premise} />
                     ))}
                 </div>
             }

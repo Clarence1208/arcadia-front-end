@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
-import {SyntheticEvent, useContext, useState} from "react";
+import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 /*import {WebsitesPanel} from "../components/features/dashboard/WebsitesPanel";
 import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";*/
@@ -11,6 +11,10 @@ import { MeetingsList } from "./meetings/MeetingsList";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
 import {PollList} from "./polls/PollList";
+import {PremisesList} from "./premises/PremisesList";
+import { DocumentList } from "../documents/DocumentList";
+import { DocumentListAdmin } from "../documents/DocumentListAdmin";
+import { ChatBotConfig } from "./components/ChatBotConfig";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -42,6 +46,13 @@ function TabPanel(props: any) {
 export function Dashboard(){
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTabsValue(newValue);
@@ -49,6 +60,8 @@ export function Dashboard(){
     };
     return (
         <div>
+            {isPageLoaded &&
+            <div> 
             <Header />
 
             <div id="dahsboard-main" className="main">
@@ -64,9 +77,11 @@ export function Dashboard(){
                 >
                     <Tab label="Gestion des Assemblées Générales" {...a11yProps(0)}/>
                     <Tab label="Gestion des utilisateurs" {...a11yProps(1)}/>
-                    <Tab label="Gestions des événements" {...a11yProps(2)}/>
+                    <Tab label="Gestions des salles" {...a11yProps(2)}/>
                     <Tab label="Gestions des paramètres globaux du site" {...a11yProps(3)}/>
                     <Tab label="Gestions des sondages" {...a11yProps(4)}/>
+                    <Tab label="Gestions des documents" {...a11yProps(5)}/>
+                    <Tab label="Gestion du ChatBot" {...a11yProps(6)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -79,9 +94,10 @@ export function Dashboard(){
                         <UsersDashboard />
                         {/*<UserAccountPanel userId={userSession?.userId} userToken={userSession?.loginToken} />*/}
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={2}>
-                        <h1>2</h1>
-                    </TabPanel>
+                    <TabPanel value={tabsValue} index={2}>  
+                        <Button href="/createPremise" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle salle</Button>
+                            <PremisesList />
+                    </TabPanel>                    
                     <TabPanel value={tabsValue} index={3}>
                         <WebsiteSettings />
                     </TabPanel>
@@ -91,11 +107,23 @@ export function Dashboard(){
                             <PollList />
                         </div>
                     </TabPanel>
+                    <TabPanel value={tabsValue} index={5}>
+                        <div className="board-documents">
+                            <DocumentListAdmin />
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={tabsValue} index={6}>
+                        <div className="board-chatbot">
+                            <ChatBotConfig />
+                        </div>
+                    </TabPanel>
                 </div>
 
             </div>
 
             <Footer />
+            </div>
+            }
         </div>
     );
 }

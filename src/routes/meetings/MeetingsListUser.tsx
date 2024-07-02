@@ -1,8 +1,10 @@
-import {Button, Pagination} from "@mui/material";
-import { Meeting } from "../meetings/Meeting";
-import {useContext, useEffect, useState} from "react";
 import '../../styles/MeetingsList.css';
 import {ConfigContext} from "../../index";
+import {Alert, Button, Pagination, Snackbar} from "@mui/material";
+import { Meeting } from "./Meeting";
+import { useContext, useEffect, useState } from "react";
+import '../../styles/MeetingsList.css';
+import { UserSessionContext } from "../../contexts/user-session";
 
 interface Meeting {
     id: number,
@@ -11,6 +13,15 @@ interface Meeting {
     startDate: Date,
     endDate: Date,
     capacity: number,
+    premise : Premise,
+}
+
+interface Premise {
+    name: string,
+    description: string,
+    adress: string,
+    type: string,
+    capacity: number,
 }
 
 type Filters = {
@@ -18,35 +29,16 @@ type Filters = {
     limit?: number,
 }
 
-
-const getMeetings = async (filters?: Filters): Promise<Meeting[]> => {
-    const config = useContext(ConfigContext);
-    const response: Response = await fetch(`${config.apiURL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
-        headers: {
-            //"Authorization": bearer,
-            "Content-Type": "application/json"
-        }
-    });
-    if (!response.ok) {
-        const error = await response.json()
-        // setErrorMessage("Erreur : " + await error.message);
-        return []
-    }
-    const res = await response.json();
-    if (res.length === 0) {
-        console.log("Aucun site web trouvé")
-        //setErrorMessage("Aucun site web trouvé")
-    }
-    return res;
-}
-
 export function MeetingsListUser() {
 
+    const userSession = useContext(UserSessionContext)?.userSession
     const [meetings, setMeetings] = useState<Meeting[]>([])
     const [pastMeetings, setPastMeetings] = useState<Meeting[]>([])
     const [currentMeetings, setCurrentMeetings] = useState<Meeting[]>([])
     const [futureMeetings, setFutureMeetings] = useState<Meeting[]>([])
     const [page, setPage] = useState(1);
+    const [open, setOpen] = useState(false);
+    const [ErrorMessage, setErrorMessage] = useState("")
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -66,6 +58,10 @@ export function MeetingsListUser() {
                 setFutureMeetings((futureMeetings) => [...futureMeetings, meeting])
             }
         });
+    }
+
+    const handleClose = () => {
+        setOpen(false)
     }
 
     const [showMeetings, setShowMeetings] = useState([{
@@ -99,11 +95,47 @@ export function MeetingsListUser() {
     }
 
     useEffect(() => {
+        if (!userSession?.loginToken) {
+            return;
+        }
+        const getMeetings = async (filters?: Filters): Promise<Meeting[]> => {
+            const config = useContext(ConfigContext);
+            const bearer = "Bearer " + userSession?.loginToken;
+            const response: Response = await fetch(`${config.apiURL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
+                headers: {
+                    "Authorization": bearer,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!response.ok) {
+                const error = await response.json()
+                setErrorMessage("Erreur : " + await error.message);
+                return []
+            }
+            const res = await response.json();
+            if (res.length === 0) {
+                setErrorMessage("Aucun site web trouvé")
+            }
+            return res;
+        }
         getMeetings({ page: page }).then(setDateMeetings)
-    }, [page]);
+    }, [page, userSession?.loginToken]);
 
     return (
             <div className={""}>
+                <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >{ErrorMessage}</Alert>
+            </Snackbar>
                     <div className={"meetings-list-user"}>
                         <h2 className={""}>Liste des assemblées générales :</h2>
                         <div>

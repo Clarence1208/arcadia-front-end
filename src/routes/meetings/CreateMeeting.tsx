@@ -20,6 +20,7 @@ type CreateMeetingData = {
     startDate: Date,
     endDate: Date,
     capacity: number,
+    premisesId?: number | null,
 }
 
 type TempMeetingData = {
@@ -29,12 +30,18 @@ type TempMeetingData = {
 
 }
 
+type Premise = {
+    id: number,
+    name: string,
+}
+
 const body : CreateMeetingData = {
     name: "",
     description: "",
     startDate: new Date(),
     endDate: new Date(),
     capacity: 0,
+    premisesId: null,
 }
 
 const tempBody : TempMeetingData = {
@@ -52,6 +59,33 @@ function CreateMeetingForm() {
     const [open, setOpen] = useState(false);
     const [data, setData] = useState(body)
     const [tempData, setTempData] = useState(tempBody)
+    const [premises, setPremises] = useState<Premise[]>([])
+
+    useEffect(() => {
+        if (!userSession?.loginToken) {
+            return;
+        }
+        const getPremises = async (): Promise<Premise[]> => {
+            const bearer = "Bearer " + userSession?.loginToken;
+            const response: Response = await fetch(`${config.apiURL}/premises`, {
+            headers: {
+                "Authorization": bearer,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!response.ok) {
+            const error = await response.json()
+            setErrorMessage("Erreur : " + await error.message);
+            return []
+        }
+        const res = await response.json();
+        if (res.length === 0) {
+            setErrorMessage("Aucune salle trouvée")
+        }
+        return res;
+        }
+        getPremises().then(setPremises)
+    }, [userSession?.loginToken]);
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')
@@ -83,6 +117,7 @@ function CreateMeetingForm() {
 
     async function onSubmit(e: FormEvent) {
         e.preventDefault()
+        const bearer = "Bearer " + userSession?.loginToken;
         const req = transformToCreateData(tempData, data);
         const response: Response = await fetch( config.apiURL + "/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Content-Type": "application/json"}});
         if (!response.ok) {
@@ -130,7 +165,7 @@ function CreateMeetingForm() {
                     />
                    <Input
                     type="number"
-                    placeholder="Capacité maximale" // Lui aide le Steupléééé / dur chef... TODO
+                    placeholder="Capacité maximale"
                     onChange={e => updateFields({ capacity: parseInt(e.target.value) })}
                     />
                </div>
@@ -175,33 +210,28 @@ function CreateMeetingForm() {
                                 label="Heure de début"
                                 onChange={(e) => updateTempFields({ endHour: e.target.value as number })}
                             >
-                                <MenuItem value={0}>0:00</MenuItem>
-                                <MenuItem value={1}>1:00</MenuItem>
-                                <MenuItem value={2}>2:00</MenuItem>
-                                <MenuItem value={3}>3:00</MenuItem>
-                                <MenuItem value={4}>4:00</MenuItem>
-                                <MenuItem value={5}>5:00</MenuItem>
-                                <MenuItem value={6}>6:00</MenuItem>
-                                <MenuItem value={7}>7:00</MenuItem>
-                                <MenuItem value={8}>8:00</MenuItem>
-                                <MenuItem value={9}>9:00</MenuItem>
-                                <MenuItem value={10}>10:00</MenuItem>
-                                <MenuItem value={11}>11:00</MenuItem>
-                                <MenuItem value={12}>12:00</MenuItem>
-                                <MenuItem value={13}>13:00</MenuItem>
-                                <MenuItem value={14}>14:00</MenuItem>
-                                <MenuItem value={15}>15:00</MenuItem>
-                                <MenuItem value={16}>16:00</MenuItem>
-                                <MenuItem value={17}>17:00</MenuItem>
-                                <MenuItem value={18}>18:00</MenuItem>
-                                <MenuItem value={19}>19:00</MenuItem>
-                                <MenuItem value={20}>20:00</MenuItem>
-                                <MenuItem value={21}>21:00</MenuItem>
-                                <MenuItem value={22}>22:00</MenuItem>
-                                <MenuItem value={23}>23:00</MenuItem>
+                                {Array.from({length: 24}, (_, i) => i).map((hour) => (
+                                    <MenuItem key={hour} value={hour}>{hour}:00</MenuItem>
+                                ))}
                             </Select>
                         </div>
                 </div>
+                {premises.length > 0 && (
+                            <div>
+                                <InputLabel id="select-label">Salle</InputLabel>
+                                <Select
+                                    labelId="select-label"
+                                    id="select-premises"
+                                    value={data.premisesId}
+                                    label="Salle"
+                                    onChange={(e) => updateFields({ premisesId: e.target.value as number })}
+                                >
+                                    {premises.map((premise) => (
+                                        <MenuItem key={premise.id} value={premise.id}>{premise.name}</MenuItem>
+                                    ))}
+                                </Select>
+                            </div>
+                            )}
                 <Button 
                 type="submit" 
                 variant="contained" 
@@ -216,11 +246,23 @@ function CreateMeetingForm() {
     );
 }
 export function CreateMeeting() {
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+
     return (
         <div>
-            <Header />
-                <CreateMeetingForm />
-            <Footer />
+            { isPageLoaded && 
+            <div>
+                <Header />
+                    <CreateMeetingForm />
+                <Footer />
+            </div>
+            }
         </div>
     );
 }

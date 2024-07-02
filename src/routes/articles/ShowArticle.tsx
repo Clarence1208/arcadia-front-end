@@ -1,14 +1,15 @@
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Header from "../components/Header";
-import React, {useContext, useEffect, useState} from "react";
-import {Footer} from "../components/Footer";
+import React, { useContext, useEffect, useState } from "react";
+import { Footer } from "../components/Footer";
 import Paper from '@mui/material/Paper';
-import catBanner from "../../images/cat-banner.jpg";
-import {UserSessionContext} from "../../contexts/user-session";
+import { UserSessionContext } from "../../contexts/user-session";
 import LoadingSpinner from "../components/LoadingSpinner";
-import {ArrowBack} from "@mui/icons-material";
-import { useTheme } from "@mui/material";
 import {ConfigContext} from "../../index";
+import { Alert, Snackbar, useTheme, CircularProgress, Box } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import ReactS3Client from "react-aws-s3-typescript";
+import { getS3Config } from './../../utils/s3Config';
 
 type Article = {
     id: number,
@@ -17,54 +18,119 @@ type Article = {
     createdAt: Date,
     user: string,
 }
-export function ShowArticle(){
-    const {articleId}=useParams();
-    const [article, setArticle] = useState<Article>();
-    const [errorMessage, setErrorMessage] = useState(null);
-    const userSession = useContext(UserSessionContext)?.userSession
+
+export function ShowArticle() {
+    const { articleId } = useParams();
+    const [article, setArticle] = useState<Article | null>(null);
+    const [errorMessage, setErrorMessage] = useState("");
+    const userSession = useContext(UserSessionContext)?.userSession;
     const theme = useTheme();
+    const [open, setOpen] = useState(false);
+    const [file, setFile] = useState("");
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
     const config = useContext(ConfigContext);
+    const s3Config = getS3Config();
+
+    const handleClose = () => {
+        setOpen(false);
+        setErrorMessage("");
+    };
 
     useEffect(() => {
-    const getArticle = async (): Promise<Article> => {
-        const bearer = "Bearer " + userSession?.loginToken;
-        const response: Response = await fetch(`${config.apiURL}/articles/${articleId}`, {
-            headers: {
-                "Authorization": bearer,
-                "Content-Type": "application/json"
-            }
-        });
-        if (!response.ok) {
-            const error = await response.json()
-            throw new Error("Erreur : " + await error.message);
+        if (!userSession?.loginToken) {
+            return;
         }
-        return await response.json();
-    }
-    getArticle().then(setArticle).catch((error) => setErrorMessage(error.message));
+        const getArticle = async (): Promise<Article> => {
+            const bearer = "Bearer " + userSession?.loginToken;
+            const response: Response = await fetch(`${config.apiURL}/articles/${articleId}`, {
+                headers: {
+                    "Authorization": bearer,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error("Erreur : " + await error.message);
+            }
+            return await response.json();
+        };
 
-}, [articleId,userSession?.loginToken]);
+        getArticle().then(setArticle).catch((error) => {
+            setErrorMessage(error.message);
+            setOpen(true);
+        });
+    }, [articleId, userSession?.loginToken]);
 
-        return (
-            <div>
-                <Header />
-                <div className={"main"}>
-                    <div onClick={() => window.history.back()} style={{ alignItems:"center" ,display: "flex", cursor: "pointer", width:"20vw"}}>
-                        <ArrowBack />
-                        <p style={{marginLeft:"1em"}}>Retour</p>
-                    </div>
-                    <Paper elevation={1}>
-                        <div style={{backgroundImage: `url(${catBanner})`, backgroundColor:theme.palette.primary.main ,borderRadius:"4px", height: "30vh", backgroundSize: "contain", backgroundRepeat:"no-repeat", backgroundPosition: "center"}}/>
+    useEffect(() => {
+        const fetchData = async () => {
+            const s3 = new ReactS3Client(s3Config);
+            try {
+                const fileList = await s3.listFiles();
+                for (const file of fileList.data.Contents) {
+                    const check = file.Key.split("/");
+                    if ((check[0] === config.associationName) && (check[1] === "articles") && (check[2] === article?.id.toString())) {
+                        setFile(file.publicUrl);
+                        return;
+                    }
+                }
+                setFile(""); // No file found
+            } catch (error) {
+                setErrorMessage("Erreur : " + error);
+                setOpen(true);
+            }
+        };
 
-                        {!article ? errorMessage && <div>{errorMessage}</div> :
-                        <div style={{padding: "4vh"}}>
-                            <h1>Article {article.title}</h1>
-                            <h4>Publié le {new Date(article.createdAt).toLocaleDateString()}</h4>
-                            <p>{article.text}</p>
+        if (articleId) {
+            fetchData().then(() => setIsPageLoaded(true));
+        }
+    }, [articleId, article]);
+
+    return (
+        <>
+            {!isPageLoaded ? (
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
+                    <CircularProgress />
+                    <div>Loading...</div>
+                </Box>
+            ) : (
+                <div>
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={3000}
+                        onClose={handleClose}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    >
+                        <Alert
+                            onClose={handleClose}
+                            severity={errorMessage.includes("Erreur") ? "error" : "success"}
+                            variant="filled"
+                            sx={{ width: '100%' }}
+                        >
+                            {errorMessage}
+                        </Alert>
+                    </Snackbar>
+                    <Header />
+                    <div className={"main"}>
+                        <div onClick={() => window.history.back()} style={{ alignItems: "center", display: "flex", cursor: "pointer", width: "20vw" }}>
+                            <ArrowBack />
+                            <p style={{ marginLeft: "1em" }}>Retour</p>
                         </div>
-                        }
-                    </Paper>
+                        <Paper elevation={1}>
+                            {file && <img src={file} alt="article banner" style={{ width: "100%", height: "30vh", objectFit: "cover" }} />}
+                            {article ? (
+                                <div style={{ padding: "4vh" }}>
+                                    <h1>Article {article.title}</h1>
+                                    <h4>Publié le {new Date(article.createdAt).toLocaleDateString()}</h4>
+                                    <p>{article.text}</p>
+                                </div>
+                            ) : (
+                                <div>{errorMessage}</div>
+                            )}
+                        </Paper>
+                    </div>
+                    <Footer />
                 </div>
-                <Footer/>
-            </div>
-        )
+            )}
+        </>
+    );
 }

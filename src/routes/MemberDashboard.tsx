@@ -1,12 +1,13 @@
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
-import {SyntheticEvent, useContext, useState} from "react";
+import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
 // import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";
 import {Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {MeetingsListUser} from "./meetings/MeetingsListUser";
 import {EditUser} from "./users/EditUser";
+import { DocumentList } from "../documents/DocumentList";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -38,13 +39,22 @@ function TabPanel(props: any) {
 export function MemberDashboard(){
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
 
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+    
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTabsValue(newValue);
         event.currentTarget.className = "active"; //doesn't seem to work as intended
     };
     return (
         <div>
+            { isPageLoaded &&
+            <div>
             <Header />
 
             <div id="dahsboard-main" className="main">
@@ -61,7 +71,7 @@ export function MemberDashboard(){
                     <Tab label="Mes assemblées générales" {...a11yProps(0)}/>
                     <Tab label="Mes informations personnelles" {...a11yProps(1)}/>
                     <Tab label="Mes paiements" {...a11yProps(2)}/>
-                    {/*<Tab label="To be defined" {...a11yProps(3)}/>*/}
+                    <Tab label="Mes documents" {...a11yProps(3)}/>
                 </Tabs>
 
                 <div className={"board"}>
@@ -77,14 +87,16 @@ export function MemberDashboard(){
                     <TabPanel value={tabsValue} index={2}>
                         <h1>Mes paiements </h1>
                     </TabPanel>
-                    {/*<TabPanel value={tabsValue} index={3}>*/}
-                    {/*    <h1>To be defined</h1>*/}
-                    {/*</TabPanel>*/}
+                    <TabPanel value={tabsValue} index={3}>
+                        <DocumentList />
+                    </TabPanel>
                 </div>
 
             </div>
 
             <Footer />
+            </div>
+            }
         </div>
     );
 }

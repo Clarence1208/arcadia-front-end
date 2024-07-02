@@ -340,11 +340,23 @@ function CreateMeetingVoteForm() {
 }
 
 export function CreateMeetingVote() {
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+
     return (
         <div>
-            <Header />
-                <CreateMeetingVoteForm />
-            <Footer />
+            { isPageLoaded && 
+            <div>
+                <Header />
+                    <CreateMeetingVoteForm />
+                <Footer />
+            </div>
+            }
         </div>
     );
 }

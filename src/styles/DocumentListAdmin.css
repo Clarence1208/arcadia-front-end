@@ -1,0 +1,84 @@
+.file-lists {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 -10px;
+}
+
+.file-list {
+  margin: 0 10px 20px;
+  min-height: 45vh;
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.file-list-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+.file-list-li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.user-select-list{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+  padding-right: 3em;
+  border-right: 2px solid #403e3e;
+}
+
+.users-documents{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.user-files{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 0 auto;
+  min-width: 35vw;
+}
+.documents-actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 2vh;
+}
+.header-safe{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2vh;
+  min-width: 35vw;
+}
+
+.header-public-safe{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 2vh;
+    min-width: 15vw;
+}
