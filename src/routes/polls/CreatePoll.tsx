@@ -368,13 +368,13 @@ export function CreatePoll() {
     
     return (
         <div>
-            {isPageLoaded &&
+            <Header />
+                {isPageLoaded &&
             <div>
-                <Header />
                     <CreatePollForm />
-                <Footer />
             </div>
             }
+            <Footer />
         </div>
     );
 }

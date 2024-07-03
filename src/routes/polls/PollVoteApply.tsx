@@ -192,9 +192,9 @@ export function PollVoteApply() {
 
     return (
         <div>
+            <Header />
             {isPageLoaded && 
             <div>
-            <Header />
                 <div id={"create-website-page"} className={"main"}>
                     <div>
                         <h1>{poll?.name} :</h1>
@@ -243,9 +243,9 @@ export function PollVoteApply() {
                         </Paper>
                         </div>
                 </div>
-            <Footer />
             </div>
             }
+            <Footer />
         </div>
     )
 }

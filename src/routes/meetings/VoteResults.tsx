@@ -210,9 +210,8 @@ export function VoteResults() {
 
     return (
         <div>
-            {isPageLoaded &&
-            <div>
             <Header />
+            {isPageLoaded &&
             <div className="main">
                 {vote?.users.length === 0 ? (
                     <h1>Pas de participant</h1>
@@ -289,9 +288,8 @@ export function VoteResults() {
                     </div>
                 )}
             </div>
-            <Footer />
-            </div>
             }
+            <Footer />
         </div>
     );
 }

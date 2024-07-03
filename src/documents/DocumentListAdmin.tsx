@@ -3,8 +3,7 @@ import {UserSessionContext} from "./../contexts/user-session";
 import {Alert, Button, IconButton, InputAdornment, Modal, Paper, Snackbar, TextField, Tooltip} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import ReactS3Client from 'react-aws-s3-typescript';
-import {getS3Config} from './../utils/s3Config';
+import { uploadToS3, deleteToS3, listFilesS3 } from "../utils/s3";
 import './../styles/DocumentListAdmin.css';
 import {Delete, Download} from '@mui/icons-material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -16,6 +15,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import timeout from "../utils/timeout";
 import SearchIcon from '@mui/icons-material/Search';
 import {ConfigContext} from "./../index";
+import { _Object } from "@aws-sdk/client-s3";
 
 interface File extends Blob {
     readonly lastModified: number;
@@ -92,23 +92,24 @@ export function DocumentListAdmin() {
     const [publicSearch, setSearchPublic] = useState("");
     const [userSearch, setSearchUser] = useState("");
     const config = useContext(ConfigContext);
-    const s3Config = getS3Config();
 
     useEffect(() => {
         const fetchData = async () => {
             setPrivateFiles([]);
             setPublicFiles([]);
             setUserFiles([]);
-            const s3 = new ReactS3Client(s3Config);
             try {
-                const fileList = await s3.listFiles();
-                fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
-                    const check = file.Key.split("/");
+                const fileList = await listFilesS3();
+                fileList?.Contents?.forEach((value: _Object, index: number, array: _Object[]) => {
+                    if (!value?.Key) {
+                        return;
+                    }
+                    const check = value.Key.split("/");
                     if ((check[0] === config.associationName) && (check[1] === "private")) {
                         setPrivateFiles((prev) => {
                             if (!prev.some(existingFile => existingFile.Key === check[2]) && check[2].includes(privateSearch)) {
-                                file.Key = check.slice(2).join("/");
-                                return [...prev, file];
+                                value.Key = check.slice(2).join("/");
+                                return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                             }
                             return prev;
                         });
@@ -116,8 +117,8 @@ export function DocumentListAdmin() {
                     if ((check[0] === config.associationName) && (check[1] === "public")) {
                         setPublicFiles((prev) => {
                             if ((!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") && check[2].includes(publicSearch)) {
-                                file.Key = check.slice(2).join("/");
-                                return [...prev, file];
+                                value.Key = check.slice(2).join("/");
+                                return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                             }
                             return prev;
                         });
@@ -126,8 +127,8 @@ export function DocumentListAdmin() {
                         if ((check[0] === config.associationName) && (check[1] === "users") && (check[2] === String(selectedUser.id))) {
                             setUserFiles((prev) => {
                                 if ((!prev.some(existingFile => existingFile.Key === check[3]) && check[3] !== "") && check[3].includes(userSearch)) {
-                                    file.Key = check.slice(3).join("/");
-                                    return [...prev, file];
+                                    value.Key = check.slice(3).join("/");
+                                    return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                                 }
                                 return prev;
                             });
@@ -180,51 +181,33 @@ export function DocumentListAdmin() {
     };
 
     const uploadFile = async (directory: string) => {
-
-        setLoading(true);
-
-        if (!fileRef.current) {
-            setErrorMessage("No file selected.");
-            setOpen(true);
-            return;
-        }
-
-        const s3 = new ReactS3Client({
-            ...s3Config,
-            dirName: s3Config.dirName + "/" + directory,
-        });
-        let filename = fileRef.current.name;
-        let parts = filename.split('.');
-        if (parts.length > 1) {
-            parts.pop();
-        }
-        let nameWithoutExtension = parts.join('.');
-
+        const key = config.associationName + "/" + directory + "/" + fileRef.current!.name;
         try {
-            const res = await s3.uploadFile(fileRef.current, nameWithoutExtension);
+            await uploadToS3(fileRef.current!, key);
             setErrorMessage("Fichier chargé avec succès.");
             setOpen(true);
+            await timeout(100);
             setUploaded(!uploaded);
-            setLoading(false);
         } catch (error) {
-            setErrorMessage("Erreur : " + error);
+            console.error("Error uploading file: ", error);
+            setErrorMessage("Erreur lors du chargement du file: " + error);
             setOpen(true);
-            setLoading(false);
         }
     };
 
     const deleteFile = async (fileName: string, directory: string) => {
-        const s3 = new ReactS3Client(s3Config);
-        const filepath = '' + config.associationName + '/' + directory + '/' + fileName;
+        const key = config.associationName + '/' + directory + "/" + fileName;
 
         try {
-            await s3.deleteFile(filepath);
+            await deleteToS3(key);
             setErrorMessage("Fichier supprimé avec succès.");
-            await timeout(100);
             setOpen(true);
-            await setUploaded(!uploaded);
-        } catch (exception) {
-            console.log(exception);
+            await timeout(100);               
+            setUploaded(!uploaded);
+        } catch (error) {
+            console.log(error)
+            setErrorMessage("Erreur lors de la supression du fichier: " + error);
+            setOpen(true);
         }
     }
 

@@ -165,13 +165,13 @@ export function CreatePremise() {
 
     return (
         <div>
+            <Header />
             { isPageLoaded && 
             <div>
-                <Header />
                     <CreatePremiseForm />
-                <Footer />
             </div>
             }
+            <Footer />
         </div>
     );
 }

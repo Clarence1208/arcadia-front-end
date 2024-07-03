@@ -8,8 +8,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import {ConfigContext} from "../../index";
 import { Alert, Snackbar, useTheme, CircularProgress, Box } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import ReactS3Client from "react-aws-s3-typescript";
-import { getS3Config } from './../../utils/s3Config';
+import { uploadToS3, listFilesS3 } from "../../utils/s3";
+import { _Object } from "@aws-sdk/client-s3";
 
 type Article = {
     id: number,
@@ -29,7 +29,6 @@ export function ShowArticle() {
     const [file, setFile] = useState("");
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const config = useContext(ConfigContext);
-    const s3Config = getS3Config();
 
     const handleClose = () => {
         setOpen(false);
@@ -63,17 +62,19 @@ export function ShowArticle() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const s3 = new ReactS3Client(s3Config);
             try {
-                const fileList = await s3.listFiles();
-                for (const file of fileList.data.Contents) {
-                    const check = file.Key.split("/");
-                    if ((check[0] === config.associationName) && (check[1] === "articles") && (check[2] === article?.id.toString())) {
-                        setFile(file.publicUrl);
+                const fileList = await listFilesS3();
+                fileList?.Contents?.forEach((value: _Object, index: number, array: _Object[]) => {
+                    if (!value?.Key) {
                         return;
                     }
-                }
-                setFile(""); // No file found
+                    const check = value.Key.split("/");
+                    if ((check[0] === config.associationName) && (check[1] === "articles") && (check[2] === article?.id.toString())) {
+                        setFile("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
+                        return;
+                    }
+                });
+                setFile("");
             } catch (error) {
                 setErrorMessage("Erreur : " + error);
                 setOpen(true);
@@ -87,6 +88,7 @@ export function ShowArticle() {
 
     return (
         <>
+            <Header />
             {!isPageLoaded ? (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
                     <CircularProgress />
@@ -109,7 +111,6 @@ export function ShowArticle() {
                             {errorMessage}
                         </Alert>
                     </Snackbar>
-                    <Header />
                     <div className={"main"}>
                         <div onClick={() => window.history.back()} style={{ alignItems: "center", display: "flex", cursor: "pointer", width: "20vw" }}>
                             <ArrowBack />
@@ -128,9 +129,9 @@ export function ShowArticle() {
                             )}
                         </Paper>
                     </div>
-                    <Footer />
                 </div>
             )}
+            <Footer />
         </>
     );
 }

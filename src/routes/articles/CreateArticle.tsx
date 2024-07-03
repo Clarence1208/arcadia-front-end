@@ -11,8 +11,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 import {ArrowBack, FileUpload} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import {ConfigContext} from "../../index";
-import { getS3Config } from './../../utils/s3Config';
-import ReactS3Client from "react-aws-s3-typescript";
+import { uploadToS3 } from "../../utils/s3";
 
 type CreateArticleData = {
     title: string,
@@ -52,7 +51,6 @@ function CreateArticleForm() {
     const [data, setData] = useState(body)
     const fileRef = useRef<File | null>(null);
     const [fileName, setFileName] = useState<string>("");
-    const s3Config = getS3Config();
 
     if (!userSession?.isLoggedIn) {
         navigate('/login')
@@ -76,23 +74,12 @@ function CreateArticleForm() {
             return;
         }
 
-        const s3 = new ReactS3Client({
-            ...s3Config,
-            dirName: s3Config.dirName + "/articles/" + directory,
-        });
-        let filename = fileRef.current.name;
-        let parts = filename.split('.');
-        if (parts.length > 1) {
-            parts.pop();
-        }
-        let nameWithoutExtension = parts.join('.');
-        
+        const key = config.associationName + "/articles/" + directory + "/" + fileRef.current.name;
         try {
-            const res = await s3.uploadFile(fileRef.current, nameWithoutExtension);
-            setErrorMessage("Fichier chargé avec succès.");
-            setOpen(true);
+            await uploadToS3(fileRef.current!, key);
         } catch (error) {
-            setErrorMessage("Erreur : " + error);
+            console.error("Error uploading file: ", error);
+            setErrorMessage("Erreur lors du chargement du file: " + error);
             setOpen(true);
         }
     };
@@ -241,17 +228,17 @@ export function CreateArticle() {
 
     return (
         <div>
+            <Header />
             { isPageLoaded ? (
                 <div>
-                    <Header />
                         <CreateArticleForm />
-                    <Footer />
                 </div>
             ) : (
                 <div className="loading">
                     <div>Loading...</div>
                 </div>
             )}
+            <Footer />
         </div>
     );
 }

@@ -4,14 +4,13 @@ import {Chatbot} from "./components/Chatbot";
 import mainPic from "../images/template_home_pic.jpg";
 import "../styles/Home.css";
 import { useContext, useEffect, useState } from "react";
-import ReactS3Client from 'react-aws-s3-typescript';
 import { Alert, Snackbar } from "@mui/material";
-import { getS3Config } from "../utils/s3Config";
+import { listFilesS3, getObjectS3 } from "../utils/s3";
 import { ConfigContext } from "../index";
+import { _Object } from "@aws-sdk/client-s3";
 
 export function Home() {
 
-    const s3Config = getS3Config();
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     const [image, setImage] = useState<string>("");
@@ -19,20 +18,24 @@ export function Home() {
     const config = useContext(ConfigContext);
 
     useEffect(() => {
-        setTimeout(() => {
-            setIsPageLoaded(true);
-        }, 100);
-    }, []);
+        if (image) {
+            setTimeout(() => {
+                setIsPageLoaded(true);
+            }, 100);
+        }
+    }, [image]);
 
     useEffect(() => {
         const fetchData = async () => {
-            const s3 = new ReactS3Client(s3Config);
             try {
-                const fileList = await s3.listFiles();
-                fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
-                    const check = file.Key.split("/");
+                const fileList = await listFilesS3();
+                fileList?.Contents?.forEach((value: _Object, index: number, array: _Object[]) => {
+                    if (!value?.Key) {
+                        return;
+                    }
+                    const check = value?.Key?.split("/");
                     if ((check[0] === config.associationName) && (check[1] === "common") && (check[2].startsWith("imageHomePage-"))) {
-                        setImage(file.publicUrl);
+                        setImage("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
                     }
                 });
             } catch (error) {
@@ -42,6 +45,7 @@ export function Home() {
             }
         };
         fetchData();
+        console.log("Image: " + image);
     }, []);
 
     const handleClose = () => {
@@ -51,6 +55,7 @@ export function Home() {
 
         return (
             <div>
+                <Header />
                 {isPageLoaded && 
                 <div>
                     <Snackbar
@@ -66,7 +71,6 @@ export function Home() {
                         sx={{width: '100%'}}
                     >{errorMessage}</Alert>
                 </Snackbar>
-                    <Header />
                         <div className={"main home"}>
                             <div>
                                 <h1>{config.associationName}</h1>
@@ -76,9 +80,9 @@ export function Home() {
                             <img src={image ? image : mainPic} alt="main-pic" />
                         </div>
                     <Chatbot />
-                    <Footer/>
                 </div>
                 }
+            <Footer/>
         </div>
     );
 }
