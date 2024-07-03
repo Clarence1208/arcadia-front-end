@@ -16,15 +16,15 @@ export function Contact(){
     
     return (
         <>
-        {isPageLoaded &&
+        <Header />
+            {isPageLoaded &&
             <div>
-                <Header />
                 <div className="main">
                     <h1>Contact</h1>
                 </div>
-                <Footer />
             </div>
         }
+        <Footer />
         </>
     );
 }

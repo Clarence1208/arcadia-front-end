@@ -1,11 +1,11 @@
 import "../../styles/Footer.css";
 import logo from "../../images/logo.png";
 import {useTheme} from "@mui/material";
-import ReactS3Client from 'react-aws-s3-typescript';
 import { Alert, Snackbar } from "@mui/material";
 import {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
-import { getS3Config } from "../../utils/s3Config";
+import { uploadToS3, listFilesS3 } from "../../utils/s3";
+import { _Object } from "@aws-sdk/client-s3";
 import { ConfigContext } from "../../index";
 export function Footer() {
 
@@ -15,17 +15,27 @@ export function Footer() {
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     const config = useContext(ConfigContext);
-    const s3Config = getS3Config();
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        if (s3Logo) {
+            setTimeout(() => {
+                setIsPageLoaded(true);
+            }, 100);
+        }
+    }, [s3Logo]);
 
     useEffect(() => {
         const fetchData = async () => {
-            const s3 = new ReactS3Client(s3Config);
             try {
-                const fileList = await s3.listFiles();
-                fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
-                    const check = file.Key.split("/");
+                const fileList = await listFilesS3();
+                fileList?.Contents?.forEach((value: _Object, index: number, array: _Object[]) => {
+                    if (!value?.Key) {
+                        return;
+                    }
+                    const check = value.Key.split("/");
                     if ((check[0] === config.associationName) && (check[1] === "common") && (check[2].startsWith("logo-"))) {
-                        sets3Logo(file.publicUrl);
+                        sets3Logo("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
                     }
                 });
             } catch (error) {
@@ -37,7 +47,6 @@ export function Footer() {
         fetchData();
     }, []);
 
-
     const handleClose = () => {
         setOpen(false);
         setErrorMessage("");
@@ -45,6 +54,8 @@ export function Footer() {
 
     return (
         <footer>
+            {isPageLoaded &&
+            <div>
             <Snackbar
                 open={open}
                 autoHideDuration={3000}
@@ -70,6 +81,8 @@ export function Footer() {
                 <p>Ce site est destiné aux gérants d'association orientée médicale souhaitant créer un site web et l'heberger rapidement. Arcadia Solutions. Il s’agit d’une entreprise fictive. By HILDERAL - HIRSCH - RUTH @ ESGI PARIS
                 </p>
             </div>
+            </div>
+            }
         </footer>
     )
 }

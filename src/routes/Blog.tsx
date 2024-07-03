@@ -37,6 +37,12 @@ export function Blog() {
     const [ErrorMessage, setErrorMessage] = useState("")
     const [isPageLoaded, setIsPageLoaded] = useState(false);
 
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
+
     const handleClose = () => {
         setOpen(false);
     }
@@ -66,7 +72,6 @@ export function Blog() {
             }
             getArticles({ page: page }).then((data) => {
                 setArticles(data);
-                setIsPageLoaded(true);
             });
         }
     }, [page, userSession?.loginToken]);
@@ -94,15 +99,14 @@ export function Blog() {
 
     return (
         <>
-            {/* Conditional Rendering for the Entire Page */}
-            {!isPageLoaded ? (
+            <Header />
+                    {!isPageLoaded ? (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
                     <CircularProgress />
                     <div>Loading...</div>
                 </Box>
             ) : (
                 <div>
-                    <Header />
 
                     <Snackbar
                         open={open}
@@ -152,9 +156,9 @@ export function Blog() {
                         <PollList />
                     </div>
                     <Chatbot />
-                    <Footer />
                 </div>
             )}
-        </>
+        <Footer />
+    </>
     );
 }

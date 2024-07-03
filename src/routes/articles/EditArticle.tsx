@@ -90,14 +90,14 @@ export function EditArticle() {
 
     return (
         <>
-            {!isPageLoaded ? (
+            <Header />
+                    {!isPageLoaded ? (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
                     <CircularProgress />
                     <div>Loading...</div>
                 </Box>
             ) : (
                 <div>
-                    <Header />
 
                     <Snackbar
                         open={open}
@@ -153,9 +153,9 @@ export function EditArticle() {
                             </form>
                         </Paper>
                     </div>
-                    <Footer />
                 </div>
             )}
+            <Footer />
         </>
     );
 }

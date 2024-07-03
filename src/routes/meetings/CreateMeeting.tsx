@@ -256,13 +256,13 @@ export function CreateMeeting() {
 
     return (
         <div>
-            { isPageLoaded && 
+            <Header />
+                { isPageLoaded && 
             <div>
-                <Header />
                     <CreateMeetingForm />
-                <Footer />
             </div>
             }
+            <Footer />
         </div>
     );
 }

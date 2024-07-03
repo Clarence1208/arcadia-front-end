@@ -6,10 +6,10 @@ import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
-import ReactS3Client from 'react-aws-s3-typescript';
 import { Alert, Snackbar } from "@mui/material";
-import { getS3Config } from "../../utils/s3Config";
+import { uploadToS3, listFilesS3 } from "../../utils/s3";
 import { ConfigContext } from "../../index";
+import { _Object } from "@aws-sdk/client-s3";
 
 interface CustomNavItemProps {
     link: string;
@@ -49,17 +49,27 @@ export default function Header() {
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     const config = useContext(ConfigContext);
-    const s3Config = getS3Config();
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    useEffect(() => {
+        if (s3Logo) {
+            setTimeout(() => {
+                setIsPageLoaded(true);
+            }, 100);
+        }
+    }, [s3Logo]);
     
     useEffect(() => {
         const fetchData = async () => {
-            const s3 = new ReactS3Client(s3Config);
             try {
-                const fileList = await s3.listFiles();
-                fileList.data.Contents.forEach((file: { Key: string, publicUrl: string }) => {
-                    const check = file.Key.split("/");
+                const fileList = await listFilesS3();
+                fileList?.Contents?.forEach((value: _Object, index: number, array: _Object[]) => {
+                    if (!value?.Key) {
+                        return;
+                    }
+                    const check = value.Key.split("/");
                     if ((check[0] === config.associationName) && (check[1] === "common") && (check[2].startsWith("logo-"))) {
-                        sets3Logo(file.publicUrl);
+                        sets3Logo("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
                     }
                 });
             } catch (error) {
@@ -78,35 +88,39 @@ export default function Header() {
 
     return (
         <div>
-            <Snackbar
-                open={open}
-                autoHideDuration={3000}
-                onClose={handleClose}
-                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-            >
-                <Alert
+            {isPageLoaded &&
+                <div>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
                     onClose={handleClose}
-                    severity={errorMessage.includes("Erreur") ? "error" : "success"}
-                    variant="filled"
-                    sx={{width: '100%'}}
-                >{errorMessage}</Alert>
-            </Snackbar>
-      <div className="main-header"> 
-        <div className="header-logo">
-            <a href="/"><img src={s3Logo ? s3Logo : logo} alt="logo" /></a>
+                    anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity={errorMessage.includes("Erreur") ? "error" : "success"}
+                        variant="filled"
+                        sx={{width: '100%'}}
+                    >{errorMessage}</Alert>
+                </Snackbar>
+        <div className="main-header"> 
+            <div className="header-logo">
+                <a href="/"><img src={s3Logo ? s3Logo : logo} alt="logo" /></a>
+            </div>
+            <div className="nav-header">
+                <CustomNavItem link="/" text="Accueil"/>
+                <CustomNavItem link="/blog" text="Actualités" />
+                    <CustomNavItem link="/donate" text="Nous soutenir" />
+
+                { userSession?.isLoggedIn && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
+                {userSession?.roles.includes("admin") && <CustomNavItem link="/adminDashboard" text="Espace admin" /> }
+            </div>
+
+            <LogInOutButton />
         </div>
-          <div className="nav-header">
-             <CustomNavItem link="/" text="Accueil"/>
-              <CustomNavItem link="/blog" text="Actualités" />
-                <CustomNavItem link="/donate" text="Nous soutenir" />
-
-              { userSession?.isLoggedIn && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
-              {userSession?.roles.includes("admin") && <CustomNavItem link="/adminDashboard" text="Espace admin" /> }
-          </div>
-
-          <LogInOutButton />
-      </div>
-            <div className="footer-header"></div>
+                <div className="footer-header"></div>
+                </div>
+        }
         </div>
     )
   }

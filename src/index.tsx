@@ -23,7 +23,7 @@ const RootComponent = () => {
     }, []);
 
     if (!config) {
-        return <div>Loading configuration...</div>;
+        return <div></div>;
     }
 
     return (

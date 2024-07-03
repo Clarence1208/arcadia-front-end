@@ -178,9 +178,9 @@ export function MeetingVoteApply() {
 
     return (
         <div>
+            <Header />
             { isPageLoaded && 
             <div>
-            <Header />
                 <div className={"main"}>
                 <Snackbar
                     open={open}
@@ -242,9 +242,9 @@ export function MeetingVoteApply() {
                         >Soumettre</Button>
                     </Paper>
                 </div>
-            <Footer />
             </div>
             }
+            <Footer />
         </div>
     )
 }

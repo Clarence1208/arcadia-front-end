@@ -60,9 +60,9 @@ export function Dashboard(){
     };
     return (
         <div>
+            <Header />
             {isPageLoaded &&
             <div> 
-            <Header />
 
             <div id="dahsboard-main" className="main">
 
@@ -121,9 +121,9 @@ export function Dashboard(){
 
             </div>
 
-            <Footer />
             </div>
             }
+            <Footer />
         </div>
     );
 }

@@ -131,9 +131,9 @@ export function PollResults() {
 
     return (
         <div>
+            <Header />
             {isPageLoaded && 
             <div>
-            <Header />
                 <div id={"create-website-page"}>
                     <div style={{ display: "flex", justifyContent: "center"}}>
                         <h1>{poll?.name} :</h1>
@@ -183,9 +183,9 @@ export function PollResults() {
                         </div>
                     </div>
                 </div>
-            <Footer />
             </div>
             }
+            <Footer />
         </div>
     )
 }

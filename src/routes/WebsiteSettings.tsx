@@ -19,8 +19,8 @@ import {UserSessionContext} from "./../contexts/user-session";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import "../styles/WebsiteSettings.css";
 import {ConfigContext} from "./../index";
-import {getS3Config} from './../utils/s3Config';
-import ReactS3Client from 'react-aws-s3-typescript';
+import { deleteToS3, uploadToS3 } from "../utils/s3";
+import timeout from "../utils/timeout";
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -228,9 +228,10 @@ function EditSettingModal({settings, setSettings,setting, open, handleClose, log
     )
 }
 
-function EditFileSettingModal({settings, setSettings,setting, open, handleClose, loginToken, setErrorMessage, setOpenError, handleFileChange, uploadFile}: {settings: WebsiteSettings[], setSettings: (settings: WebsiteSettings[]) => void ,setting: WebsiteSettings |undefined, open: boolean, handleClose: () => void, loginToken: string | undefined, setErrorMessage: (message: string) => void, setOpenError: (open: boolean) => void, handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => string, uploadFile: (path: string) => void}){
+function EditFileSettingModal({settings, setSettings,setting, open, handleClose, loginToken, setErrorMessage, setOpenError, handleFileChange, uploadFile}: {settings: WebsiteSettings[], setSettings: (settings: WebsiteSettings[]) => void ,setting: WebsiteSettings |undefined, open: boolean, handleClose: () => void, loginToken: string | undefined, setErrorMessage: (message: string) => void, setOpenError: (open: boolean) => void, handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => string, uploadFile: (path: string, previousName: string) => void}){
 
     const [data, setData] = useState<WebsiteSettings |undefined>(setting)
+    const [previousName, setPreviousName] = useState<string>("")  
     const [isLoaded, setIsLoaded] = useState(false)
     const config = useContext(ConfigContext);
 
@@ -238,6 +239,11 @@ function EditFileSettingModal({settings, setSettings,setting, open, handleClose,
         () => {
             if (setting){
                 setData(setting)
+                if (setting.name == "logo") {
+                    setPreviousName("logo-" + setting.value)
+                } else if (setting.name == "imageHomePage") {
+                    setPreviousName("imageHomePage-" + setting.value)
+                }
             }
         }, [setting]
     )
@@ -262,9 +268,9 @@ function EditFileSettingModal({settings, setSettings,setting, open, handleClose,
 
         const setting = await response.json()
         if (data){
-            await uploadFile(data.name)
+            await uploadFile(data.name, previousName)
         } else {
-            await uploadFile("undefined")
+            await uploadFile("undefined", previousName)
         }
         setErrorMessage("Paramètre modifié avec succès");
         setOpenError(true);
@@ -341,7 +347,6 @@ export function WebsiteSettings() {
     const [selectedSetting, setSelectedSetting] = useState<WebsiteSettings>()
     const config = useContext(ConfigContext);
     const fileRef = useRef<File | null>(null);
-    const s3Config = getS3Config();
 
     function handleEditClicked(setting: WebsiteSettings) {
         setSelectedSetting(setting)
@@ -361,7 +366,7 @@ export function WebsiteSettings() {
         return "undifined"
     };
 
-    const uploadFile = async (path: string) => {
+    const uploadFile = async (path: string, previousName: string) => {
 
         if (!fileRef.current) {
             setErrorMessage("No file selected.");
@@ -369,27 +374,34 @@ export function WebsiteSettings() {
             return;
         }
 
-        const s3 = new ReactS3Client({
-            ...s3Config,
-            dirName: s3Config.dirName + "/common",
-        });
-        let filename = path + "-" + fileRef.current.name;
-        let parts = filename.split('.');
-        if (parts.length > 1) {
-            parts.pop();
-        }
-        let nameWithoutExtension = parts.join('.');
-
+        const key = config.associationName + "/common/" + path + "-" + fileRef.current.name;
         try {
-            await s3.uploadFile(fileRef.current, nameWithoutExtension);
-            setErrorMessage("Fichier chargé avec succès.");
+            await uploadToS3(fileRef.current!, key);
+            if (previousName !== "undefined") {
+                await deleteToS3(config.associationName + "/common/" + previousName);
+            }
+            setErrorMessage("Fichier chargé avec succès");
             setOpenError(true);
         } catch (error) {
-            console.error('Upload error:', error);
-            setErrorMessage("Erreur : " + error);
+            console.error("Error uploading file: ", error);
+            setErrorMessage("Erreur lors du chargement du file: " + error);
             setOpenError(true);
         }
     };
+
+    const deleteFile = async (fileName: string, directory: string) => {
+        const key = config.associationName + '/' + directory + "/" + fileName;
+
+        try {
+            await deleteToS3(key);
+            setErrorMessage("Fichier supprimé avec succès.");
+            setOpenError(true);
+        } catch (error) {
+            console.log(error)
+            setErrorMessage("Erreur lors de la supression du fichier: " + error);
+            setOpenError(true);
+        }
+    }
 
     useEffect(() => {
             if (userToken && userId) {
