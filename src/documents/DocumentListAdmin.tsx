@@ -82,6 +82,7 @@ export function DocumentListAdmin() {
     const [publicFiles, setPublicFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
     const [userFiles, setUserFiles] = useState<Array<{ Key: string, publicUrl: string }>>([]);
     const [uploaded, setUploaded] = useState(false);
+    const [dowloadingPending, setDowloadingPending] = useState(false);
     const [image, setImage] = useState<string>("");
     const [video, setVideo] = useState<string>("");
     const [loading, setLoading] = useState(false);
@@ -256,12 +257,12 @@ export function DocumentListAdmin() {
     }
 
     const handleDownload = async (url: string, fileName: string) => {
+        setDowloadingPending(true); // TODO: fix: prevent multiple downloads
         try {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
             const blob = await response.blob();
             const blobUrl = window.URL.createObjectURL(blob);
 
@@ -278,6 +279,9 @@ export function DocumentListAdmin() {
             window.URL.revokeObjectURL(blobUrl);
         } catch (error) {
             setErrorMessage("Erreur : " + error);
+        } finally
+        {
+            setDowloadingPending(false);
         }
     }
 
@@ -372,7 +376,7 @@ export function DocumentListAdmin() {
                                         <Button title={"Voir la vidéo"} onClick={() => showVideo(file.publicUrl)}>{
                                             <VisibilityIcon/>}</Button>}
                                     <Button title={"Télécharger"}
-                                            onClick={() => handleDownload(file.publicUrl, file.Key)}>{
+                                            onClick={() => handleDownload(file.publicUrl, file.Key)} disabled={dowloadingPending}>{
                                         <Download/>}</Button>
                                     <Button title={"Supprimer"} onClick={() => deleteFile(file.Key, "public")}>{
                                         <Delete/>}</Button>
@@ -420,7 +424,7 @@ export function DocumentListAdmin() {
                                         <Button title={"Voir la vidéo"} onClick={() => showVideo(file.publicUrl)}>{
                                             <VisibilityIcon/>}</Button>}
                                     <Button title={"Télécharger"}
-                                            onClick={() => handleDownload(file.publicUrl, file.Key)}>{
+                                            onClick={() => handleDownload(file.publicUrl, file.Key)} disabled={dowloadingPending}>{
                                         <Download/>}</Button>
                                     <Button title={"Supprimer"} onClick={() => deleteFile(file.Key, "private")}>{
                                         <Delete/>}</Button>

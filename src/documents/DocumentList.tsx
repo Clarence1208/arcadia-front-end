@@ -283,32 +283,34 @@ export function DocumentList() {
             </Snackbar>
             <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                 <h1>Mes documents :</h1>
-                <Button
-                    component="label"
-                    role="button"
-                    variant="contained"
-                    tabIndex={-1}
-                    startIcon={<CloudUploadIcon/>}
-                >
-                    Charger un document
-                    <VisuallyHiddenInput
-                        type="file"
-                        onChange={handleFileChange}
-                    />
-                </Button>
             </div>
             <div className="file-lists">
                 <div className="file-list">
                     <div>
-                        <h2>Fichiers privés :</h2>
+                        <h2>Mes fichiers privés :</h2>
+                        <div className="header-public-safe">
+                        <Button
+                            component="label"
+                            role="button"
+                            variant="contained"
+                            tabIndex={-1}
+                            startIcon={<CloudUploadIcon/>}
+                        >
+                            Charger un document
+                            <VisuallyHiddenInput
+                                type="file"
+                                onChange={handleFileChange}
+                            />
+                        </Button>
                         <TextField InputProps={{startAdornment: (
                             <InputAdornment position="start">
                                 <SearchIcon />
                             </InputAdornment>
-                        )}} id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}/>
-                    </div>
+                        )}} id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate} style={{marginTop: "2em"}}/>
+                        </div>
+                        </div>
                     <ul className="file-list-ul">
-                        {userFiles.length === 0 && <h4>Aucun fichier privé ou aucun fichier trouvé</h4>}
+                        {userFiles.length === 0 && <h4>Aucun fichier trouvé</h4>}
                         {userFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
                                 {file.Key}
@@ -333,11 +335,13 @@ export function DocumentList() {
                 <div className="file-list">
                     <div>
                         <h2>Fichiers publics :</h2>
+                        <div className="header-public-safe">
                         <TextField InputProps={{startAdornment: (
                             <InputAdornment position="start">
                                 <SearchIcon />
                             </InputAdornment>
                         )}} id="outlined-basic" label="Rechercher un fichier public" variant="outlined" onChange={searchPublic}/>
+                    </div>
                     </div>
                     <ul className="file-list-ul">
                         {publicFiles.length === 0 && <h4>Aucun fichier public ou aucun fichier trouvé</h4>}
