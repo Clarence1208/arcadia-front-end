@@ -10,7 +10,6 @@ import Snackbar from "@mui/material/Snackbar";
 import {useNavigate} from "react-router-dom";
 import {Chatbot} from "./components/Chatbot";
 import {PollList} from "./polls/PollList";
-import theme from "../utils/theme";
 import {ConfigContext} from "../index";
 
 interface Article {
@@ -36,6 +35,7 @@ export function Blog() {
     const config = useContext(ConfigContext);
     const [ErrorMessage, setErrorMessage] = useState("")
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const theme = useTheme();
 
     useEffect(() => {
         setTimeout(() => {
@@ -43,7 +43,6 @@ export function Blog() {
         }, 100);
     }, []);
 
-    const theme = useTheme();
     const handleClose = () => {
         setOpen(false);
     }

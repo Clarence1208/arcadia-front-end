@@ -54,7 +54,7 @@ export function UserRegisterForm(props: UserFormProps){
                         <Select variant="outlined" label="Role" value={props.roles} style={{width: "13vw"}} onChange={e => props.updateFields({roles: e.target.value})}>
                             <MenuItem value="adherent">Adhérent</MenuItem>
                             <MenuItem value="admin">Admin</MenuItem>
-                            {userSession?.roles.includes("superAdmin") && <MenuItem value="superAdmin">Super admin</MenuItem> }
+                            {userSession?.roles.includes("superadmin") && <MenuItem value="superadmin">Super admin</MenuItem> }
                             <MenuItem value="servicesManager">Gestionnaire de contenus</MenuItem>
                         </Select>
                     </div>}
