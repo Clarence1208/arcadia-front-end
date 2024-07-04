@@ -23,7 +23,7 @@ function LogInForm() {
     const [open, setOpen] = useState(true);
     const sessionContext = useContext(UserSessionContext)
     const config = useContext(ConfigContext);
-    const [ErrorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
     const [data, setData] = useState(body)
     function updateFields(fields: Partial<LogInData>) {
         setData(prev => {
@@ -70,12 +70,27 @@ function LogInForm() {
         alert("flemme.")
     }
 
+    const handleClose = () => {
+        setOpen(false);
+        setErrorMessage("");
+    };
+
     return (
         <form id="formLogin" onSubmit={onSubmit} style={{maxWidth: "40vw"}}>
+            <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+            >
+                <Alert
+                    onClose={handleClose}
+                    severity={errorMessage.includes("Erreur") ? "error" : "success"}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >{errorMessage}</Alert>
+            </Snackbar>
             <h1>Portail d'accès à l'administration de {config.associationName} </h1>
-            {ErrorMessage && <Collapse in={open}><Alert className={"alert"} severity="error"
-                                                        onClose={() => setOpen(false)}>{ErrorMessage}</Alert></Collapse>}
-
 
             <TextField id="loginEmailInput" label="E-mail" type="email" variant="outlined"
                        onChange={e => updateFields({email: e.target.value})}/>
