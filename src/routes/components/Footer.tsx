@@ -16,14 +16,15 @@ export function Footer() {
     const [open, setOpen] = useState(false);
     const config = useContext(ConfigContext);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const [isDataFetched, setIsDataFetched] = useState(false);
 
     useEffect(() => {
-        if (s3Logo) {
+        if (isDataFetched) {
             setTimeout(() => {
                 setIsPageLoaded(true);
             }, 100);
         }
-    }, [s3Logo]);
+    }, [isDataFetched]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,6 +39,7 @@ export function Footer() {
                         sets3Logo("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
                     }
                 });
+                setIsDataFetched(true);
             } catch (error) {
                 console.error('List error:', error);
                 setErrorMessage("Erreur : " + error);
