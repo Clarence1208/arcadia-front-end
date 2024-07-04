@@ -63,7 +63,7 @@ function App() {
             return [(primaryColor ? primaryColor.value : DEFAULT_PRIMARY_COLOR) , (secondaryColor ? secondaryColor.value : '#f5f5f5')];
         }catch (e) {
             console.warn(e)
-            return DEFAULT_PRIMARY_COLOR;
+            return [DEFAULT_PRIMARY_COLOR, DEFAULT_PRIMARY_COLOR];
         }
     }
 
