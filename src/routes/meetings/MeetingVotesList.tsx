@@ -124,9 +124,9 @@ export function MeetingVotesList() {
 
     return (
         <div>
+            <Header />
             { isPageLoaded && 
             <div>
-            <Header />
                 <div className={"main"}>
                 <Snackbar
                     open={open}
@@ -171,9 +171,9 @@ export function MeetingVotesList() {
                         </div>
                     </div>
                 </div>
-            <Footer />
             </div>
             }
+            <Footer />
         </div>
     )
 }

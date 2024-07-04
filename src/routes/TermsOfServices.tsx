@@ -14,6 +14,7 @@ export function TermsOfServices() {
 
     return (
         <>
+            <Header />
             {!isPageLoaded ? (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
                     <CircularProgress />
@@ -21,7 +22,6 @@ export function TermsOfServices() {
                 </Box>
             ) : (
                 <div>
-                    <Header />
                     <div className={"main"}>
                         <h1>Mentions Légales</h1>
                         <p><strong>Nom du site :</strong> Template d'Arcadia</p>
@@ -75,9 +75,9 @@ export function TermsOfServices() {
                         <h3>Article 9 : Droit applicable et juridiction compétente</h3>
                         <p>Le présent contrat est soumis à la législation française. En cas de litige non résolu à l'amiable entre l'Utilisateur et l'Éditeur, les tribunaux de Paris sont compétents pour régler le contentieux.</p>
                     </div>
-                    <Footer />
                 </div>
             )}
+            <Footer />
         </>
     );
 }

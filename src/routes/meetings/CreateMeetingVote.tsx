@@ -350,13 +350,13 @@ export function CreateMeetingVote() {
 
     return (
         <div>
+            <Header />
             { isPageLoaded && 
             <div>
-                <Header />
                     <CreateMeetingVoteForm />
-                <Footer />
             </div>
             }
+            <Footer />
         </div>
     );
 }

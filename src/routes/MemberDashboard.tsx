@@ -53,9 +53,9 @@ export function MemberDashboard(){
     };
     return (
         <div>
+            <Header />
             { isPageLoaded &&
             <div>
-            <Header />
 
             <div id="dahsboard-main" className="main">
 
@@ -94,9 +94,9 @@ export function MemberDashboard(){
 
             </div>
 
-            <Footer />
             </div>
             }
+            <Footer />
         </div>
     );
 }
