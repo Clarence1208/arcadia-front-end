@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {Button, Modal, Paper, TextField} from "@mui/material";
 import {Settings} from "@mui/icons-material";
+import {ConfigContext} from "../../../index";
 
 type StripePriceDto = {
     currency: string;
@@ -27,6 +28,7 @@ type ModalProps = {accountId: string,
 }
 
 export function CreateMembershipModal({accountId, setMemberships, memberships, open, handleClose, loginToken, setErrorMessage, setOpenError}: ModalProps) {
+    const config = useContext(ConfigContext);
     const [data, setData] = useState<MembershipDTO>({
         name: "",
         description: "",

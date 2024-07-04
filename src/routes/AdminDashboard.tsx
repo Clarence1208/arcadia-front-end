@@ -92,7 +92,7 @@ export function Dashboard() {
                             <PollList/>
                         </div>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={4}>
+                    <TabPanel value={tabsValue} index={5}>
                         <StripeSettings/>
                     </TabPanel>
 

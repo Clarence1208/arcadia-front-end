@@ -1,8 +1,10 @@
 import { useParams} from 'react-router-dom';
 import {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
+import {ConfigContext} from "../../index";
 
 export function RefreshStripe(){
+    const config = useContext(ConfigContext);
         const userSession = useContext(UserSessionContext)?.userSession;
         const {connectedAccountId} = useParams();
         const [accountLinkCreatePending, setAccountLinkCreatePending] = useState(false);
