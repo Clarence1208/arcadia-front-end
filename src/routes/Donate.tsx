@@ -112,13 +112,17 @@ export function Donate() {
                                 don de {amount}€</Button>
                         </form>
 
-                        {(formStep === 1 && clientSecret) &&
+                        {(formStep === 1 && clientSecret) ?
                             <Elements stripe={stripePromise}
                                       options={{
                                           clientSecret: clientSecret
                                       }}>
                                 <StripePayementForm clientSecret={clientSecret} amount={amount}/>
                             </Elements>
+                            :
+                            <div style={{display: "flex"}}>
+                                <p style={{alignSelf: "center"}}>Veuillez sélectionner ou entrez un montant pour votre don</p>
+                            </div>
                         }
                     </div>
 

@@ -1,21 +1,25 @@
 .green-separator{
     width: 3vw;
     height: 100vh;
+    background-color: var(--admin-green);
+    margin-right: 2vw;
 }
 
 .rotated-text{
     transform: rotate(180deg);
     writing-mode: vertical-lr;
     text-align: center;
-    font-size: 8em;
+    font-size: 7em;
+    color: var(--admin-green);
     margin-top: 4vh;
-    padding-right: 25vw;
+    padding-right: 23vw;
 }
 
 #formLogin{
     display: flex;
     flex-direction: column;
     height: 40vh;
+    min-width: 30vw;
     justify-content: space-around;
 }
 

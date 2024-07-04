@@ -18,11 +18,17 @@ import {EditMembershipModal} from "./memberships/EditMembershipModal";
 import {CreateMembershipModal} from "./memberships/CreateMembershipModal";
 import {ConfigContext} from "../../index";
 
+type WebSetting = {
+    name: string,
+    value: string,
+    description: string,
+    type: string
+}
 export default function StripeSettings() {
     const config = useContext(ConfigContext);
     const userSession = useContext(UserSessionContext)?.userSession;
-    const [accountCreatePending, setAccountCreatePending] = useState(true);
-    const [connectedAccountId, setConnectedAccountId] = useState("");
+    const [accountCreatePending, setAccountCreatePending] = useState(false);
+    const [connectedAccountId, setConnectedAccountId] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
     const [openError, setOpenError] = useState(false);
     const [createStripeAccountData, setcreateStripeAccountData] = useState({
@@ -33,8 +39,8 @@ export default function StripeSettings() {
     async function getStripeAccount() {
         try {
             const response = await fetch(`${config.apiURL}/websiteSettings`);
-            const data = await response.json();
-            return data
+            const data: WebSetting[] = await response.json();
+            return data.find(item => item.name === 'stripe_account_id')?.value || null;
         } catch (e) {
             console.warn(e)
         }
@@ -94,7 +100,10 @@ export default function StripeSettings() {
     useEffect(
         () => {
             getStripeAccount().then(data => {
-                setConnectedAccountId(data[4].value)
+                //@ts-ignore
+                setConnectedAccountId(data)
+            }).catch((e) => {
+                console.warn(e)
             })
         }, []
     )
@@ -117,21 +126,20 @@ export default function StripeSettings() {
             <h2>Lien à Stripe: </h2>
             <p>Vous pouvez gérer le lien de paiement Stripe d'ici</p>
 
-
-            {!connectedAccountId &&
+            { (!connectedAccountId || connectedAccountId === "") ?
                 <div>
                     <p>Lors de votre 1ère visite sur cette page, veuillez créer un compte Stripe (Bouton "Créer un
-                        compte Stripe") pour utiliser la fonctionalité "Dons" du site.</p>
-                    <p>Vous pouvez ensuite personaliser le compte avec vos informations depuis le bouton "Modifier les
+                        compte Stripe") pour utiliser la fonctionalité "Dons" du site.</p><br/>
+                    <p>Vous pouvez personaliser le compte avec vos informations depuis le bouton "Modifier les
                         informations du compte Stripe"</p>
-                    {!accountCreatePending && <LoadingSpinner message={"Création du compte en cours..."}/>}
+                    {accountCreatePending && <LoadingSpinner message={"Création du compte en cours..."}/>}
 
                     {!accountCreatePending &&
-                    <Button
-                        variant="contained"
-                        onClick={createStripeAccount}
-                    >Créer un compte Stripe
-                    </Button>
+                        <Button
+                            variant="contained"
+                            onClick={createStripeAccount}
+                        >Créer un compte Stripe
+                        </Button>
                     }
 
                     <Button
@@ -142,22 +150,24 @@ export default function StripeSettings() {
 
                 </div>
 
+                :
+                <div>
+                    <Button
+                        variant="contained"
+                        onClick={() => window.location.href = `https://dashboard.stripe.com/login`}
+                    >
+                        Accès au dashboard Stripe (ouvre un nouvel onglet)
+                    </Button>
+
+
+                    <h2>Configuration des adhésions</h2>
+                    {/*   /*<p>Todo: afficher les paiements (les dons donc)</p>*/
+                        /*<a href={"https://docs.stripe.com/connect/supported-embedded-components/payments"}>Docs de l'api stripe </a>*/}
+                    <Button variant={"contained"}>Créer un type d'adhésion</Button>
+                    <ListMemberships accountID={connectedAccountId}/>
+                </div>
+
             }
-
-            {connectedAccountId &&
-                <Button
-                    variant="contained"
-                    onClick={() => window.location.href = `https://dashboard.stripe.com/login`}
-                >Accès au dashboard Stripe (ouvre un nouvel onglet)
-                </Button>
-            }
-
-            <h2>Configuration des adhésions</h2>
-            {/*<p>Todo: afficher les paiements (les dons donc)</p>*/}
-            {/*<a href={"https://docs.stripe.com/connect/supported-embedded-components/payments"}>Docs de l'api stripe </a>*/}
-            <Button variant={"contained"}>Créer un type d'adhésion</Button>
-            <ListMemberships accountID={connectedAccountId}/>
-
         </div>
     )
 }
@@ -177,7 +187,11 @@ type MembershipDTO = {
     default_price: StripePriceDto;
 }
 
-export function ListMemberships({accountID}: { accountID: string }) {
+export function ListMemberships({
+                                    accountID
+                                }: {
+    accountID: string
+}) {
 
     const config = useContext(ConfigContext);
     const [openModal, setOpenModal] = useState(false)
@@ -195,6 +209,7 @@ export function ListMemberships({accountID}: { accountID: string }) {
         setSelectedSetting(setting)
         setOpenEditModal(true)
     }
+
     const [memberships, setMemberships] = useState<MembershipDTO[]>([]);
 
     useEffect(() => {
@@ -221,30 +236,30 @@ export function ListMemberships({accountID}: { accountID: string }) {
         <div>
 
             <EditMembershipModal open={openEditModal} handleClose={handleCloseEditModal}
-                              setErrorMessage={setErrorMessage}
-                              loginToken={userToken}
-                              setOpenError={setOpenError}
-                              setMemberships={setMemberships}
-                              settings={memberships}
-                              setting={selectedSetting}/>
+                                 setErrorMessage={setErrorMessage}
+                                 loginToken={userToken}
+                                 setOpenError={setOpenError}
+                                 setMemberships={setMemberships}
+                                 settings={memberships}
+                                 setting={selectedSetting}/>
             <CreateMembershipModal open={openModal} handleClose={handleCloseModal}
-                                setErrorMessage={setErrorMessage}
-                                loginToken={userToken}
-                                setOpenError={setOpenError}
-                                setMemberships={setMemberships}
-                                memberships={memberships}
-                                accountId={accountID}/>
+                                   setErrorMessage={setErrorMessage}
+                                   loginToken={userToken}
+                                   setOpenError={setOpenError}
+                                   setMemberships={setMemberships}
+                                   memberships={memberships}
+                                   accountId={accountID}/>
             <Snackbar
                 open={openError}
                 autoHideDuration={3000}
                 onClose={() => setOpenError(false)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
                 <Alert
                     onClose={() => setOpenError(false)}
                     severity="warning"
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >{errorMessage}</Alert>
             </Snackbar>
             <div>
@@ -275,7 +290,7 @@ export function ListMemberships({accountID}: { accountID: string }) {
                                     <TableCell align="right">{membership.description}</TableCell>
                                     <TableCell align="right">{membership.default_price.unit_amount / 100} €</TableCell>
                                     <TableCell align="right">
-                                        <Button title={"Modifier"} onClick={()=>handleEditClicked(membership)}><Edit/></Button>
+                                        <Button title={"Modifier"} onClick={() => handleEditClicked(membership)}><Edit/></Button>
                                         <Button title={"Supprimer"}>{<Delete/>}</Button>
                                         <Button title={"Blocker"}>{<Delete/>}</Button>
                                     </TableCell>

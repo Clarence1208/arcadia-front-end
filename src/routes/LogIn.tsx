@@ -90,7 +90,7 @@ function LogInForm() {
                     sx={{width: '100%'}}
                 >{errorMessage}</Alert>
             </Snackbar>
-            <h1>Portail d'accès à l'administration de {config.associationName} </h1>
+            <h1>Portail d'accès à {config.associationName} </h1>
 
             <TextField id="loginEmailInput" label="E-mail" type="email" variant="outlined"
                        onChange={e => updateFields({email: e.target.value})}/>
@@ -133,7 +133,7 @@ export function LogIn() {
         <div>
             {isPageLoaded && 
             <div className="containerRow">
-                    <div className="rotated-text" style={{color: theme.palette.primary.main}}>ADMIN</div>
+                    <div className="rotated-text" style={{color: theme.palette.primary.main}}>CONNEXION</div>
                     <div className="green-separator" style={{backgroundColor: theme.palette.primary.main}} />
                     <div className="containerCol">
                         <Snackbar

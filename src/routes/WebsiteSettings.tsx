@@ -86,6 +86,7 @@ function CreateSettingModal({settings, setSettings, open, handleClose, loginToke
         return;
 
     }
+
     return (
         <Modal
             open={open}
@@ -124,7 +125,6 @@ function CreateSettingModal({settings, setSettings, open, handleClose, loginToke
                             variant="contained"
                             color="primary"
                             style={{ width: "20vw", marginBottom: "2vh"}}
-                            // onClick={onSubmit}
                         >Soumettre</Button>
                     </form>
                 </Paper>
@@ -133,7 +133,7 @@ function CreateSettingModal({settings, setSettings, open, handleClose, loginToke
 }
 
 function EditSettingModal({settings, setSettings,setting, open, handleClose, loginToken, setErrorMessage, setOpenError}: {settings: WebsiteSettings[], setSettings: (settings: WebsiteSettings[]) => void ,setting: WebsiteSettings |undefined, open: boolean, handleClose: () => void, loginToken: string | undefined, setErrorMessage: (message: string) => void, setOpenError: (open: boolean) => void}) {
-
+    const config = useContext(ConfigContext);
     const [data, setData] = useState<WebsiteSettings |undefined>(setting)
 
     useEffect(
@@ -143,7 +143,6 @@ function EditSettingModal({settings, setSettings,setting, open, handleClose, log
             }
         }, [setting]
     )
-    console.log(data)
     function updateFields(fields: Partial<WebsiteSettings>) {
         if (data){
             // @ts-ignore
@@ -154,7 +153,7 @@ function EditSettingModal({settings, setSettings,setting, open, handleClose, log
     }
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault()
-        const config = useContext(ConfigContext);
+        console.log("updatiiing")
 
         const bearer = "Bearer " + loginToken;
         const response: Response = await fetch( config.apiURL + "/websiteSettings/"+data?.id, {
@@ -415,7 +414,6 @@ export function WebsiteSettings() {
                     });
                     if (!response.ok) {
                         const error = await response.json()
-                        console.log(error)
                         setErrorMessage("Erreur : " + await error.message);
                         setOpenError(true)
                         return []

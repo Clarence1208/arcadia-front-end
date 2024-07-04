@@ -3,14 +3,11 @@ import {Footer} from "./components/Footer";
 import {Chatbot} from "./components/Chatbot";
 import mainPic from "../images/template_home_pic.jpg";
 import "../styles/Home.css";
-import {CookieConsent} from "react-cookie-consent";
-import { useContext, useEffect, useState } from "react";
-import { Alert, Snackbar } from "@mui/material";
-import {Skeleton} from "@mui/material";
-import { getS3Config } from "../utils/s3Config";
-import { listFilesS3, getObjectS3 } from "../utils/s3";
-import { ConfigContext } from "../index";
-import { _Object } from "@aws-sdk/client-s3";
+import {useContext, useEffect, useState} from "react";
+import {Alert, Snackbar} from "@mui/material";
+import {listFilesS3} from "../utils/s3";
+import {ConfigContext} from "../index";
+import {_Object} from "@aws-sdk/client-s3";
 
 
 type WebSetting = {
