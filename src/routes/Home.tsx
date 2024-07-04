@@ -15,15 +15,16 @@ export function Home() {
     const [open, setOpen] = useState(false);
     const [image, setImage] = useState<string>("");
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const [isDataFetched, setIsDataFetched] = useState(false);
     const config = useContext(ConfigContext);
 
     useEffect(() => {
-        if (image) {
+        if (isDataFetched) {
             setTimeout(() => {
                 setIsPageLoaded(true);
             }, 100);
         }
-    }, [image]);
+    }, [isDataFetched]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,6 +39,7 @@ export function Home() {
                         setImage("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
                     }
                 });
+                setIsDataFetched(true);
             } catch (error) {
                 console.error('List error:', error);
                 setErrorMessage("Erreur : " + error);
@@ -45,7 +47,6 @@ export function Home() {
             }
         };
         fetchData();
-        console.log("Image: " + image);
     }, []);
 
     const handleClose = () => {
