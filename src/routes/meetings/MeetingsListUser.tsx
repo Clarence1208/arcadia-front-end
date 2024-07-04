@@ -39,7 +39,7 @@ export function MeetingsListUser() {
     const [page, setPage] = useState(1);
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")
-
+    const config = useContext(ConfigContext);
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
@@ -91,7 +91,6 @@ export function MeetingsListUser() {
                 future: true
             }])
         }
-
     }
 
     useEffect(() => {
@@ -99,7 +98,6 @@ export function MeetingsListUser() {
             return;
         }
         const getMeetings = async (filters?: Filters): Promise<Meeting[]> => {
-            const config = useContext(ConfigContext);
             const bearer = "Bearer " + userSession?.loginToken;
             const response: Response = await fetch(`${config.apiURL}/meetings${filters?.page ? "?limit=10&page=" + filters?.page : ""}`, {
                 headers: {
