@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Header from "../components/Header";
 import {Footer} from "../components/Footer";
 import {Elements, useStripe} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
+import {ConfigContext} from "../../index";
 
 
 type WebSetting = {
@@ -12,7 +13,7 @@ type WebSetting = {
     type: string
 }
 export default function ReturnStripeAccountPage() {
-
+    const config = useContext(ConfigContext);
     const [connectedAccountId, setConnectedAccountId] = useState("");
     const stripePromise = loadStripe("pk_test_51PPPaZBvbnM6p69y9VGLCmAkev3tT3Plbw8JPtnf78iiJxiGtsTXNPOEPn3M9OktpiKeuTqx1XwcoKoVUty97nr600GCnOjcBt",
         {

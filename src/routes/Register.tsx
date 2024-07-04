@@ -65,7 +65,7 @@ export function Register(){
             return { ...prev, ...fields }
         })
     }
-
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
     const [selectedMembership, setSelectedMembership] = useState<MembershipDTO | null>(null);
     const [connectedAccountId, setConnectedAccountId] = useState("");
     const [memberships, setMemberships] = useState([]);
@@ -74,6 +74,13 @@ export function Register(){
         const data: WebSetting[] = await response.json();
         return data.find(item => item.name === 'stripe_account_id')?.value || "";
     }
+
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPageLoaded(true);
+        }, 100);
+    }, []);
 
     useEffect(
         () => {
@@ -109,6 +116,7 @@ export function Register(){
         <div>
             <Header />
             <div className="main">
+                {isPageLoaded ?
                 <Paper elevation={1} className={""} style={{width: "40vw"}}>
                     <UserRegisterForm {...data} formTitle={"Créer un compte"} formDescription={"Accéder aux actualités, vos historiques de paiements et participer aux assemblées générales"} formError={errorMessage} updateFields={updateFields}  />
                     {selectedMembership &&
@@ -120,7 +128,11 @@ export function Register(){
                         <PaymentInfoForm userData={data} accountID={connectedAccountId} memberships={memberships} selectedMembership={selectedMembership} setSelectedMembership={setSelectedMembership}/>
                     </Elements>
                     }
-                 </Paper>
+                 </Paper> :
+                    <div className="loading">
+                        <h1>Chargement...</h1>
+                    </div>
+                }
             </div>
             <Footer />
         </div>

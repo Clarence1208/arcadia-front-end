@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Button, Modal, Paper, TextField} from "@mui/material";
 import {Settings} from "@mui/icons-material";
+import {ConfigContext} from "../../../index";
 
 // TODO: Fix edit... good luck future me i am tired of it rn but it should be easy
 export function EditMembershipModal({settings, setMemberships,setting, open, handleClose, loginToken, setErrorMessage, setOpenError}: {settings: any[], setMemberships: (settings: any[]) => void ,setting: any |undefined, open: boolean, handleClose: () => void, loginToken: string | undefined, setErrorMessage: (message: string) => void, setOpenError: (open: boolean) => void}) {
-
+    const config = useContext(ConfigContext);
     const [data, setData] = useState<any |undefined>(setting)
 
     useEffect(
