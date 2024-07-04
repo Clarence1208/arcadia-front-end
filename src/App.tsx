@@ -36,7 +36,8 @@ import {CreatePremise} from './routes/premises/CreatePremise';
 import ReturnStripeAccountPage from "./routes/stripe/ReturnStripeAccountPage";
 import {RefreshStripe} from "./routes/stripe/RefreshStripe";
 import {Donate} from "./routes/Donate";
-
+import {Subscribe} from "./routes/users/Subscribe";
+import {SubscriptionPayment} from "./routes/stripe/SubscriptionPayment";
 type WebSetting = {
     name: string,
     value: string,
@@ -44,6 +45,7 @@ type WebSetting = {
     type: string
 }
 const DEFAULT_PRIMARY_COLOR = '#074032'
+
 function App() {
     const [theme, setTheme] = React.useState(createTheme());
     const config = useContext(ConfigContext);
@@ -123,10 +125,13 @@ function App() {
                             <Route path='/polls/:id/vote' element={<PollVoteApply/>}/>
                             <Route path='/poll/:id/results' element={<PollResults/>}/>
 
-                {/*STRIPE*/}
-                <Route path='/return/:id' element={<ReturnStripeAccountPage />}/>
-                <Route path='/stripe/return' element={<ReturnStripeAccountPage />}/>
-                <Route path='/refresh/:id' element={<RefreshStripe />}/>
+                            {/*STRIPE*/}
+
+                            <Route path='/users/subscribe' element={<Subscribe />}/>
+                            <Route path='/users/subscribe/:subscriptionId/:clientSecret' element={<SubscriptionPayment />}/>
+                            <Route path='/return/:id' element={<ReturnStripeAccountPage />}/>
+                            <Route path='/stripe/return' element={<ReturnStripeAccountPage />}/>
+                            <Route path='/refresh/:id' element={<RefreshStripe />}/>
 
 
                             <Route path='*' element={<NotFound/>}/>

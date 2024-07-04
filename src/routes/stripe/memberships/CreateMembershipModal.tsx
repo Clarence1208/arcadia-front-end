@@ -10,7 +10,6 @@ type StripePriceDto = {
         interval: string;
         interval_count: number;
     };
-
 }
 type MembershipDTO = {
     name: string;
@@ -42,6 +41,7 @@ export function CreateMembershipModal({accountId, setMemberships, memberships, o
     }
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault()
+        console.log(data)
 
         const bearer = "Bearer " + loginToken;
         const response: Response = await fetch( config.apiURL+"/stripe/memberships?accountId="+accountId, {
