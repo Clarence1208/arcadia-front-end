@@ -28,7 +28,7 @@ type WebsiteSettings = {
 }
 export function Chatbot() {
     const config = useContext(ConfigContext);
-    const API_KEY = config.openaiAPIKey;
+    const API_KEY = import.meta.env.VITE_OPENAI_API_KEY as string;
     const APP_NAME = config.associationName;
     
     const [messages, setMessages] = useState<PromptMessages>(initialMessages);
