@@ -13,9 +13,9 @@
 .form-inputs{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    height: 50vh;
+    height: 60vh;
 }
 
 .form-input{

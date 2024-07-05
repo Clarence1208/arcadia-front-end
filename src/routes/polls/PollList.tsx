@@ -90,9 +90,9 @@ export function PollList() {
                         {ErrorMessage}
                     </Alert>
                 </Snackbar>
-                <h1
-                >Sondages :</h1>
-                {polls.length === 0 ? <div>Pas de sondages disponibles...</div> :
+                <h2
+                >Sondages :</h2>
+                {!polls ? <div>Pas de sondages disponibles...</div> :
                     <div className={"polls-list"}>
                             {polls.map(poll => {
                                 return <Poll key={poll.id} poll={poll} />

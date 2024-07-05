@@ -145,9 +145,9 @@ export function Blog() {
                         ) : (
                             <ArticleList articles={articles} deleteItem={deleteItem}/>
                         )}
-                        { total > 10 &&
+                        { total > 6 &&
                             <div style={{marginTop: "2vh", alignSelf:"center"}}>
-                                <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                                <Pagination count={(Math.ceil(total / 6))} page={page} onChange={handleChangePage}/>
                             </div>
                         }
 

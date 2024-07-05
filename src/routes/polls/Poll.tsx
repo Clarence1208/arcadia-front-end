@@ -96,10 +96,10 @@ export function Poll({poll}: PollProps){
                 <div className="poll-info">
                     <h2>{poll.name}</h2>
                     <div style={{marginBottom: "2vh"}}>
-                        <span className="vote-admin">Nombre de questions : {poll.questions.length}</span>
+                        <span className="vote-admin">Nombre de questions : {poll.questions?.length ?? 0}</span>
                     </div>
                     <div style={{marginBottom: "5vh"}}>
-                        <span className="vote-admin">Nombre de personnes ayant répondu : {poll.users?.length}</span>
+                        <span className="vote-admin">Nombre de personnes ayant répondu : {poll.users?.length ?? 0}</span>
                     </div>
                 </div>
                 ) : null}
