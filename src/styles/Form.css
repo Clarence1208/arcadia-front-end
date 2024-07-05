@@ -3,10 +3,21 @@
     flex-direction: row;
 }
 
+.form-base{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}   
+
 .form-inputs{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     height: 50vh;
+}
+
+.form-input{
+    width: 25vw !important;
 }

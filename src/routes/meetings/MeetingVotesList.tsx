@@ -1,4 +1,4 @@
-import { Alert, Button, Pagination, Snackbar } from "@mui/material";
+import { Alert, Button, Snackbar } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import '../../styles/VotesList.css';
 import { useNavigate, useParams } from "react-router-dom";

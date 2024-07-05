@@ -149,7 +149,7 @@ function ChatBotConfigForm() {
     }
 
     return (
-        <div id="create-meeting" className="main">
+        <div>
             <Snackbar
                 open={open}
                 autoHideDuration={3000}
@@ -166,7 +166,7 @@ function ChatBotConfigForm() {
 
             <div className="chatbot-config">
                 <div className="chatbot-config-title">
-                    <h1>Configuration du ChatBot :</h1>
+                    <h2>Configuration du ChatBot :</h2>
                     <Tooltip title="La configuration de votre ChatBot se résume de toute les informations importantes dont vous voulez que votre assistant IA dispose pour qu'il puisse le mieux répondre à vos utilisateurs. Le ChatBot se trouvera en bas à droite de votre site.">
                             <IconButton>
                                 <HelpIcon />

@@ -90,9 +90,10 @@ export function DocumentList() {
                     const check = value.Key.split("/");
                     if ((check[0] === config.associationName) && (check[1] === "users") && (check[2] === String(userSession?.userId))) {
                         setUserFiles((prev) => {
+                            console.log(value)
                             if (!prev.some(existingFile => existingFile.Key === check[3]) && check[3].includes(privateSearch)) {
-                                value.Key = check.slice(3).join("/");
-                                return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
+                                const name = check.slice(3).join("/");
+                                return [...prev, {Key: name, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                             }
                             return prev;
                         });
@@ -100,8 +101,8 @@ export function DocumentList() {
                     if ((check[0] === config.associationName) && (check[1] === "public")) {
                         setPublicFiles((prev) => {
                             if ((!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") && check[2].includes(publicSearch)) {
-                                value.Key = check.slice(2).join("/");
-                                return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
+                                const name = check.slice(2).join("/");
+                                return [...prev, {Key: name, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                             }
                             return prev;
                         });
@@ -216,12 +217,20 @@ export function DocumentList() {
 
     const showImage = (url: string) => {
         setImage(url);
+        console.log("Image url:", url);
         setOpenModal(true);
     }
 
     const showVideo = (url: string) => {
         setVideo(url);
         setOpenVideoModal(true);
+    }
+
+    const truncate = (input: string, length: number) => {
+        if (input.length > length) {
+            return input.substring(0, length) + '...';
+        }
+        return input;
     }
 
     return (
@@ -266,13 +275,9 @@ export function DocumentList() {
             </Snackbar>
             <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                 <h1>Mes documents :</h1>
+                
             </div>
-            <div className="file-lists">
-                <div className="file-list">
-                    <div>
-                        <h2>Mes fichiers privés :</h2>
-                        <div className="header-public-safe">
-                        <Button
+            <Button
                             component="label"
                             role="button"
                             variant="contained"
@@ -285,18 +290,23 @@ export function DocumentList() {
                                 onChange={handleFileChange}
                             />
                         </Button>
+            <div className="file-lists">
+                <div className="file-list">
+                    <div>
+                        <h2>Mes fichiers privés :</h2>
+                        <div className="header-public-safe">
                         <TextField InputProps={{startAdornment: (
                             <InputAdornment position="start">
                                 <SearchIcon />
                             </InputAdornment>
-                        )}} id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate} style={{marginTop: "2em"}}/>
+                        )}} id="outlined-basic" label="Rechercher un fichier privé" variant="outlined" onChange={searchPrivate}/>
                         </div>
                         </div>
                     <ul className="file-list-ul">
                         {userFiles.length === 0 && <h4>Aucun fichier trouvé</h4>}
                         {userFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
-                                {file.Key}
+                                {truncate(file.Key, 30)}
                                 <div>
                                     {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) &&
                                         <Button title={"Voir l'image"} onClick={() => showImage(file.publicUrl)}>{
@@ -330,7 +340,7 @@ export function DocumentList() {
                         {publicFiles.length === 0 && <h4>Aucun fichier public ou aucun fichier trouvé</h4>}
                         {publicFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
-                                {file.Key}
+                                {truncate(file.Key, 30)}
                                 <div>
                                 {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) &&
                                     <Button title={"Voir l'image"} onClick={() => showImage(file.publicUrl)}>{

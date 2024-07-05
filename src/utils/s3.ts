@@ -7,7 +7,7 @@ const BUCKET = "arcadia-bucket";
 
 export const uploadToS3 = async (file: File, key: string) => {
 
-    const command = new PutObjectCommand({ ACL:"public-read", Bucket: BUCKET, Key: key, Body: file, ContentType: file.type });
+    const command = new PutObjectCommand({ ACL:"public-read-write", Bucket: BUCKET, Key: key, Body: file, ContentType: file.type });
 
     try {
         await s3.send(command);

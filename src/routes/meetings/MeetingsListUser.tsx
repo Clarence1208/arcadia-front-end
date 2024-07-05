@@ -40,6 +40,7 @@ export function MeetingsListUser() {
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")
     const config = useContext(ConfigContext);
+    const [total, setTotal] = useState(0);
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
@@ -114,7 +115,8 @@ export function MeetingsListUser() {
             if (res.length === 0) {
                 setErrorMessage("Aucun site web trouvé")
             }
-            return res;
+            setTotal(res.total)
+            return res.data;
         }
         getMeetings({ page: page }).then(setDateMeetings)
     }, [page, userSession?.loginToken]);
@@ -148,8 +150,12 @@ export function MeetingsListUser() {
                                 <h3>Assemblées générales passées :</h3>
                                     {pastMeetings.map((meeting) => (
                                         <Meeting meeting={meeting} />
-                                    ))}
-                                    <Pagination style={{marginTop: "10vh"}} count={10} page={page} onChange={handleChangePage}/>
+                                    ))}                                
+                                    { total > 10 &&
+                                        <div style={{marginTop: "2vh", alignSelf:"center"}}>
+                                            <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                                        </div>
+                                    }
                             </div> : null
                         }
 
@@ -160,7 +166,11 @@ export function MeetingsListUser() {
                                     {currentMeetings.map((meeting) => (
                                         <Meeting meeting={meeting} />
                                     ))}
-                                    <Pagination style={{marginTop: "10vh"}} count={10} page={page} onChange={handleChangePage}/>
+                                    { total > 10 &&
+                                        <div style={{marginTop: "2vh", alignSelf:"center"}}>
+                                            <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                                        </div>
+                                    }
                             </div> : null
                         }
 
@@ -171,7 +181,11 @@ export function MeetingsListUser() {
                                     {futureMeetings.map((meeting) => (
                                         <Meeting meeting={meeting} />
                                     ))}
-                                    <Pagination style={{marginTop: "10vh"}} count={10} page={page} onChange={handleChangePage}/>
+                                    { total > 10 &&
+                                        <div style={{marginTop: "2vh", alignSelf:"center"}}>
+                                            <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                                        </div>
+                                    }
                             </div> : null
                         }
                     </div>

@@ -36,6 +36,7 @@ export function Blog() {
     const [ErrorMessage, setErrorMessage] = useState("")
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const theme = useTheme();
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         setTimeout(() => {
@@ -68,7 +69,8 @@ export function Blog() {
                     return [];
                 }
                 const res = await response.json();
-                return res;
+                setTotal(res.total);
+                return res.data;
             }
             getArticles({page: page}).then((data) => {
                 setArticles(data);
@@ -143,12 +145,11 @@ export function Blog() {
                         ) : (
                             <ArticleList articles={articles} deleteItem={deleteItem}/>
                         )}
-                        <Pagination
-                            style={{alignSelf: "center"}}
-                            count={10}
-                            page={page}
-                            onChange={handleChangePage}
-                        />
+                        { total > 10 &&
+                            <div style={{marginTop: "2vh", alignSelf:"center"}}>
+                                <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                            </div>
+                        }
 
                         <div style={{
                             backgroundColor: theme.palette.primary.main,

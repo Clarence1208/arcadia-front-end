@@ -106,9 +106,7 @@ export function Dashboard() {
                     <TabPanel value={tabsValue} index={4}>
                         <Button href="/createPoll" variant="contained" color="primary"
                                 endIcon={<AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
-                        <div className={"board"}>
                             <PollList />
-                        </div>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={5}>
                         <div className="board-documents">

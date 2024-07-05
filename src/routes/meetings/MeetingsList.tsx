@@ -37,6 +37,7 @@ export function MeetingsList() {
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")
     const config = useContext(ConfigContext);
+    const [total, setTotal] = useState(0);
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -63,7 +64,8 @@ export function MeetingsList() {
         if (res.length === 0) {
             setErrorMessage("Aucun site web trouvé")
         }
-        return res;
+        setTotal(res.total)
+        return res.data;
         }
         getMeetings({ page: page }).then(setMeetings)
     }, [page, userSession?.loginToken]);
@@ -94,9 +96,11 @@ export function MeetingsList() {
                     ))}
                 </div>
             }
-            <div style={{marginTop: "2vh"}}>
-                <Pagination count={10} page={page} onChange={handleChangePage}/>
-            </div>
+            { total > 10 &&
+                <div style={{marginTop: "2vh", alignSelf:"center"}}>
+                    <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                </div>
+            }
         </div>
     )
 }

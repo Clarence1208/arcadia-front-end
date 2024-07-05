@@ -1,4 +1,4 @@
-import {Alert, Button, InputLabel, MenuItem, Pagination, Select, Snackbar, Switch} from "@mui/material";
+import {Alert, Button, InputLabel, MenuItem, Select, Snackbar, Switch} from "@mui/material";
 import {FormEvent, useContext, useEffect, useState} from "react";
 import '../../styles/VoteChoiceList.css';
 import {useNavigate, useParams} from "react-router-dom";

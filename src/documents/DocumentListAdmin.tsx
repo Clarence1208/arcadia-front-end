@@ -108,8 +108,8 @@ export function DocumentListAdmin() {
                     if ((check[0] === config.associationName) && (check[1] === "private")) {
                         setPrivateFiles((prev) => {
                             if (!prev.some(existingFile => existingFile.Key === check[2]) && check[2].includes(privateSearch)) {
-                                value.Key = check.slice(2).join("/");
-                                return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
+                                const name = check.slice(2).join("/");
+                                return [...prev, {Key: name, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                             }
                             return prev;
                         });
@@ -117,8 +117,8 @@ export function DocumentListAdmin() {
                     if ((check[0] === config.associationName) && (check[1] === "public")) {
                         setPublicFiles((prev) => {
                             if ((!prev.some(existingFile => existingFile.Key === check[2]) && check[2] !== "") && check[2].includes(publicSearch)) {
-                                value.Key = check.slice(2).join("/");
-                                return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
+                                const name = check.slice(2).join("/");
+                                return [...prev, {Key: name, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                             }
                             return prev;
                         });
@@ -127,8 +127,8 @@ export function DocumentListAdmin() {
                         if ((check[0] === config.associationName) && (check[1] === "users") && (check[2] === String(selectedUser.id))) {
                             setUserFiles((prev) => {
                                 if ((!prev.some(existingFile => existingFile.Key === check[3]) && check[3] !== "") && check[3].includes(userSearch)) {
-                                    value.Key = check.slice(3).join("/");
-                                    return [...prev, {Key: value.Key, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
+                                    const name = check.slice(3).join("/");
+                                    return [...prev, {Key: name, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
                                 }
                                 return prev;
                             });
@@ -278,6 +278,13 @@ export function DocumentListAdmin() {
         setOpenVideoModal(true);
     }
 
+    const truncate = (input: string, length: number) => {
+        if (input.length > length) {
+            return input.substring(0, length) + '...';
+        }
+        return input;
+    }
+
     return (
         <div>
             {loading && <LoadingSpinner message={"Chargement..."}/>}
@@ -319,17 +326,19 @@ export function DocumentListAdmin() {
                 >{errorMessage}</Alert>
             </Snackbar>
             <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                <h1>Gestion des documents de {config.associationName} :</h1>
+                <h2>Gestion des documents de {config.associationName} :</h2>
             </div>
             <div className="file-lists">
                 <div className="file-list">
-                    <h2><PublicIcon/> Documents publics :</h2>
+                    <h2><PublicIcon/> Documents publics : <Tooltip title="Visible par tout le monde"
+                                                                  children={<IconButton>
+                                                                      <HelpIcon/>
+                                                                  </IconButton>}/></h2>
                     <div className="header-public-safe">
                     <Button
                         component="label"
                         role="button"
                         variant="contained"
-                        tabIndex={-1}
                         startIcon={<CloudUploadIcon/>}
                     >
                         Charger un document public
@@ -350,7 +359,7 @@ export function DocumentListAdmin() {
                         {publicFiles.length === 0 && <h4>Aucun fichier public ou aucun fichier trouvé</h4>}
                         {publicFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
-                                {file.Key}
+                                {truncate(file.Key, 30)}
                                 <div>
                                     {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) &&
                                         <Button title={"Voir l'image"} onClick={() => showImage(file.publicUrl)}>{
@@ -378,7 +387,6 @@ export function DocumentListAdmin() {
                         component="label"
                         role="button"
                         variant="contained"
-                        tabIndex={-1}
                         startIcon={<CloudUploadIcon/>}
                     >
                         Charger un document privé
@@ -398,7 +406,7 @@ export function DocumentListAdmin() {
                         {privateFiles.length === 0 && <h4>Aucun fichier privé ou aucun fichier trouvé</h4>}
                         {privateFiles.map((file) => (
                             <li key={file.Key} className="file-list-li">
-                                {file.Key}
+                                {truncate(file.Key, 30)}
                                 <div>
                                     {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) &&
                                         <Button title={"Voir l'image"} onClick={() => showImage(file.publicUrl)}>{
@@ -463,7 +471,7 @@ export function DocumentListAdmin() {
                                 <h4>{selectedUser.firstName + " " + selectedUser.surname} n'a pas de documents ou pas de fichier trouvé</h4>}
                             {userFiles.map((file) => (
                                 <li key={file.Key} className="file-list-li">
-                                    {file.Key}
+                                    {truncate(file.Key, 30)}
                                     <div>
                                         {Object.values(SupportedImageType).includes(file.publicUrl.split('.').pop() as string) &&
                                             <Button title={"Voir l'image"} onClick={() => showImage(file.publicUrl)}>{

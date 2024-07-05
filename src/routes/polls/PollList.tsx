@@ -40,6 +40,7 @@ export function PollList() {
     const config = useContext(ConfigContext);
     const [ErrorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
+    const [total, setTotal] = useState(0);
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -61,7 +62,8 @@ export function PollList() {
                     return []
                 }
                 const res = await response.json();
-                return res;
+                setTotal(res.total)
+                return res.data;
             }
             getPolls({ page: page }).then(setPolls)
         }
@@ -88,17 +90,20 @@ export function PollList() {
                         {ErrorMessage}
                     </Alert>
                 </Snackbar>
-                <h1>Sondages :</h1>
+                <h1
+                >Sondages :</h1>
+                {polls.length === 0 ? <div>Pas de sondages disponibles...</div> :
                     <div className={"polls-list"}>
-                        {polls.length === 0 ? <div>Pas de sondages disponibles...</div> :
-                            polls.map(poll => {
+                            {polls.map(poll => {
                                 return <Poll key={poll.id} poll={poll} />
-                            })
-                        }
+                            })}
                     </div>
-                <div style={{marginTop: "2vh", alignSelf:"center"}}>
-                    <Pagination count={10} page={page} onChange={handleChangePage}/>
-                </div>
+                }
+                { total > 10 &&
+                    <div style={{marginTop: "2vh", alignSelf:"center"}}>
+                        <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                    </div>
+                }
             </div>
     )
 }

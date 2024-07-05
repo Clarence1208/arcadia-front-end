@@ -19,3 +19,11 @@
     cursor: pointer;
     background-color: rgba(175, 168, 166, 0.64);
 }
+
+.form-and-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2em;
+}

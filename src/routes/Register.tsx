@@ -74,7 +74,6 @@ export function Register(){
         navigate("/login?successMessage=true")
     }
     async function handleSubmit(){
-        console.log(data)
         await createUser(data);
     }
     useEffect(() => {
@@ -89,9 +88,11 @@ export function Register(){
             <Header />
             <div className="main">
                 {isPageLoaded ?
-                <Paper elevation={1} className="" style={{width: "40vw"}}>
+                <Paper elevation={1} className="paper" style={{width: "40vw"}}>
+                    <div className="form-and-button">
                     <UserRegisterForm {...data} formTitle={"Créer un compte"} formDescription={"Accéder aux actualités, vos historiques de paiements et participer aux assemblées générales"} formError={errorMessage} updateFields={updateFields}  />
-                    <Button variant="contained" type={"submit"} onClick={handleSubmit} style={{width: "10vw"}}>Créer mon compte</Button>
+                    <Button variant="contained" type={"submit"} onClick={handleSubmit} style={{width: "20vw", marginTop: "3vh"}}>Créer mon compte</Button>
+                    </div>
                 </Paper> :
                     <div className="loading">
                         <h1>Chargement...</h1>

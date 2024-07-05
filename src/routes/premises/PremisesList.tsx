@@ -27,6 +27,7 @@ export function PremisesList() {
     const [open, setOpen] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("")
     const config = useContext(ConfigContext);
+    const [total, setTotal] = useState(0);
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -53,7 +54,8 @@ export function PremisesList() {
         if (res.length === 0) {
             setErrorMessage("Aucune salle trouvée")
         }
-        return res;
+        setTotal(res.total)
+        return res.data;
         }
         getPremises({ page: page }).then(setPremises)
     }, [page, userSession?.loginToken]);
@@ -84,9 +86,11 @@ export function PremisesList() {
                     ))}
                 </div>
             }
-            <div style={{marginTop: "2vh"}}>
-                <Pagination count={10} page={page} onChange={handleChangePage}/>
-            </div>
+            { total > 10 &&
+                <div style={{marginTop: "2vh", alignSelf:"center"}}>
+                    <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
+                </div>
+            }
         </div>
     )
 }

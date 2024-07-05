@@ -1,4 +1,4 @@
-import { Button, InputLabel, Pagination, Switch } from "@mui/material";
+import { Button, InputLabel, Switch } from "@mui/material";
 import { SetStateAction, useContext, useEffect, useState } from "react";
 import '../../styles/VoteResults.css';
 import { useNavigate, useParams } from "react-router-dom";

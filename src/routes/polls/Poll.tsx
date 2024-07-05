@@ -75,7 +75,8 @@ export function Poll({poll}: PollProps){
 
     return (
         (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || !poll.isClosed) ? (
-            <div className="vote-div">
+            <div>
+            <div className="poll-div">
                 <Snackbar
                     open={open}
                     autoHideDuration={3000}
@@ -91,21 +92,22 @@ export function Poll({poll}: PollProps){
                         {ErrorMessage}
                     </Alert>
                 </Snackbar>
-                <h2>{poll.name}</h2>
                 {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
-                <div>
-                    <div style={{marginBottom: "1vh"}}>
+                <div className="poll-info">
+                    <h2>{poll.name}</h2>
+                    <div style={{marginBottom: "2vh"}}>
                         <span className="vote-admin">Nombre de questions : {poll.questions.length}</span>
                     </div>
-                    <div style={{marginBottom: "1vh"}}>
+                    <div style={{marginBottom: "5vh"}}>
                         <span className="vote-admin">Nombre de personnes ayant répondu : {poll.users?.length}</span>
                     </div>
                 </div>
                 ) : null}
-    
+            <div className="poll-choices">
                 {!poll.isClosed ? (
                     !userInPoll ? (
                         <Button
+                            className="poll-choice"
                             variant="contained"
                             color="primary"
                             href={`/polls/${poll.id}/vote`}
@@ -116,6 +118,7 @@ export function Poll({poll}: PollProps){
                         </Button>
                     ) : (
                         <Button
+                            className="poll-choice"
                             variant="contained"
                             color="primary"
                             endIcon={<TaskIcon />}
@@ -129,6 +132,7 @@ export function Poll({poll}: PollProps){
     
                 {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
                     <Button
+                        className="poll-choice"
                         variant="contained"
                         color="primary"
                         href={`/poll/${poll.id}/results`}
@@ -141,6 +145,7 @@ export function Poll({poll}: PollProps){
     
                 {(userSession && (userSession.roles.includes("admin") || userSession.roles.includes("superadmin"))) && !poll.isClosed ? (
                     <Button
+                        className="poll-choice"
                         variant="contained"
                         color="primary"
                         endIcon={<CancelIcon />}
@@ -150,6 +155,8 @@ export function Poll({poll}: PollProps){
                         Mettre fin au sondage
                     </Button>
                 ) : null}
+            </div>
+            </div>
             </div>
         ) : null
     )
