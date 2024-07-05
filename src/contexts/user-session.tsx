@@ -8,6 +8,7 @@ export interface IUserSession {
     loginToken: string;
     roles: string[];
     email: string;
+    customerId?: string;
 }
 
 interface IUserSessionContext {

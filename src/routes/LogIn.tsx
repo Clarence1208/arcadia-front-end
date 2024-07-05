@@ -56,13 +56,12 @@ function LogInForm() {
                 sessionContext.updateUserSession({
                     userId: res.id, loginToken: res.loginToken,
                     fullName: res.firstName + " " + res.surname, isLoggedIn: true,
-                    roles: roles, email: res.email
+                    roles: roles, email: res.email, customerId: res.customerId
                 })
-            }
-            if (res.roles === "admin") {
-                navigate('/adminDashboard')
-            } else {
-                navigate('/memberDashboard')
+            } if (res.roles === "admin") {
+            navigate('/adminDashboard')
+        } else {
+            navigate('/memberDashboard')
 
             }
         } catch (e) {

@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import {Footer} from "./components/Footer";
 import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
-import {Tab, Tabs} from "@mui/material";
+import {Link, Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {MeetingsListUser} from "./meetings/MeetingsListUser";
 import {EditUser} from "./users/EditUser";
@@ -84,6 +84,7 @@ export function MemberDashboard(){
                         {userSession && <EditUser userId={userSession?.userId} userToken={userSession?.loginToken}/>}
                     </TabPanel>
                     <TabPanel value={tabsValue} index={2}>
+                        <Link href="/users/subscribe">Changer de type d'abonnement</Link>
                         <h1>Mes paiements </h1>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={3}>
