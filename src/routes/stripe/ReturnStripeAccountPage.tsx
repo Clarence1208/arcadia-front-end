@@ -4,7 +4,7 @@ import {Footer} from "../components/Footer";
 import {Elements, useStripe} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 import {ConfigContext} from "../../index";
-
+import {Link} from "@mui/material";
 
 type WebSetting = {
     name: string,
@@ -15,10 +15,8 @@ type WebSetting = {
 export default function ReturnStripeAccountPage() {
     const config = useContext(ConfigContext);
     const [connectedAccountId, setConnectedAccountId] = useState("");
-    const stripePromise = loadStripe("pk_test_51PPPaZBvbnM6p69y9VGLCmAkev3tT3Plbw8JPtnf78iiJxiGtsTXNPOEPn3M9OktpiKeuTqx1XwcoKoVUty97nr600GCnOjcBt",
-        {
-            stripeAccount: connectedAccountId
-        }
+    const clientSecret = new URLSearchParams(window.location.search).get(
+        'payment_intent_client_secret'
     );
 
     async function getSettings() {
@@ -32,12 +30,30 @@ export default function ReturnStripeAccountPage() {
             getSettings().then((data) => setConnectedAccountId(data));
         }, []
     )
-    const clientSecret = new URLSearchParams(window.location.search).get(
-        'payment_intent_client_secret'
-    ) || '';
+
+    const stripePromise = loadStripe(config.stripePublicKey,
+        {
+            stripeAccount: connectedAccountId
+        }
+    );
+    if (!clientSecret) {
+        return (
+            <div>
+                <Header/>
+                <div className="main">
+                    <h1>Erreur</h1>
+                    <p>Le paiement n'a pas pu être effectué. Veuillez réessayer.</p><br/>
+                    <Link href="/donate">Retour à la page de don</Link>
+                    <br/>
+                    <br/>
+                    <Link href="/users/subscribe">Retour à la page d'abonnement</Link>
+                </div>
+                <Footer/>
+            </div>
+        );
+    }
 
     return (
-
         <div>
             <Header/>
             <div className="main">
@@ -52,31 +68,19 @@ export default function ReturnStripeAccountPage() {
 
 export function PaymentStatus({clientSecret}: any) {
     const stripe = useStripe();
-    const [message, setMessage] = useState("Pas de message");
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         if (!stripe) {
             return;
         }
-
-        // Retrieve the "payment_intent_client_secret" query parameter appended to
-        // your return_url by Stripe.js
-
-
         // Retrieve the PaymentIntent
         stripe
             .retrievePaymentIntent(clientSecret)
             .then(({paymentIntent}) => {
-                // Inspect the PaymentIntent `status` to indicate the status of the payment
-                // to your customer.
-                //
-                // Some payment methods will [immediately succeed or fail][0] upon
-                // confirmation, while others will first enter a `processing` state.
-                //
-                // [0]: https://stripe.com/docs/payments/payment-methods#payment-notification
                 switch (paymentIntent?.status) {
                     case 'succeeded':
-                        setMessage("Merci de votre don ! La transaction a été effectuée avec succès !");
+                        setMessage("Merci de votre don ! La transaction a été effectuée avec succès ! Vous allez recevoir un reçu par mail.");
                         break;
 
                     case 'processing':
@@ -84,8 +88,6 @@ export function PaymentStatus({clientSecret}: any) {
                         break;
 
                     case 'requires_payment_method':
-                        // Redirect your user back to your payment page to attempt collecting
-                        // payment again
                         setMessage('Votre paiement a échoué. Veuillez réessayer.');
                         break;
 
