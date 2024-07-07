@@ -168,8 +168,7 @@ export function DocumentListAdmin() {
                 }
                 getUsers().then(setUsers)
             }
-        }
-        , [userSession?.loginToken, userSession?.userId])
+        }, [userSession?.loginToken, userSession?.userId])
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, directory: string) => {
         const file = event.target.files?.[0];

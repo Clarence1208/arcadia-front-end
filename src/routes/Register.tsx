@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import "../styles/Memberships.css";
 import {ConfigContext} from "../index";
+import emailjs from "@emailjs/browser";
 
 type FormData = {
     firstName: string
@@ -25,6 +26,7 @@ const body: FormData = {
     email: "",
     password: "",
     birthDate: null,
+    roles : "user"
 }
 
 type WebSetting = {
@@ -55,6 +57,21 @@ export function Register(){
             return { ...prev, ...fields }
         })
     }
+
+    function sendEmail(userData: FormData) {
+        emailjs.send(import.meta.env.VITE_MAIL_SERVICE_ID, "template_xukeys6", {
+            associationName: config.associationName,
+            emailFrom: config.associationName + "@gmail.com",
+            emailTo: userData.email,
+            message: "Merci d'avoir crée un compte sur notre site, vous pouvez dès à présent vous connecter et accéder à votre espace adhérent."
+        }, import.meta.env.VITE_MAIL_PUBLIC_KEY)
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+    }
+
     async function createUser(userData: FormData): Promise<any> {
 
         if (userData.password !== userData.confirmPassword) {
@@ -71,6 +88,7 @@ export function Register(){
             setOpen(true);
             return;
         }
+        sendEmail(userData)
         navigate("/login?successMessage=true")
     }
     async function handleSubmit(){
@@ -86,9 +104,9 @@ export function Register(){
     return (
         <div>
             <Header />
-            <div className="main">
+            <div className="main" style={{marginBottom: "15vw"}}>
                 {isPageLoaded ?
-                <Paper elevation={1} className="paper" style={{width: "40vw"}}>
+                <Paper elevation={1} className="paper" style={{width: "40vw", marginTop: "5vw"}}>
                     <div className="form-and-button">
                     <UserRegisterForm {...data} formTitle={"Créer un compte"} formDescription={"Accéder aux actualités, vos historiques de paiements et participer aux assemblées générales"} formError={errorMessage} updateFields={updateFields}  />
                     <Button variant="contained" type={"submit"} onClick={handleSubmit} style={{width: "20vw", marginTop: "3vh"}}>Créer mon compte</Button>

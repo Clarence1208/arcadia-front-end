@@ -12,6 +12,7 @@ import Paper from "@mui/material/Paper";
 import {Groups3} from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
 import {ConfigContext} from "../../index";
+import emailjs from "@emailjs/browser"
 
 
 type CreateMeetingData = {
@@ -50,6 +51,14 @@ const tempBody : TempMeetingData = {
     endHour: 0,
 }
 
+type User = {
+    id: number,
+    firstName: string,
+    surname: string,
+    email: string,
+    roles: string,
+}
+
 function CreateMeetingForm() {
     const userSession = useContext(UserSessionContext)?.userSession
     const navigate = useNavigate();
@@ -60,6 +69,7 @@ function CreateMeetingForm() {
     const [data, setData] = useState(body)
     const [tempData, setTempData] = useState(tempBody)
     const [premises, setPremises] = useState<Premise[]>([])
+    const [users, setUsers] = useState<User[]>([])
 
     useEffect(() => {
         if (!userSession?.loginToken) {
@@ -87,6 +97,33 @@ function CreateMeetingForm() {
         getPremises().then(setPremises)
     }, [userSession?.loginToken]);
 
+    useEffect(() => {
+        if (userSession?.loginToken) {
+            const getUsers = async (): Promise<User[]> => {
+                const bearer = "Bearer " + userSession?.loginToken;
+                const response: Response = await fetch(`${config.apiURL}/users`, {
+                    headers: {
+                        "Authorization": bearer,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (!response.ok) {
+                    const error = await response.json()
+                    setErrorMessage("Erreur : " + await error.message);
+                    setOpen(true);
+                    return []
+                }
+                const res = await response.json();
+                if (res.length === 0) {
+                    setErrorMessage("Aucun utilisateur trouvé")
+                    setOpen(true)
+                }
+                return res;
+            }
+            getUsers().then(setUsers)
+        }
+    }, [userSession?.loginToken, userSession?.userId])
+
     if (!userSession?.isLoggedIn) {
         navigate('/login')
     }
@@ -107,6 +144,46 @@ function CreateMeetingForm() {
         })
     }
 
+    function sendMeetingInvites(meeting: CreateMeetingData) {
+        const date = formatDate(meeting.startDate);
+        const startHour = formatHours(meeting.startDate);
+        const endHour = formatHours(meeting.endDate);
+        for (const user of users) {
+            if (user.roles.includes("admin") || user.roles.includes("superadmin") || user.roles.includes("adherent")) {
+                emailjs.send(import.meta.env.VITE_MAIL_SERVICE_ID, "template_7nwdxug", {
+                    associationName: config.associationName,
+                    emailFrom: config.associationName + "@gmail.com",
+                    emailTo: user.email,
+                    message: `Une nouvelle assemblée générale '${meeting.name}' a été créée, vous êtes invité à y participer. Elle aura lieu le ${date} de ${startHour} à ${endHour}.`
+                }, import.meta.env.VITE_MAIL_PUBLIC_KEY)
+                    .then((result) => {
+                        console.log(result.text);
+                    }, (error) => {
+                        console.log(error.text);
+                    });
+            }
+        }
+    }
+
+    const formatHours = (date: Date) => {
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${hours}:${minutes}`;
+    }
+
+    const formatDate = (date: Date) => {
+        const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        const monthNames = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+        
+        const dayName = dayNames[date.getDay()];
+        const day = date.getDate();
+        const monthName = monthNames[date.getMonth()];
+        
+        return `${dayName} ${day} ${monthName}`;
+      };
+    
+
     function transformToCreateData(temp: TempMeetingData, data: CreateMeetingData): CreateMeetingData {
         const { tempDate, startHour, endHour } = temp;
         data.startDate = tempDate ? tempDate.hour(startHour).toDate() : new Date();
@@ -119,13 +196,14 @@ function CreateMeetingForm() {
         e.preventDefault()
         const bearer = "Bearer " + userSession?.loginToken;
         const req = transformToCreateData(tempData, data);
-        const response: Response = await fetch( config.apiURL + "/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Content-Type": "application/json"}});
+        const response: Response = await fetch( config.apiURL + "/meetings", {method: "POST", body: JSON.stringify(req), headers: {"Authorization": bearer,"Content-Type": "application/json"}});
         if (!response.ok) {
             const error =  await response.json()
             setErrorMessage("Erreur : " + await error.message);
             setOpen(true)
             return
         }
+        sendMeetingInvites(req)
         setErrorMessage("");
         navigate('/adminDashboard')
     }
