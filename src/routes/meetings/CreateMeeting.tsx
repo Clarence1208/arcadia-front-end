@@ -70,6 +70,13 @@ function CreateMeetingForm() {
     const [tempData, setTempData] = useState(tempBody)
     const [premises, setPremises] = useState<Premise[]>([])
     const [users, setUsers] = useState<User[]>([])
+    const [isPremiseLoaded, setIsPremiseLoaded] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsPremiseLoaded(true);
+        }, 100);
+    }, [premises]);
 
     useEffect(() => {
         if (!userSession?.loginToken) {
@@ -92,7 +99,7 @@ function CreateMeetingForm() {
         if (res.length === 0) {
             setErrorMessage("Aucune salle trouvée")
         }
-        return res;
+        return res.data;
         }
         getPremises().then(setPremises)
     }, [userSession?.loginToken]);
@@ -228,6 +235,7 @@ function CreateMeetingForm() {
                 >{ErrorMessage}</Alert>
             </Snackbar>
 
+            {isPremiseLoaded && 
             <Paper elevation={1} className={"paper"} >
             <h1><Groups3 fontSize={"large"}/> Créer une Assemblée Générale</h1>
             <form id="create-meeting-form" onSubmit={onSubmit}>
@@ -294,7 +302,7 @@ function CreateMeetingForm() {
                             </Select>
                         </div>
                 </div>
-                {premises.length > 0 && (
+                {premises && (
                             <div>
                                 <InputLabel id="select-label">Salle</InputLabel>
                                 <Select
@@ -320,6 +328,7 @@ function CreateMeetingForm() {
                 </Button>
             </form>
             </Paper>
+            }
         </div>
     );
 }
