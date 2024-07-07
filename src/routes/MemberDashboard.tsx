@@ -7,6 +7,7 @@ import "../styles/Dashboard.css";
 import {MeetingsListUser} from "./meetings/MeetingsListUser";
 import {EditUser} from "./users/EditUser";
 import {DocumentList} from "../documents/DocumentList";
+import {MySubscription} from "./users/MySubscription";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -84,7 +85,8 @@ export function MemberDashboard(){
                         {userSession && <EditUser userId={userSession?.userId} userToken={userSession?.loginToken}/>}
                     </TabPanel>
                     <TabPanel value={tabsValue} index={2}>
-                        <Link href="/users/subscribe">Changer de type d'abonnement</Link>
+                        <MySubscription />
+
                         <h1>Mes paiements </h1>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={3}>

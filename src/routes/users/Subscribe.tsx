@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import {Footer} from "../components/Footer";
 import {ConfigContext} from "../../index";
 import {useContext, useEffect, useState} from "react";
-import {Button, Link} from "@mui/material";
+import {Button} from "@mui/material";
 import {UserSessionContext} from "../../contexts/user-session";
 import {useNavigate} from "react-router-dom";
 
@@ -11,6 +11,7 @@ type MembershipDTO = {
     name: string;
     description: string;
     default_price: StripePriceDto;
+    active: boolean;
 }
 
 type StripePriceDto = {
@@ -81,11 +82,13 @@ export function Subscribe(){
             }
         );
         const data = await response.json();
-        console.log(data)
-        return data;
+        return data.filter((membership: MembershipDTO) => membership.active);
     }
 
+
     async function getPaymentIntent() {
+        console.log(selectedMembership)
+        console.log(userSession?.customerId)
         const bearer = "Bearer " + userSession?.loginToken;
         const response = await fetch(`${config.apiURL}/stripe/subscriptionIntents`, {
             method: "POST",
@@ -98,13 +101,15 @@ export function Subscribe(){
                 customerId: userSession?.customerId || ""
             })
         });
+
         if (!response.ok) {
             const error: CustomError = await response.json()
             console.log(error)
             return
         }
+
         const data: StripeData = await response.json();
-        console.log(data);
+        console.log(data)
         navigate("/users/subscribe/"+ data.subscriptionId +"/"+ data.clientSecret +"?priceId="+ data.priceId + "&accountId=" + connectedAccountId)
     }
 
@@ -116,14 +121,18 @@ export function Subscribe(){
 
     useEffect(() => {
         if (connectedAccountId !== "") {
-            fetchMemberships().then((data) => setMemberships(data));
+            fetchMemberships().then((data) => {
+                    setMemberships(data);
+                    setSelectedMembership(data[0]);
+            }
+            );
         }
     }, [connectedAccountId]);
     return (
         <div>
             <Header />
             <div className="main">
-                <h1>Choisir le montant de votre adhésion mensuelle</h1>
+                <h1>Sélectionner le montant de votre cotisation mensuelle</h1>
 
                 <div className="list-memberships">
                     {memberships.map((membership: any) => {

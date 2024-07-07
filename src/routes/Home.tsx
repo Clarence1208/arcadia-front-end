@@ -49,7 +49,6 @@ export function Home() {
                 });
                 setIsDataFetched(true);
             } catch (error) {
-                console.error('List error:', error);
                 setErrorMessage("Erreur : " + error);
                 setOpen(true);
             }

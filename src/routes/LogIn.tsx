@@ -61,8 +61,7 @@ function LogInForm() {
             } if (res.roles === "admin") {
             navigate('/adminDashboard')
         } else {
-            navigate('/memberDashboard')
-
+            navigate('/users/subscribe')
             }
         } catch (e) {
             setErrorMessage("Erreur : " + e);

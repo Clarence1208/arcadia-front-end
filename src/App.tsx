@@ -38,6 +38,7 @@ import {RefreshStripe} from "./routes/stripe/RefreshStripe";
 import {Donate} from "./routes/Donate";
 import {Subscribe} from "./routes/users/Subscribe";
 import {SubscriptionPayment} from "./routes/stripe/SubscriptionPayment";
+import {ValidateSubscription} from "./routes/stripe/ValidateSubscription";
 type WebSetting = {
     name: string,
     value: string,
@@ -129,7 +130,7 @@ function App() {
 
                             <Route path='/users/subscribe' element={<Subscribe />}/>
                             <Route path='/users/subscribe/:subscriptionId/:clientSecret' element={<SubscriptionPayment />}/>
-                            <Route path='/return/:id' element={<ReturnStripeAccountPage />}/>
+                            <Route path='/stripe/validateSubscription' element={<ValidateSubscription />}/>
                             <Route path='/stripe/return' element={<ReturnStripeAccountPage />}/>
                             <Route path='/refresh/:id' element={<RefreshStripe />}/>
 

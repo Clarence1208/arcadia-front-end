@@ -3,10 +3,40 @@ import {Button, Modal, Paper, TextField} from "@mui/material";
 import {Settings} from "@mui/icons-material";
 import {ConfigContext} from "../../../index";
 
-// TODO: Fix edit... good luck future me i am tired of it rn but it should be easy
+type WebSetting = {
+    name: string,
+    value: string,
+    description: string,
+    type: string
+}
+
+type FieldUpdatable = {
+    name?: string;
+    description?: string;
+    default_price? : StripePriceDto;
+}
+
+type StripePriceDto = {
+    currency: string;
+    unit_amount: number;
+    recurring: {
+        interval: string;
+        interval_count: number;
+    };
+}
+
+type MembershipDTO = {
+    id?: string;
+    name: string;
+    description: string;
+    default_price: StripePriceDto | null;
+}
+
 export function EditMembershipModal({settings, setMemberships,setting, open, handleClose, loginToken, setErrorMessage, setOpenError}: {settings: any[], setMemberships: (settings: any[]) => void ,setting: any |undefined, open: boolean, handleClose: () => void, loginToken: string | undefined, setErrorMessage: (message: string) => void, setOpenError: (open: boolean) => void}) {
     const config = useContext(ConfigContext);
     const [data, setData] = useState<any |undefined>(setting)
+    const [dataUpdated, setDataUpdated] = useState<FieldUpdatable>({})
+    const [connectedAccount, setConnectedAccountId] = useState<string>("");
 
     useEffect(
         () => {
@@ -15,21 +45,34 @@ export function EditMembershipModal({settings, setMemberships,setting, open, han
             }
         }, [setting]
     )
-    function updateFields(fields: Partial<any>) {
+    function updateFields(fields: Partial<FieldUpdatable>) {
+        if (dataUpdated){
+            setDataUpdated({...dataUpdated, ...fields})
+        }
         if (data){
-            // @ts-ignore
-            setData(prev => {
-                return { ...prev, ...fields }
-            })
+            setData({...data, ...fields})
         }
     }
+
+    async function getSettings() {
+        const response = await fetch(`${config.apiURL}/websiteSettings`);
+        const data: WebSetting[] = await response.json();
+        return data.find(item => item.name === 'stripe_account_id')?.value || "";
+    }
+
+    useEffect(
+        () => {
+            getSettings().then((data) => setConnectedAccountId(data));
+        }, []
+    )
+
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault()
 
         const bearer = "Bearer " + loginToken;
-        const response: Response = await fetch( config.apiURL+"/stripe/memberships/"+data?.id, {
+        const response: Response = await fetch( config.apiURL+"/stripe/memberships/"+data?.id+"?accountId="+connectedAccount, {
             method: "PATCH",
-            body: JSON.stringify(data),
+            body: JSON.stringify(dataUpdated),
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": bearer,
@@ -46,7 +89,7 @@ export function EditMembershipModal({settings, setMemberships,setting, open, han
         setErrorMessage("Adhésion modifié avec succès");
         setOpenError(true);
         handleClose();
-        setMemberships(settings.map((s : any) => s.id === setting.id ? setting : s))
+        setMemberships(settings.map((s : MembershipDTO) => s.id === setting.id ? setting : s))
         return;
 
     }
@@ -84,15 +127,14 @@ export function EditMembershipModal({settings, setMemberships,setting, open, han
                     multiline
                     style={{ width: "30vw"}}
                     value={data?.default_price.unit_amount / 100}
-                    onChange={e => updateFields({ default_price_data: { currency: "eur", unit_amount: parseInt(e.target.value), recurring: { interval: "month", interval_count: 1 } } })}
+                    onChange={e => updateFields({ default_price: { currency: "eur", unit_amount: parseInt(e.target.value), recurring: { interval: "month", interval_count: 1 } } })}
                 />
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         style={{ width: "20vw", marginBottom: "2vh"}}
-                        // onClick={onSubmit}
-                    >Soumettre</Button>
+                    >Modifier</Button>
                 </form>
             </Paper>
         </Modal>

@@ -13,7 +13,7 @@ import {
 import React, {useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../../contexts/user-session";
 import LoadingSpinner from "../components/LoadingSpinner";
-import {AddCircleOutline, Delete, Edit} from "@mui/icons-material";
+import {AddCircleOutline, Delete, DoNotDisturb, Edit, Visibility, VisibilityOff} from "@mui/icons-material";
 import {EditMembershipModal} from "./memberships/EditMembershipModal";
 import {CreateMembershipModal} from "./memberships/CreateMembershipModal";
 import {ConfigContext} from "../../index";
@@ -91,7 +91,6 @@ export default function StripeSettings() {
                 window.location.href = url;
             })
             .catch((error) => {
-                console.error("Error:", error);
                 setErrorMessage(error);
                 setOpenError(true);
             });
@@ -126,7 +125,7 @@ export default function StripeSettings() {
             <h2>Lien à Stripe: </h2>
             <p>Vous pouvez gérer le lien de paiement Stripe d'ici</p>
 
-            { (!connectedAccountId || connectedAccountId === "") ?
+            {(!connectedAccountId || connectedAccountId === "") ?
                 <div>
                     <p>Lors de votre 1ère visite sur cette page, veuillez créer un compte Stripe (Bouton "Créer un
                         compte Stripe") pour utiliser la fonctionalité "Dons" du site.</p><br/>
@@ -160,10 +159,8 @@ export default function StripeSettings() {
                     </Button>
 
 
-                    <h2>Configuration des adhésions</h2>
-                    {/*   /*<p>Todo: afficher les paiements (les dons donc)</p>*/
-                        /*<a href={"https://docs.stripe.com/connect/supported-embedded-components/payments"}>Docs de l'api stripe </a>*/}
-                    <Button variant={"contained"}>Créer un type d'adhésion</Button>
+                    <h2>Configuration des cotisations</h2>
+                    <p>Vous pouvez gérer les cotisations d'ici</p>
                     <ListMemberships accountID={connectedAccountId}/>
                 </div>
 
@@ -184,7 +181,8 @@ type MembershipDTO = {
     id?: string
     name: string;
     description: string;
-    default_price: StripePriceDto;
+    default_price: StripePriceDto | null;
+    active: boolean;
 }
 
 export function ListMemberships({
@@ -203,18 +201,12 @@ export function ListMemberships({
     const [openError, setOpenError] = useState(false)
     const userSession = useContext(UserSessionContext)?.userSession
     const userToken = userSession?.loginToken
-    const [selectedSetting, setSelectedSetting] = useState<MembershipDTO>()
-
-    function handleEditClicked(setting: MembershipDTO) {
-        setSelectedSetting(setting)
-        setOpenEditModal(true)
-    }
-
+    const [selectedSetting, setSelectedSetting] = useState<MembershipDTO | undefined>(undefined)
     const [memberships, setMemberships] = useState<MembershipDTO[]>([]);
 
     useEffect(() => {
         async function fetchMemberships() {
-            const bearer = `Bearer ${userSession?.loginToken}`;
+            const bearer = `Bearer ${userToken}`;
 
             const response = await fetch(`${config.apiURL}/stripe/memberships?accountId=${accountID}`,
                 {
@@ -231,6 +223,36 @@ export function ListMemberships({
 
         fetchMemberships().then((data) => setMemberships(data));
     }, [accountID]);
+
+    async function handleEditClicked(setting: MembershipDTO) {
+        setOpenEditModal(true)
+        setSelectedSetting(setting)
+    }
+    async function toggleMembership(membership: MembershipDTO) {
+
+
+            const bearer = `Bearer ${userToken}`;
+            const response: Response = await fetch( config.apiURL+"/stripe/memberships/"+membership?.id+"?accountId="+accountID, {
+                method: "PATCH",
+                body: JSON.stringify({active: !membership.active}),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": bearer,
+                }
+            });
+            if (!response.ok) {
+                const error =  await response.json()
+                setErrorMessage("Erreur : " + await error.message);
+                setOpenError(true)
+                return;
+            }
+
+            const setting = await response.json()
+            setErrorMessage(`Adhésion rendu ${membership.active ? "inactive" : "active"} avec succès`);
+            setOpenError(true);
+            setMemberships(memberships.map((s : MembershipDTO) => s.id === setting.id ? setting : s))
+            return;
+    }
 
     return (
         <div>
@@ -264,8 +286,7 @@ export function ListMemberships({
             </Snackbar>
             <div>
                 <div style={{display: "flex", alignItems: "center"}}>
-                    <p>Vous pouvez gérer les adhésions d'ici</p>
-                    <Button onClick={handleOpenModal} title={"Ajouter un type d'adhésion"}><AddCircleOutline/></Button>
+                    <Button onClick={handleOpenModal} title={"Ajouter un type de cotisation"}><AddCircleOutline/></Button>
                 </div>
 
                 <TableContainer component={Paper}>
@@ -282,17 +303,19 @@ export function ListMemberships({
                             {memberships.map((membership) => (
                                 <TableRow
                                     key={membership.id}
-                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                    sx={{'&:last-child td, &:last-child th': {border: 0}, backgroundColor: membership.active ? "#F5F5F5" : "rgba(149,147,147,0.24)"}}
                                 >
                                     <TableCell scope="row">
                                         {membership.name}
                                     </TableCell>
                                     <TableCell align="right">{membership.description}</TableCell>
-                                    <TableCell align="right">{membership.default_price.unit_amount / 100} €</TableCell>
+                                    <TableCell align="right">{membership.default_price === null ? "": membership.default_price.unit_amount / 100} €</TableCell>
                                     <TableCell align="right">
                                         <Button title={"Modifier"} onClick={() => handleEditClicked(membership)}><Edit/></Button>
+                                        <Button title={membership.active ? "Désactiver": "Activer"} onClick={() => toggleMembership(membership)}>{
+                                            membership.active ? <Visibility/> : <VisibilityOff/>
+                                        }</Button>
                                         <Button title={"Supprimer"}>{<Delete/>}</Button>
-                                        <Button title={"Blocker"}>{<Delete/>}</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
