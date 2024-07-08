@@ -2,9 +2,10 @@ import React, {useContext, useEffect, useState} from "react";
 import {loadStripe} from "@stripe/stripe-js";
 import {ConfigContext} from "../../index";
 import {Elements, useStripe} from "@stripe/react-stripe-js";
-import {PaymentStatus} from "./ReturnStripeAccountPage";
 import {Link} from "@mui/material";
 import {UserSessionContext} from "../../contexts/user-session";
+import Header from "../components/Header";
+import {Footer} from "../components/Footer";
 
 type WebSetting = {
     name: string,
@@ -65,12 +66,14 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
     const config = useContext(ConfigContext);
     const [updateUser, setUpdateUser] = useState(false);
 
+    console.log(userSession)
     async function changeRole(userId: number, role: string) {
         //UPDATE USER ROLE
         const res = await fetch(`${config.apiURL}/users/${userId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + userSession?.loginToken
             },
             body: JSON.stringify({roles: role})
         })
@@ -93,7 +96,11 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
 
 
     useEffect(() => {
-        if (!stripe || !clientSecret) {
+        console.log("useEffect")
+        if (!stripe) {
+            return;
+        }
+        if (!clientSecret) {
             return;
         }
         // Retrieve the PaymentIntent
@@ -102,6 +109,7 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
             .then(({paymentIntent}) => {
                 switch (paymentIntent?.status) {
                     case 'succeeded':
+                        console.log("Succeeded")
                         setMessage("Vous avez bien souscrit à la cotisation pour l'association. Vous recevrez un email de confirmation dès que la transaction sera effectuée.");
 
                         if (!userSession?.userId){
@@ -123,6 +131,11 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
                         setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer.');
                         break;
                 }
+            })
+
+            .catch((error) => {
+                console.error(error);
+                setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer putain?');
             });
 
     }, [stripe]);
@@ -130,7 +143,7 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
     useEffect(() => {
 
         if (!updateUser || !userSession?.userId) return;
-        changeRole(userSession?.userId, "adherant").then(updated => {
+        changeRole(userSession?.userId, "adherent").then(updated => {
             if (updated) {
                 setMessage("Vous avez bien souscrit à la cotisation pour l'association. Vous recevrez un email de confirmation dès que la transaction sera effectuée.");
             }else{
@@ -154,8 +167,12 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
     }
     return (
         <div>
-            <h1>Validation de l'abonnement</h1>
-            <p>{message}</p>
+            <Header/>
+            <div className="main">
+                <h1>Validation de l'abonnement</h1>
+                <p>{message}</p>
+            </div>
+            <Footer/>
         </div>
     )
 }

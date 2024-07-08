@@ -60,6 +60,8 @@ export function Subscribe(){
     const [selectedMembership, setSelectedMembership] = useState<MembershipDTO | null>(null);
     const [connectedAccountId, setConnectedAccountId] = useState<string>("");
     const navigate = useNavigate() ;
+
+    console.log(userSession)
     const selectItem = (item: MembershipDTO) => {
         if (selectedMembership?.id === item.id) {
             setSelectedMembership(null);
@@ -98,7 +100,8 @@ export function Subscribe(){
             },
             body: JSON.stringify({
                 priceId: selectedMembership?.default_price.id || "",
-                customerId: userSession?.customerId || ""
+                customerId: userSession?.customerId || "",
+                email: userSession?.email || ""
             })
         });
 
@@ -133,6 +136,7 @@ export function Subscribe(){
             <Header />
             <div className="main">
                 <h1>Sélectionner le montant de votre cotisation mensuelle</h1>
+                <p>L'accès au tableau de bord des adhérents est accessible uniquement aux utilisateurs qui paient une cotisation mensuelle.</p>
 
                 <div className="list-memberships">
                     {memberships.map((membership: any) => {

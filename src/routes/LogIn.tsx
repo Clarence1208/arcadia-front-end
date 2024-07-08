@@ -58,7 +58,7 @@ function LogInForm() {
                     fullName: res.firstName + " " + res.surname, isLoggedIn: true,
                     roles: roles, email: res.email, customerId: res.customerId
                 })
-            } if (res.roles === "admin") {
+            } if (res.roles.includes("admin") || res.roles.includes("superadmin")) {
             navigate('/adminDashboard')
         } else {
             navigate('/users/subscribe')
@@ -143,12 +143,20 @@ export function LogIn() {
     const [open, setOpen] = useState(queryParameters.get('successMessage') === "true");
     const theme = useTheme();
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    let navigate = useNavigate();
+    const sessionContext = useContext(UserSessionContext)
+
 
     useEffect(() => {
         setTimeout(() => {
             setIsPageLoaded(true);
         }, 100);
     }, []);
+
+    if (sessionContext?.userSession.isLoggedIn) {
+        console.log("User is already logged in")
+        navigate("/")
+    }
 
     const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {

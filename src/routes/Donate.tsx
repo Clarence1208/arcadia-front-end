@@ -95,7 +95,20 @@ export function Donate() {
                 <Footer/>
             </div>
         )
-    }else {
+    }
+        else if (connectedAccountId === "") {
+            return (
+                <div>
+                    <Header/>
+                    <div className="main">
+                        <h1>Module désactivé</h1>
+                        <p>Les dons n'ont pas été activé pour cette association. Contacter un administrateur si besoin.</p>
+                    </div>
+                    <Footer/>
+                </div>
+            )
+        }
+    else {
         return (
             <div>
                 <Header/>

@@ -62,7 +62,7 @@ export function PaymentForm(){
             //`Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/stripe/validateSubscription`, //TODO: redirect to another page that check payment status and change user roles to adherent if all good. Allow user to download invoice
+                return_url: `${window.location.origin}/stripe/validateSubscription`,
             },
         });
     };

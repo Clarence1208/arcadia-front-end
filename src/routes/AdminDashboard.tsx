@@ -16,6 +16,7 @@ import { DocumentList } from "../documents/DocumentList";
 import { DocumentListAdmin } from "../documents/DocumentListAdmin";
 import { ChatBotConfig } from "./components/ChatBotConfig";
 import StripeSettings from "./stripe/StripeSettings";
+import {useNavigate} from "react-router-dom";
 
 function a11yProps(index: number) {
     return {
@@ -48,6 +49,7 @@ export function Dashboard() {
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setTimeout(() => {
@@ -55,6 +57,9 @@ export function Dashboard() {
         }, 100);
     }, []);
 
+    if (!userSession?.isLoggedIn || (!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))) {
+        navigate("/login")
+    }
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTabsValue(newValue);
         event.currentTarget.className = "active"; //doesn't seem to work as intended

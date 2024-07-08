@@ -8,6 +8,7 @@ import {MeetingsListUser} from "./meetings/MeetingsListUser";
 import {EditUser} from "./users/EditUser";
 import {DocumentList} from "../documents/DocumentList";
 import {MySubscription} from "./users/MySubscription";
+import {useNavigate} from "react-router-dom";
 
 //tabs comes from MUI API docs https://mui.com/material-ui/react-tabs/
 function a11yProps(index: number) {
@@ -40,13 +41,21 @@ export function MemberDashboard(){
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setTimeout(() => {
             setIsPageLoaded(true);
         }, 100);
+        console.log(userSession)
     }, []);
-    
+
+    if (!userSession?.isLoggedIn) {
+        navigate("/login")
+    }
+    else if (!userSession?.roles.includes("adherent") && ( !userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))){
+        navigate("/users/subscribe")
+    }
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTabsValue(newValue);
         event.currentTarget.className = "active"; //doesn't seem to work as intended
