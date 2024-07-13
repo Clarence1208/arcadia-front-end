@@ -60,8 +60,10 @@ function LogInForm() {
                 })
             } if (res.roles.includes("admin") || res.roles.includes("superadmin")) {
             navigate('/adminDashboard')
-        } else {
-            navigate('/users/subscribe')
+        } else if (res.roles.includes("adherent")){
+                navigate('/memberDashboard')
+            }else {
+                navigate('/users/subscribe')
             }
         } catch (e) {
             setErrorMessage("Erreur : " + e);

@@ -89,8 +89,7 @@ export function Subscribe(){
 
 
     async function getPaymentIntent() {
-        console.log(selectedMembership)
-        console.log(userSession?.customerId)
+
         const bearer = "Bearer " + userSession?.loginToken;
         const response = await fetch(`${config.apiURL}/stripe/subscriptionIntents`, {
             method: "POST",

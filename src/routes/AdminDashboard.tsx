@@ -2,9 +2,7 @@ import Header from "./components/Header";
 import {Footer} from "./components/Footer";
 import {SyntheticEvent, useContext, useEffect, useState} from "react";
 import {UserSessionContext} from "../contexts/user-session";
-/*import {WebsitesPanel} from "../components/features/dashboard/WebsitesPanel";
-import {UserAccountPanel} from "../components/features/dashboard/UserAccountPanel";*/
-import {Button, Tab, Tabs} from "@mui/material";
+import {Alert, Button, Tab, Tabs} from "@mui/material";
 import "../styles/Dashboard.css";
 import {UsersDashboard} from "./UsersDashboard";
 import {MeetingsList} from "./meetings/MeetingsList";
@@ -12,11 +10,11 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import {WebsiteSettings} from "./WebsiteSettings";
 import {PollList} from "./polls/PollList";
 import {PremisesList} from "./premises/PremisesList";
-import { DocumentList } from "../documents/DocumentList";
 import { DocumentListAdmin } from "../documents/DocumentListAdmin";
 import { ChatBotConfig } from "./components/ChatBotConfig";
 import StripeSettings from "./stripe/StripeSettings";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
 
 function a11yProps(index: number) {
     return {
@@ -46,9 +44,11 @@ function TabPanel(props: any) {
 }
 
 export function Dashboard() {
+    const [queryParameters] = useSearchParams();
     const userSession = useContext(UserSessionContext)?.userSession
     const [tabsValue, setTabsValue] = useState(0);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const [open, setOpen] = useState(queryParameters.get("successMessage") === "true");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -67,6 +67,19 @@ export function Dashboard() {
     return (
         <div>
             <Header />
+            <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={()=>setOpen(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert
+                    onClose={()=>setOpen(false)}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >Le compte a été créé avec succès</Alert>
+            </Snackbar>
             {isPageLoaded &&
             <div>
 

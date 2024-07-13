@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {loadStripe} from "@stripe/stripe-js";
 import {ConfigContext} from "../../index";
 import {Elements, useStripe} from "@stripe/react-stripe-js";
-import {Link} from "@mui/material";
+import {Button, Link} from "@mui/material";
 import {UserSessionContext} from "../../contexts/user-session";
 import Header from "../components/Header";
 import {Footer} from "../components/Footer";
@@ -79,7 +79,6 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
         })
 
         if (res.ok) {
-            console.log("Role updated in API")
             const user = await res.json();
             const newRoles = user.roles.split(", ");
 
@@ -96,7 +95,6 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
 
 
     useEffect(() => {
-        console.log("useEffect")
         if (!stripe) {
             return;
         }
@@ -171,6 +169,8 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
             <div className="main">
                 <h1>Validation de l'abonnement</h1>
                 <p>{message}</p>
+                <br/>
+                <Button variant="contained" color="primary" href="/memberDashboard">Accès au tableau de bord adhérent</Button>
             </div>
             <Footer/>
         </div>

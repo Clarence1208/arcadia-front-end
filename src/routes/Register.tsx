@@ -2,13 +2,15 @@ import {UserRegisterForm} from "./components/UserRegisterForm"
 import React, {useContext, useEffect, useState} from "react";
 import Header from "./components/Header";
 import {Footer} from "./components/Footer";
-import {Button} from "@mui/material";
+import {Alert, Button} from "@mui/material";
 import {Dayjs} from "dayjs";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import "../styles/Memberships.css";
 import {ConfigContext} from "../index";
 import emailjs from "@emailjs/browser";
+import {UserSessionContext} from "../contexts/user-session";
+import Snackbar from "@mui/material/Snackbar";
 
 type FormData = {
     firstName: string
@@ -46,11 +48,15 @@ type StripePriceDto = {
 
 export function Register(){
     const navigate = useNavigate();
+
+
+    const userSession = useContext(UserSessionContext)?.userSession;
     const config = useContext(ConfigContext);
     const [data, setData] = useState(body)
     const [errorMessage, setErrorMessage] = useState("")
     const [open, setOpen] = useState(false);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
+
 
     function updateFields(fields: Partial<FormData>) {
         setData(prev => {
@@ -63,7 +69,7 @@ export function Register(){
             associationName: config.associationName,
             emailFrom: config.associationName + "@gmail.com",
             emailTo: userData.email,
-            message: "Merci d'avoir crée un compte sur notre site, vous pouvez dès à présent vous connecter et accéder à votre espace adhérent."
+            message: "Merci d'avoir créé un compte sur notre site, vous pouvez dès à présent vous connecter et payer votre abonnement pour accéder à votre espace adhérent."
         }, import.meta.env.VITE_MAIL_PUBLIC_KEY)
             .then((result) => {
                 console.log(result.text);
@@ -89,7 +95,12 @@ export function Register(){
             return;
         }
         sendEmail(userData)
-        navigate("/login?successMessage=true")
+        console.log(userSession?.roles)
+        if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) {
+            navigate('/adminDashboard?successMessage=true')
+        }else{
+            navigate("/login?successMessage=true")
+        }
     }
     async function handleSubmit(){
         await createUser(data);

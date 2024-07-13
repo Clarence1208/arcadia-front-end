@@ -95,8 +95,6 @@ export function MemberDashboard(){
                     </TabPanel>
                     <TabPanel value={tabsValue} index={2}>
                         <MySubscription />
-
-                        <h1>Mes paiements </h1>
                     </TabPanel>
                     <TabPanel value={tabsValue} index={3}>
                         <DocumentList />
