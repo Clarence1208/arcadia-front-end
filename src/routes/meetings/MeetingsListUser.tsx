@@ -138,10 +138,11 @@ export function MeetingsListUser() {
             </Snackbar>
                     <div className={"meetings-list-user"}>
                         <h2 className={""}>Liste des assemblées générales :</h2>
-                        <div>
-                            <Button className={"active"} onClick={changeDisplayedMeetings}>En cours</Button>
-                            <Button onClick={changeDisplayedMeetings}>Passées</Button>
-                            <Button onClick={changeDisplayedMeetings}>Futures</Button>
+                        <div style={{display:"flex"}}>
+                            <p style={{marginRight: "3em"}}>Filtrer par: </p>
+                            <Button className={showMeetings[0].current ? "active": ""} onClick={changeDisplayedMeetings}>En cours</Button>
+                            <Button className={showMeetings[0].past ? "active": ""} onClick={changeDisplayedMeetings}>Passées</Button>
+                            <Button className={showMeetings[0].future ? "active": ""} onClick={changeDisplayedMeetings}>Futures</Button>
                         </div>
 
                         {
@@ -156,6 +157,7 @@ export function MeetingsListUser() {
                                             <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
                                         </div>
                                     }
+                                    {pastMeetings.length === 0 ? <p>Aucune assemblée générale passée</p> : null}
                             </div> : null
                         }
 
@@ -171,6 +173,7 @@ export function MeetingsListUser() {
                                             <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
                                         </div>
                                     }
+                                    {currentMeetings.length === 0 ? <p>Aucune assemblée générale en cours</p> : null}
                             </div> : null
                         }
 
@@ -186,6 +189,7 @@ export function MeetingsListUser() {
                                             <Pagination count={(Math.ceil(total / 10))} page={page} onChange={handleChangePage}/>
                                         </div>
                                     }
+                                    {futureMeetings.length === 0 ? <p>Aucune assemblée générale prévue</p> : null}
                             </div> : null
                         }
                     </div>

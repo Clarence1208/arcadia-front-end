@@ -62,7 +62,7 @@ export function Dashboard() {
     }
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTabsValue(newValue);
-        event.currentTarget.className = "active"; //doesn't seem to work as intended
+        event.currentTarget.className = "active";
     };
     return (
         <div>

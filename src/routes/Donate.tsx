@@ -69,15 +69,15 @@ export function Donate() {
     }
     async function initiatePayment(amount: number) {
         const bearer = "Bearer " + userSession?.loginToken;
-
-        const response = await fetch(`${config.apiURL}/stripe/createPaymentIntent?amount=${amount}&accountId=${connectedAccountId}&customerEmail=${customerEmail}`, {
+        const customerId = userSession?.customerId;
+        const response = await fetch(`${config.apiURL}/stripe/createPaymentIntent?amount=${amount}&accountId=${connectedAccountId}&customerEmail=${customerEmail}&customerId=${customerId}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': bearer
             },
         });
-        if (response.status !== 200) {
+        if (!response.ok) {
             return;
         }
         const data = await response.json();

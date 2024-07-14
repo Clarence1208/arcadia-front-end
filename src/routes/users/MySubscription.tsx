@@ -168,7 +168,6 @@ export function MySubscription(){
 
     return (
         <div>
-            <h2>Ma cotisation mensuelle</h2>
             <Snackbar
                 open={open}
                 autoHideDuration={3000}
@@ -182,6 +181,7 @@ export function MySubscription(){
                     sx={{ width: '100%' }}
                 >{errorMessage}</Alert>
             </Snackbar>
+            <h2>Ma cotisation mensuelle</h2>
             {
 
                 !pageLoaded ?
@@ -191,7 +191,7 @@ export function MySubscription(){
                     :
                     (
                         <div>
-                            {(subscription && subscription.price && subscription.id) &&
+                            {(subscription && subscription.price && subscription.id) ?
                                 <div>
                                     <div className="article-div">
 
@@ -209,6 +209,8 @@ export function MySubscription(){
                                     <Button variant="contained" color="primary" onClick={() => confirmCancel(subscription.id)}>Se désabonner</Button>
 
                                 </div>
+                                :
+                                <p>Cet utilisateur ne paie pas de cotisation.</p>
                             }
                             <h2>Historique des paiements</h2>
                             <TableContainer component={Paper} style={{maxHeight: "70vh", overflowY:"scroll"}}>
@@ -237,14 +239,9 @@ export function MySubscription(){
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-
                         </div>
-
                     )
-
             }
-
-
         </div>
     )
 }
