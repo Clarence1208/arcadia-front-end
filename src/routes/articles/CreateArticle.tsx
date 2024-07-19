@@ -160,7 +160,7 @@ function CreateArticleForm() {
                     <p style={{marginLeft:"1em"}}>Retour</p>
                 </div>
                 <Paper elevation={1} className={"paper"} >
-                <h1><FeedIcon />  Créer un article </h1>
+                <h2><FeedIcon />  Créer un article </h2>
                 <form id="create-article-form" onSubmit={onSubmit}>
                     <TextField
                         id="create-article-title" 
@@ -175,6 +175,7 @@ function CreateArticleForm() {
                         multiline
                         rows={10}
                         style={{ width: "60vw"}}
+                        sx={{ mt: 1, mb: 1 }}
                         onChange={e => updateFields({ text: e.target.value })} 
                     />
                     <div style={{display: "flex", flexDirection: "column", alignItems:"center", justifyContent: "center"}}>
