@@ -142,7 +142,7 @@ export function MeetingVotesList() {
                 </Snackbar>
                     {meeting && <h1>Votes de l'assemblée générale {meeting.name} :</h1>}
 
-                            {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
+                            {userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")  ?
                                 <div>
                                     <Button 
                                     href={"/meeting/"+id+"/createVote"}

@@ -59,8 +59,8 @@ function LogInForm() {
                     roles: roles, email: res.email, customerId: res.customerId
                 })
             } if (res.roles.includes("admin") || res.roles.includes("superadmin")) {
-            navigate('/adminDashboard')
-        } else if (res.roles.includes("adherent")){
+                navigate('/adminDashboard')
+            } else if (res.roles.includes("adherent")){
                 navigate('/memberDashboard')
             }else {
                 navigate('/users/subscribe')

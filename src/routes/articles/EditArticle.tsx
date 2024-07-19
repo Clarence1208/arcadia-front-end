@@ -38,6 +38,9 @@ export function EditArticle() {
 
     async function onSubmit(e: FormEvent) {
         e.preventDefault();
+        if (!userSession?.loginToken) {
+            return;
+        }
         const bearer = "Bearer " + userSession?.loginToken;
         const response: Response = await fetch( config.apiURL + `/articles/${articleId}`, {
             method: "PATCH",
@@ -60,6 +63,9 @@ export function EditArticle() {
     }
 
     useEffect(() => {
+        if (!userSession?.loginToken) {
+            return;
+        }
         const getArticle = async (): Promise<PatchArticle> => {
             const bearer = "Bearer " + userSession?.loginToken;
             const response: Response = await fetch(`${config.apiURL}/articles/${articleId}`, {

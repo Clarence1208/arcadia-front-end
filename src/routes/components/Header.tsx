@@ -111,10 +111,10 @@ export default function Header() {
             <div className="nav-header">
                 <CustomNavItem link="/" text="Accueil"/>
                 <CustomNavItem link="/blog" text="Actualités" />
-                    <CustomNavItem link="/donate" text="Nous soutenir" />
-
-                { userSession?.isLoggedIn && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
-                {userSession?.roles.includes("admin") && <CustomNavItem link="/adminDashboard" text="Espace admin" /> }
+                <CustomNavItem link="/donate" text="Nous soutenir" />
+                
+                {userSession?.roles.includes("adherent") && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
+                {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager") || userSession?.roles.includes("treasurer")) && <CustomNavItem link="/adminDashboard" text="Espace admin" /> }
             </div>
 
             <LogInOutButton />

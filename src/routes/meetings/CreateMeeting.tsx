@@ -302,7 +302,7 @@ function CreateMeetingForm() {
                             </Select>
                         </div>
                 </div>
-                {premises && (
+                {premises && premises.length != 0 && (
                             <div>
                                 <InputLabel id="select-label">Salle</InputLabel>
                                 <Select

@@ -165,7 +165,7 @@ export function PollVoteApply() {
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
-            const response: Response = await fetch( config.apiURL + "/polls/" + id + "/join", {method: "POST",
+            const response: Response = await fetch( config.apiURL + "/polls/" + id + "/join/" + userSession.userId, {method: "POST",
                 headers: {
                     "Authorization": bearer,
                     "Content-Type": "application/json"
@@ -176,7 +176,7 @@ export function PollVoteApply() {
                 return
             }
 
-            const responseVoteChoices: Response = await fetch( config.apiURL +"/polls/" + id + "/voteChoices/apply", {method: "POST", body: JSON.stringify(data.responses),
+            const responseVoteChoices: Response = await fetch( config.apiURL +"/polls/" + id + "/voteChoices/apply/" + userSession.userId, {method: "POST", body: JSON.stringify(data.responses),
                 headers: {
                 "Authorization": bearer,
                 "Content-Type": "application/json"

@@ -104,7 +104,7 @@ export function Vote({vote, meetingId}: VoteProps){
                 </Button>
             ) : (
                 <>
-                    {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) && vote.quorum ? (
+                    {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")) && vote.quorum ? (
                         <div>
                             <span className="vote-admin">Quorum : {vote.users?.length}/{vote.quorum}</span>
                         </div>
@@ -130,7 +130,7 @@ export function Vote({vote, meetingId}: VoteProps){
                         </Button>
                     )}
                     <br />
-                    {userSession && (userSession.roles.includes("admin") || userSession.roles.includes("superadmin")) ? (
+                    {userSession && (userSession.roles.includes("admin") || userSession.roles.includes("superadmin") || userSession.roles.includes("manager")) ? (
                         voteCanEnd ? (
                             <Button variant="contained" color="primary" onClick={(e) => { onSubmit(e, vote) }}>
                                 Mettre fin au Vote

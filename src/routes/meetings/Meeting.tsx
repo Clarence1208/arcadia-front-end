@@ -65,7 +65,7 @@ export function Meeting({meeting}: {meeting: Meeting}){
 
                 <h4>{meeting.name}</h4>
                 <p>{meeting.description}</p>
-                { userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
+                { userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")  ?
                     <p>Capacité : {meeting.capacity} places</p> :
                     null
                 }
@@ -81,7 +81,7 @@ export function Meeting({meeting}: {meeting: Meeting}){
                         >Voir le lieu</Button>:
                     null
                 }
-                { userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
+                { userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager") ?
                     <div>
                         { meeting.endDate > now ?
                             <Button

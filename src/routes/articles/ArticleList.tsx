@@ -15,7 +15,7 @@ interface Article {
 
 export function ArticleList({articles, deleteItem}: {articles: Article[], deleteItem: (id: number) => void}){
     const userSession = useContext(UserSessionContext)?.userSession
-    const isAdmin = userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")
+    const isAdmin = userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("contentmanager")
 
 
     return (

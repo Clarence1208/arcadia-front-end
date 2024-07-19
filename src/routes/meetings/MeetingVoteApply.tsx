@@ -8,6 +8,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import {Vote} from "./Vote";
 import Paper from "@mui/material/Paper";
 import {ConfigContext} from "../../index";
+import { M } from "vite/dist/node/types.d-aGj9QkWt";
 
 interface Vote {
     id: number,
@@ -19,7 +20,6 @@ interface Vote {
     nbPossibleVotes: number,
     quorum?: number,
     currentRound?: number,
-    meetingId: number,
 }
 
 interface VoteParams {
@@ -29,11 +29,6 @@ interface VoteParams {
 interface VoteChoice {
     id: number,
     name?: string,
-}
-
-type Filters = {
-    page?: number,
-    limit?: number,
 }
 
 export function MeetingVoteApply() {
@@ -67,8 +62,8 @@ export function MeetingVoteApply() {
         if (!userSession?.roles) {
             return;
         }
-        if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("adherent")) {
-            const getVote = async (filters?: Filters): Promise<Vote> => {
+        if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("adherent") || userSession?.roles.includes("manager")) {
+            const getVote = async (): Promise<Vote> => {
                 const bearer = "Bearer " + userSession?.loginToken;
                 const response: Response = await fetch(`${config.apiURL}/votes/${voteId}`, {
                     method: "GET",
@@ -89,7 +84,7 @@ export function MeetingVoteApply() {
                 return res;
             }
             getVote().then(setVote)
-            const getVoteChoices = async (filters?: Filters): Promise<VoteChoice[]> => {
+            const getVoteChoices = async (): Promise<VoteChoice[]> => {
                 const bearer = "Bearer " + userSession?.loginToken;
                 const response: Response = await fetch(`${config.apiURL}/votes/${voteId}/voteChoices?type=Vote`, {
                     method: "GET",
@@ -110,9 +105,6 @@ export function MeetingVoteApply() {
                 return res;
             }
             getVoteChoices().then(setVoteChoices)
-            if (voteChoices.length === 0) {
-                navigate("/meeting/" + vote?.meetingId + "/votes");
-            }
             return;
         } else {
             return;

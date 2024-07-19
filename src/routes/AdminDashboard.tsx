@@ -57,7 +57,7 @@ export function Dashboard() {
         }, 100);
     }, []);
 
-    if (!userSession?.isLoggedIn || (!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))) {
+    if (!userSession?.isLoggedIn || (!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin") && !userSession?.roles.includes("manager") && !userSession?.roles.includes("treasurer"))) {
         navigate("/login")
     }
     const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -94,52 +94,76 @@ export function Dashboard() {
                     aria-label="Vertical tabs example"
                     sx={{ borderRight: 1, borderColor: 'divider' }}
                 >
-                    <Tab label="Gestion des Assemblées Générales" {...a11yProps(0)}/>
-                    <Tab label="Gestion des utilisateurs" {...a11yProps(1)}/>
-                    <Tab label="Gestions des salles" {...a11yProps(2)}/>
-                    <Tab label="Gestions des paramètres globaux du site" {...a11yProps(3)}/>
-                    <Tab label="Gestions des sondages" {...a11yProps(4)}/>
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("manager")) &&
+                        <Tab label="Gestion des Assemblées Générales" {...a11yProps(0)}/>
+                    }
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("manager")) &&
+                    <Tab label="Gestions des sondages" {...a11yProps(1)}/>
+                    }
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("manager")) &&
+                        <Tab label="Gestion des utilisateurs" {...a11yProps(2)}/>
+                    }
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("manager")) &&
+                        <Tab label="Gestions des salles" {...a11yProps(3)}/>
+                    }
+                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
+                        <Tab label="Gestions des paramètres globaux du site" {...a11yProps(4)}/>
+                    }
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("treasurer")) &&
                     <Tab label="Gestions des documents" {...a11yProps(5)}/>
+                    }
+                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
                     <Tab label="Gestion du ChatBot" {...a11yProps(6)}/>
+                    }
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("treasurer")) &&
                     <Tab label="Gestions des dons" {...a11yProps(7)}/>
+                    }
                 </Tabs>
 
                 <div className={"board"}>
                     <h1>Tableau de bord de {userSession?.fullName || "l'administrateur"}</h1>
-                    <TabPanel value={tabsValue} index={0} className={"tab-panel"}>
+                    <TabPanel value={tabsValue} index={userSession?.roles.includes("treasurer") ? 5 : 0} className={"tab-panel"}>
                         <Button href="/createMeeting" variant="contained" color="primary"
                                 endIcon={<AddBoxIcon></AddBoxIcon>}>Créer une nouvelle assemblée générale</Button>
                         <MeetingsList/>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={1}>
-                        <UsersDashboard/>
-                    </TabPanel>
-                    <TabPanel value={tabsValue} index={2}>
-                        <Button href="/createPremise" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle salle</Button>
-                            <PremisesList />
-                    </TabPanel>
-                    <TabPanel value={tabsValue} index={3}>
-                        <WebsiteSettings/>
-                    </TabPanel>
-                    <TabPanel value={tabsValue} index={4}>
+                    <TabPanel value={tabsValue} index={userSession?.roles.includes("treasurer") ? 7 : 1}>
                         <Button href="/createPoll" variant="contained" color="primary"
                                 endIcon={<AddBoxIcon></AddBoxIcon>}>Créer un nouveau sondage</Button>
                             <PollList />
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={5}>
-                        <div className="board-documents">
-                            <DocumentListAdmin />
-                        </div>
+                    <TabPanel value={tabsValue} index={2}>
+                        <UsersDashboard/>
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={6}>
-                        <div className="board-chatbot">
-                            <ChatBotConfig />
-                        </div>
+                    <TabPanel value={tabsValue} index={3}>
+                        <Button href="/createPremise" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle salle</Button>
+                            <PremisesList />
                     </TabPanel>
-                    <TabPanel value={tabsValue} index={7}>
-                        <StripeSettings />
+                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
+                    <TabPanel value={tabsValue} index={4}>
+                        <WebsiteSettings/>
                     </TabPanel>
-
+                    }
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") ||  userSession?.roles.includes("treasurer")) &&
+                        <TabPanel value={tabsValue} index={userSession?.roles.includes("treasurer") ? 0 : 5}>
+                            <div className="board-documents">
+                                <DocumentListAdmin />
+                            </div>
+                        </TabPanel>
+                    }
+                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
+                    
+                        <TabPanel value={tabsValue} index={6}>
+                            <div className="board-chatbot">
+                                <ChatBotConfig />
+                            </div>
+                        </TabPanel>
+                    }
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("treasurer")) &&
+                        <TabPanel value={tabsValue} index={userSession?.roles.includes("treasurer") ? 1 : 7}>
+                            <StripeSettings />
+                        </TabPanel>
+                    }
                 </div>
             </div>
             </div>

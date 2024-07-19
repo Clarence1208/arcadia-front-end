@@ -63,7 +63,7 @@ export function VoteResults() {
             if (!userSession?.roles) {
                 return;
             }
-            if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("adherent")) {
+            if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")) {
                 const fetchData = async () => {
                     try {
                         const bearer = "Bearer " + userSession?.loginToken;
@@ -103,7 +103,7 @@ export function VoteResults() {
             }
         };
     
-        if (userSession?.roles && userSession.roles.includes("admin")) {
+        if (userSession?.roles && userSession.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")) {
             fetchData();
         }
     }, [userSession, voteId]);

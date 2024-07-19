@@ -46,6 +46,7 @@ export function Poll({poll}: PollProps){
         poll.users = []
     }
 
+    console.log(poll)
     const userInPoll = poll.users.find(user => user.id === userSession?.userId)
 
     async function onSubmit(e: FormEvent, poll: Poll) {
@@ -75,7 +76,7 @@ export function Poll({poll}: PollProps){
     };
 
     return (
-        (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || !poll.isClosed) ? (
+        (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager") || !poll.isClosed) ? (
             <div>
             <div className="poll-div">
                 <Snackbar
@@ -93,7 +94,6 @@ export function Poll({poll}: PollProps){
                         {ErrorMessage}
                     </Alert>
                 </Snackbar>
-                {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
                 <div className="poll-info">
                     <h2>{poll.name}</h2>
                     <div style={{marginBottom: "2vh"}}>
@@ -103,7 +103,6 @@ export function Poll({poll}: PollProps){
                         <span className="vote-admin">Nombre de personnes ayant répondu : {poll.users?.length ?? 0}</span>
                     </div>
                 </div>
-                ) : null}
             <div className="poll-choices">
                 {!poll.isClosed ? (
                     !userInPoll ? (
@@ -131,7 +130,7 @@ export function Poll({poll}: PollProps){
                     )
                 ) : null}
     
-                {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) ? (
+                {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")) ? (
                     <Button
                         className="poll-choice"
                         variant="contained"
@@ -144,7 +143,7 @@ export function Poll({poll}: PollProps){
                     </Button>
                 ) : null}
     
-                {(userSession && (userSession.roles.includes("admin") || userSession.roles.includes("superadmin"))) && !poll.isClosed ? (
+                {(userSession && (userSession.roles.includes("admin") || userSession.roles.includes("superadmin") || userSession?.roles.includes("manager"))) && !poll.isClosed ? (
                     <Button
                         className="poll-choice"
                         variant="contained"

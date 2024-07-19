@@ -75,7 +75,7 @@ export function Blog() {
                 setArticles(data);
             });
         }
-    }, [page, userSession?.loginToken]);
+    }, [page, userSession?.loginToken, flashMessage]);
 
     async function deleteItem(id: number) {
         const bearer = "Bearer " + userSession?.loginToken;
@@ -126,7 +126,7 @@ export function Blog() {
                     <div className={"main article-page"}>
                         <div id={"title-blog"}>
                             <h1>Actualités</h1>
-                            {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) && (
+                            {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) || userSession?.roles.includes("contentmanager") && (
                                 <div className={"create-article"}>
                                     <Button
                                         href={"/createArticle"}

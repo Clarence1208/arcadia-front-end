@@ -33,10 +33,21 @@ export function UsersDashboard() {
     const userToken = userSession?.loginToken
     const userId = userSession?.userId
     const config = useContext(ConfigContext);
+    const [OnChange, setOnChange] = useState<boolean>(false)
 
-    async function deleteItem(id: number) {
+    async function deleteItem(user: User) {
+        if (user.roles.includes("superadmin")) {
+            setErrorMessage("Vous ne pouvez pas supprimer un superadmin")
+            setOpen(true)
+            return
+        }
+        if (user.id === userId) {
+            setErrorMessage("Vous ne pouvez pas supprimer votre propre compte")
+            setOpen(true)
+            return
+        }
         const bearer = "Bearer " + userSession?.loginToken;
-        const response = await fetch(`${config.apiURL}/users/${id}`, {
+        const response = await fetch(`${config.apiURL}/users/${user.id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": bearer,
@@ -50,9 +61,10 @@ export function UsersDashboard() {
             return
         }
         const res = await response.json();
-        setUsers(users.filter((user) => user.id !== id))
+        setUsers(users.filter((user) => user.id !== user.id))
         setErrorMessage("Utilisateur supprimé")
         setOpen(true)
+        setOnChange(!OnChange)
     }
 
     useEffect(() => {
@@ -81,7 +93,7 @@ export function UsersDashboard() {
                 getUsers().then(setUsers)
             }
         }
-        , [userToken, userId])
+        , [userToken, userId, OnChange])
 
     if (users.length === 0) {
         return <div>Loading...</div>
@@ -97,7 +109,7 @@ export function UsersDashboard() {
                     >
                         <Alert
                             onClose={() => setOpen(false)}
-                            severity="error"
+                            severity={errorMessage.includes("Erreur") ? "error" : "success"}
                             variant="filled"
                             sx={{ width: '100%' }}
                         >{errorMessage}</Alert>
@@ -135,8 +147,7 @@ export function UsersDashboard() {
                                             {user.roles}
                                         </TableCell>
                                         <TableCell align="right">
-                                            <Button title={"Modifier"}><Edit/></Button>
-                                            <Button title={"Supprimer"} onClick={()=>deleteItem(user.id)}>{<Delete/>}</Button>
+                                            <Button title={"Supprimer"} onClick={()=>deleteItem(user)}>{<Delete/>}</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
