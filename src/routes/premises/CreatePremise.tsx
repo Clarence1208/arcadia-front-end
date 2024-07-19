@@ -17,7 +17,7 @@ import {ConfigContext} from "../../index";
 type CreatePremiseData = {
     name: string,
     description: string,
-    adress: string,
+    address: string,
     type: string,
     capacity: number,
 }
@@ -25,7 +25,7 @@ type CreatePremiseData = {
 const body : CreatePremiseData = {
     name: "",
     description: "",
-    adress: "",
+    address: "",
     type: "",
     capacity: 0,
 }
@@ -108,12 +108,12 @@ function CreatePremiseForm() {
                </div>
                <div style={{width:"50vw",display:"flex", justifyContent:"space-between", alignItems:"center"}}>
                 <TextField
-                        id="create-meeting-adress"
-                        label="Adresse"
+                        id="create-meeting-address"
+                        label="Addresse"
                         variant="outlined"
                         size="small"
                         style={{width: "30vw", marginBottom: "1em"}}
-                        onChange={e => updateFields({ adress: e.target.value })}
+                        onChange={e => updateFields({ address: e.target.value })}
                     />
                </div>
                <div style={{width:"50vw",display:"flex", justifyContent:"space-between", alignItems:"center"}}>

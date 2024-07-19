@@ -28,7 +28,7 @@ export function TermsOfServices() {
                         <p><strong>URL du site :</strong> www.arcadia-solution.com</p>
                         <p><strong>Éditeur du site :</strong></p>
                         <p>Arcadia</p>
-                        Adresse de l'association : 123 Rue des Étudiants, 75011 Paris, France<br/>
+                        Addresse de l'association : 123 Rue des Étudiants, 75011 Paris, France<br/>
                         Email : fausse.email@arcadia-solution.com<br/>
                         Téléphone : +33 1 23 45 67 89
 

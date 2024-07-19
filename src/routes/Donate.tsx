@@ -117,7 +117,7 @@ export function Donate() {
 
                                 <h1>Faire un don</h1>
                                 <p>Un grand merci pour votre aide !</p>
-                                <TextField label={"Votre adresse email"} value={customerEmail} type="email" required
+                                <TextField label={"Votre addresse email"} value={customerEmail} type="email" required
                                            name={"customerEmail"}
                                            onChange={(e) => setCustomerEmail(e.target.value)}></TextField>
                                 <h3>Choisissez un montant en euros:</h3>

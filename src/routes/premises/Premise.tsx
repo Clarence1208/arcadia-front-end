@@ -9,7 +9,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 interface Premise {
     name: string,
     description: string,
-    adress: string,
+    address: string,
     type: string,
     capacity: number,
 }
@@ -23,7 +23,7 @@ export function Premise({premise}: {premise: Premise}){
 
                 <h4>{premise.name}</h4>
                 <p>Type : {premise.type}</p>
-                <p>Adresse : {premise.adress}</p>
+                <p>Addresse : {premise.address}</p>
                 <p>{premise.description}</p>
                 { userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
                     <p>Capacité : {premise.capacity} places</p> :

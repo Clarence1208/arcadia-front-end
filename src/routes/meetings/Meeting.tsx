@@ -21,7 +21,7 @@ interface Meeting {
 interface Premise {
     name: string,
     description: string,
-    adress: string,
+    address: string,
     type: string,
     capacity: number,
 }
