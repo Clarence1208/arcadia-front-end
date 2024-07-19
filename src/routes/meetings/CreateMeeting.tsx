@@ -220,7 +220,7 @@ function CreateMeetingForm() {
     }
 
     return (
-        <div id="create-meeting" className="main">
+        <div id="create-meeting" className="main" style={{height: "80vh"}}>
             <Snackbar
                 open={open}
                 autoHideDuration={3000}
@@ -236,7 +236,7 @@ function CreateMeetingForm() {
             </Snackbar>
 
             {isPremiseLoaded && 
-            <Paper elevation={1} className={"paper"} >
+            <Paper elevation={1} className={"paper"} sx={{height: "70vh"}} >
             <h1><Groups3 fontSize={"large"}/> Créer une Assemblée Générale</h1>
             <form id="create-meeting-form" onSubmit={onSubmit}>
 
@@ -323,6 +323,7 @@ function CreateMeetingForm() {
                 variant="contained" 
                 color="primary"
                 onClick={onSubmit}
+                sx={{marginTop: "2em"}}
                 >
                     Soumettre
                 </Button>

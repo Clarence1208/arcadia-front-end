@@ -21,10 +21,10 @@ export function Premise({premise}: {premise: Premise}){
 
             <div className="meeting-content">
 
-                <h4>{premise.name}</h4>
+                <h4>Nom : {premise.name}</h4>
                 <p>Type : {premise.type}</p>
                 <p>Addresse : {premise.address}</p>
-                <p>{premise.description}</p>
+                <p>Description : {premise.description}</p>
                 { userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") ?
                     <p>Capacité : {premise.capacity} places</p> :
                     null
