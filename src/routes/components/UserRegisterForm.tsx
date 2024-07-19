@@ -99,7 +99,7 @@ export function UserRegisterForm(props: UserFormProps){
                     />
                 </div>
 
-                {userSession?.roles.includes("admin") &&
+                {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")) &&
                     <div>
                         <InputLabel id="role-select-label">Rôle</InputLabel>
                         <Select className="form-input" variant="outlined" label="Role" value={props.roles} style={{width: "13vw"}} onChange={e => props.updateFields({roles: e.target.value})}>
@@ -111,7 +111,8 @@ export function UserRegisterForm(props: UserFormProps){
                             <MenuItem value="treasurer">Trésorier</MenuItem>
                             
                         </Select>
-                    </div>}
+                    </div>
+                }
 
                 <DatePicker
                     className="form-input"
