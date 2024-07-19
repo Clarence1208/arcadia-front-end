@@ -14,9 +14,6 @@
     margin: 0;
 }
 
-.create-article {
-    margin-bottom: 2vh;
-}
 .articles-list{
     display: flex;
     flex-direction: row;

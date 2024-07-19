@@ -141,7 +141,7 @@ function CreateArticleForm() {
     };
 
     return (
-        <div id="create-article" className="main">
+        <div id="create-article" className="main" style={{height: "80vh"}}>
                 <Snackbar
                     open={open}
                     autoHideDuration={3000}
@@ -159,8 +159,8 @@ function CreateArticleForm() {
                     <ArrowBack />
                     <p style={{marginLeft:"1em"}}>Retour</p>
                 </div>
-                <Paper elevation={1} className={"paper"} >
-                <h2><FeedIcon />  Créer un article </h2>
+                <Paper elevation={1} className={"paper"} sx={{height: "70vh"}}>
+                <h1><FeedIcon />  Créer un article </h1>
                 <form id="create-article-form" onSubmit={onSubmit}>
                     <TextField
                         id="create-article-title" 
