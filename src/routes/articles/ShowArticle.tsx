@@ -71,10 +71,10 @@ export function ShowArticle() {
                     const check = value.Key.split("/");
                     if ((check[0] === config.associationName) && (check[1] === "articles") && (check[2] === article?.id.toString())) {
                         setFile("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
+                        console.log("https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value?.Key);
                         return;
                     }
                 });
-                setFile("");
             } catch (error) {
                 setErrorMessage("Erreur : " + error);
                 setOpen(true);

@@ -193,6 +193,7 @@ function CreateArticleForm() {
                         variant="contained"
                         tabIndex={-1}
                         startIcon={<FileUpload />}
+                        sx={{ mt: 1, mb: 1 }}
                     >
                         Ajouter un média (jpg, png, jpeg, bmp, webp)
                         <VisuallyHiddenInput
@@ -207,6 +208,7 @@ function CreateArticleForm() {
                     variant="contained" 
                     color="primary"
                     onClick={onSubmit}
+                    sx={{ mt: 1, mb: 1 }}
                     >
                         Soumettre
                     </Button>
