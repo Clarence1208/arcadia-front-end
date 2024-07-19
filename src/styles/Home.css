@@ -1,5 +1,51 @@
 .home{
     display: flex;
-    align-items: center;
+    flex-direction: column !important;
     justify-content: space-around;
+    min-height: 120vh;
+}
+
+.quote{
+    display: flex;
+    min-width: 100%;
+    min-height: 15vh;
+}
+
+.quote-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 80%
+}
+.logo-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 20%;
+    max-height: 15vh;
+    border: solid 1px;
+}
+.cta-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    min-width: 100%;
+    min-height: 20vh;
+}
+#about-home{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    min-width: 100%;
+    min-height: 50vh;
+}
+
+.text-home{
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
 }

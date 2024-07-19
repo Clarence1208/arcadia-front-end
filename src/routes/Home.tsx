@@ -4,7 +4,7 @@ import {Chatbot} from "./components/Chatbot";
 import mainPic from "../images/template_home_pic.jpg";
 import "../styles/Home.css";
 import {useContext, useEffect, useState} from "react";
-import {Alert, Snackbar} from "@mui/material";
+import {Alert, Button, Snackbar, useTheme} from "@mui/material";
 import {listFilesS3} from "../utils/s3";
 import {ConfigContext} from "../index";
 import {_Object} from "@aws-sdk/client-s3";
@@ -24,6 +24,7 @@ export function Home() {
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const config = useContext(ConfigContext);
+    const theme = useTheme();
     const [data, setData] = useState<string[]>([]);
 
     useEffect(() => {
@@ -86,7 +87,7 @@ export function Home() {
             <div>
                 <Header />
                 {isPageLoaded &&
-                <div>
+                <div className="main">
                     <Snackbar
                     open={open}
                     autoHideDuration={3000}
@@ -100,13 +101,31 @@ export function Home() {
                         sx={{width: '100%'}}
                     >{errorMessage}</Alert>
                 </Snackbar>
-                        <div className={"main home"}>
-                            <div>
-                                <h1>{config.associationName}</h1>
-                                <h1>{data[0]}</h1>
-                                <h3>{data[1]}</h3>
-                            </div>
-                            <img src={image ? image : mainPic} alt="main-pic" />
+                        <div className={"home"}>
+                            <section className="quote">
+                                <div className="quote-div" style={{backgroundColor: theme.palette.primary.main, color: "white"}}>
+                                    <p>{data[0]}</p>
+                                    <b>- {config.associationName}</b>
+                                </div>
+                                <div className="logo-div" style={{borderColor: theme.palette.primary.main}}>
+                                    <img src={image ? image : mainPic} alt="logo" style={{maxHeight:"15vh"}}/>
+                                </div>
+                            </section>
+                            <section className="cta-section">
+                                <h2>{data[1]}</h2>
+                                <Button variant="contained" style={{minWidth: "20vw", minHeight: "5vh"}} href="/donate">Je fais un don !</Button>
+                            </section>
+                            <section id="about-home">
+                                <img src={image ? image : mainPic} alt="main-pic"  />
+                                <div className="text-home">
+                                    <h2>Qui sommes-nous ?</h2>
+                                    <p>
+                                      Nous sommes intimement convaincus qu’un enfant qui vit ses passions et réalise ses rêves est un enfant qui trouve un surplus d’énergie pour affronter la maladie. Le personnel médical des 150 services hospitaliers avec lesquels nous collaborons au quotidien confirme d’ailleurs que le rêve aide leurs petits patients à se sentir mieux émotionnellement et parfois même physiquement.
+                                        <br/><br/>
+                                      L’Association est la seule association en France à réaliser plusieurs rêves pour un même enfant malade si son état le nécessite, en fonction de l'évolution de sa pathologie et de ses traitements. Les bénévoles de l’Association sont en contact régulier avec les enfants, leur famille et le personnel médical pour assurer un soutien dans la durée.
+                                    </p>
+                                </div>
+                            </section>
                         </div>
                     <Chatbot />
                 </div>
