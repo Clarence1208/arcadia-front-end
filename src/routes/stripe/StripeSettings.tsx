@@ -141,16 +141,16 @@ export default function StripeSettings() {
                         </Button>
                     }
 
+                </div>
+
+                :
+                <div>
                     <Button
                         variant="contained"
                         onClick={handleStripeAccountLink}
                     >Modifier les informations du compte Stripe (ouvre un nouvel onglet)
                     </Button>
 
-                </div>
-
-                :
-                <div>
                     <Button
                         variant="contained"
                         onClick={() => window.location.href = `https://dashboard.stripe.com/login`}
