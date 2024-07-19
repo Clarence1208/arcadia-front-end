@@ -174,7 +174,6 @@ export function DocumentListAdmin() {
         const file = event.target.files?.[0];
         if (file) {
             fileRef.current = file;
-            console.log('File reference:', fileRef.current);
             uploadFile(directory);
         }
     };
@@ -188,7 +187,6 @@ export function DocumentListAdmin() {
             await timeout(100);
             setUploaded(!uploaded);
         } catch (error) {
-            console.error("Error uploading file: ", error);
             setErrorMessage("Erreur lors du chargement du file: " + error);
             setOpen(true);
         }
@@ -204,7 +202,6 @@ export function DocumentListAdmin() {
             await timeout(100);               
             setUploaded(!uploaded);
         } catch (error) {
-            console.log(error)
             setErrorMessage("Erreur lors de la supression du fichier: " + error);
             setOpen(true);
         }

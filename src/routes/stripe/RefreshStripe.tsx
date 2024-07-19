@@ -28,7 +28,6 @@ export function RefreshStripe(){
                 window.location.href = url;
             })
             .catch((error) => {
-                console.error("Error:", error);
                 setError(true);
             });
     }

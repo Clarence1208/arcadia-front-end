@@ -156,7 +156,6 @@ export function LogIn() {
     }, []);
 
     if (sessionContext?.userSession.isLoggedIn) {
-        console.log("User is already logged in")
         navigate("/")
     }
 

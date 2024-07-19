@@ -40,8 +40,7 @@ export function CreateMembershipModal({accountId, setMemberships, memberships, o
         })
     }
     async function onSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        console.log(data)
+        e.preventDefault();
 
         const bearer = "Bearer " + loginToken;
         const response: Response = await fetch( config.apiURL+"/stripe/memberships?accountId="+accountId, {
@@ -53,13 +52,13 @@ export function CreateMembershipModal({accountId, setMemberships, memberships, o
             }
         });
         if (!response.ok) {
-            const error =  await response.json()
+            const error =  await response.json();
             setErrorMessage("Erreur : " + await error.message);
-            setOpenError(true)
+            setOpenError(true);
             return;
         }
         const setting = await response.json() //new setting
-        setMemberships([...memberships, setting])
+        setMemberships([...memberships, setting]);
         setErrorMessage("Adhésion créée avec succès");
         setOpenError(true);
         handleClose();

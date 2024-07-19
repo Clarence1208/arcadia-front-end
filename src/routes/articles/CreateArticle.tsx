@@ -78,7 +78,6 @@ function CreateArticleForm() {
         try {
             await uploadToS3(fileRef.current!, key);
         } catch (error) {
-            console.error("Error uploading file: ", error);
             setErrorMessage("Erreur lors du chargement du file: " + error);
             setOpen(true);
         }

@@ -75,7 +75,6 @@ export function MySubscription(){
                 }
                 setErrorMessage("Abonnement annulé avec succès.");
             }catch (e){
-                console.log(e);
                 setErrorMessage("Erreur" + e)
             }finally {
                 setOpen(true);
@@ -115,7 +114,6 @@ export function MySubscription(){
                     return {};
                 }
                 const data: Subscription = await response.json();
-                console.log(data);
                 return data;
 
             } catch (e) {
@@ -130,7 +128,6 @@ export function MySubscription(){
             const bearer = "Bearer " + userSession?.loginToken;
             const customerId = userSession?.customerId;
             const userId = userSession?.userId;
-            console.log("invoices fetching");
             if (!customerId || !connectedAccountId){
                 return;
             }
@@ -146,7 +143,6 @@ export function MySubscription(){
                     return;
                 }
                 const data = await response.json();
-                console.log(data);
                 return data;
 
             } catch (e) {

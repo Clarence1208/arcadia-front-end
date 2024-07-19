@@ -217,7 +217,6 @@ export function ListMemberships({
                 }
             );
             const data = await response.json();
-            console.log(data)
             return data;
         }
 

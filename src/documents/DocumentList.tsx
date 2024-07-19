@@ -90,7 +90,6 @@ export function DocumentList() {
                     const check = value.Key.split("/");
                     if ((check[0] === config.associationName) && (check[1] === "users") && (check[2] === String(userSession?.userId))) {
                         setUserFiles((prev) => {
-                            console.log(value)
                             if (!prev.some(existingFile => existingFile.Key === check[3]) && check[3].includes(privateSearch)) {
                                 const name = check.slice(3).join("/");
                                 return [...prev, {Key: name, publicUrl: "https://arcadia-bucket.s3.eu-west-3.amazonaws.com/" + value.Key}];
@@ -109,7 +108,6 @@ export function DocumentList() {
                     }
                 });
             } catch (error) {
-                console.error('List error:', error);
                 setErrorMessage("Erreur : " + error);
                 setOpen(true);
             }
@@ -120,14 +118,7 @@ export function DocumentList() {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            console.log('File details:', {
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                lastModified: file.lastModified,
-            });
             fileRef.current = file;
-            console.log('File reference:', fileRef.current);
             uploadFile();
         }
     };
@@ -151,7 +142,6 @@ export function DocumentList() {
             await timeout(100);
             setUploaded(!uploaded);
         } catch (error) {
-            console.error("Error uploading file: ", error);
             setErrorMessage("Erreur lors du chargement du file: " + error);
             setOpen(true);
         }
@@ -161,14 +151,12 @@ export function DocumentList() {
         const key = config.associationName + '/' + directory + "/" + fileName;
 
         try {
-            console.log("Deleting file:", key)
             await deleteToS3(key);
             setErrorMessage("Fichier supprimé avec succès.");
             setOpen(true);
             await timeout(100);               
             setUploaded(!uploaded);
         } catch (error) {
-            console.log(error)
             setErrorMessage("Erreur lors de la supression du fichier: " + error);
             setOpen(true);
         }
@@ -188,8 +176,6 @@ export function DocumentList() {
     }
 
     const handleDownload = async (url: string, fileName: string) => {
-        console.log('Downloading file:', url);
-        console.log('File name:', fileName);
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -217,7 +203,6 @@ export function DocumentList() {
 
     const showImage = (url: string) => {
         setImage(url);
-        console.log("Image url:", url);
         setOpenModal(true);
     }
 

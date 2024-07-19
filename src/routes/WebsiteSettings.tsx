@@ -152,8 +152,7 @@ function EditSettingModal({settings, setSettings,setting, open, handleClose, log
         }
     }
     async function onSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        console.log("updatiiing")
+        e.preventDefault();
 
         const bearer = "Bearer " + loginToken;
         const response: Response = await fetch( config.apiURL + "/websiteSettings/"+data?.id, {
@@ -382,7 +381,6 @@ export function WebsiteSettings() {
             setErrorMessage("Fichier chargé avec succès");
             setOpenError(true);
         } catch (error) {
-            console.error("Error uploading file: ", error);
             setErrorMessage("Erreur lors du chargement du file: " + error);
             setOpenError(true);
         }
@@ -396,7 +394,6 @@ export function WebsiteSettings() {
             setErrorMessage("Fichier supprimé avec succès.");
             setOpenError(true);
         } catch (error) {
-            console.log(error)
             setErrorMessage("Erreur lors de la supression du fichier: " + error);
             setOpenError(true);
         }

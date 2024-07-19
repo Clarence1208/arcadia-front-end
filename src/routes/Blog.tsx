@@ -64,7 +64,6 @@ export function Blog() {
                 });
                 if (!response.ok) {
                     const error = await response.json();
-                    console.log(error);
                     setFlashMessage("Erreur : " + await error.message);
                     return [];
                 }

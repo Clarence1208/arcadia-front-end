@@ -47,7 +47,6 @@ export function MemberDashboard(){
         setTimeout(() => {
             setIsPageLoaded(true);
         }, 100);
-        console.log(userSession)
     }, []);
 
     if (!userSession?.isLoggedIn) {

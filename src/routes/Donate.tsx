@@ -39,7 +39,6 @@ export function Donate() {
     }, [isDataFetched]);
 
     async function getSettings() {
-        console.log(userSession);
         const response = await fetch(`${config.apiURL}/websiteSettings`);
         const data: WebSetting[] = await response.json();
         return data.find(item => item.name === 'stripe_account_id')?.value || "";
@@ -52,16 +51,14 @@ export function Donate() {
         }, []
     )
 
-    const stripePromise = loadStripe("pk_test_51PPPaZBvbnM6p69y9VGLCmAkev3tT3Plbw8JPtnf78iiJxiGtsTXNPOEPn3M9OktpiKeuTqx1XwcoKoVUty97nr600GCnOjcBt",
+    const stripePromise = loadStripe("pk_live_51PPPaZBvbnM6p69y7vH2KFYTrszO7Mu94ZlkdSl2hJqk4nJszkBoCEM26kytyJLg1Wk4W6YJ33YwjUjcaenutVqj005pVjqnpO",
         {
             stripeAccount: connectedAccountId
         });
 
     const handlePayButton1 = async (e: FormEvent) => {
         e.preventDefault();
-        initiatePayment(amount).then(() => {
-            console.log("Payment intent reloaded")
-        });
+        await initiatePayment(amount);
     }
 
     const handleFreeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {

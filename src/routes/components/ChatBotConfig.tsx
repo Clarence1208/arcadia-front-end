@@ -51,7 +51,6 @@ function ChatBotConfigForm() {
                 });
                 if (!response.ok) {
                     const error = await response.json()
-                    console.log(error)
                     setErrorMessage("Erreur : " + await error.message);
                     setOpen(true)
                     return []

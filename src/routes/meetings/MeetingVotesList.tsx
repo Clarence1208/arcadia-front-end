@@ -76,7 +76,6 @@ export function MeetingVotesList() {
                 }
                 const res = await response.json();
                 if (res.length === 0) {
-                    console.log("Aucun site web trouvé")
                     setErrorMessage("Aucun site web trouvé")
                 }
                 return res;

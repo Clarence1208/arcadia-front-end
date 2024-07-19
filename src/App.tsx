@@ -60,7 +60,6 @@ function App() {
             }
             const response = await fetch(`${config.apiURL}/websiteSettings`);
             const data : WebSetting[] = await response.json();
-            console.log(data)
             const primaryColor = data.find( item => item.name === 'primaryColor');
             const secondaryColor = data.find( item => item.name === 'secondaryColor');
             return [(primaryColor ? primaryColor.value : DEFAULT_PRIMARY_COLOR) , (secondaryColor ? secondaryColor.value : '#f5f5f5')];

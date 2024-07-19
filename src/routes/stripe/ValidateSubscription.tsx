@@ -66,7 +66,6 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
     const config = useContext(ConfigContext);
     const [updateUser, setUpdateUser] = useState(false);
 
-    console.log(userSession)
     async function changeRole(userId: number, role: string) {
         //UPDATE USER ROLE
         const res = await fetch(`${config.apiURL}/users/${userId}`, {
@@ -107,7 +106,6 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
             .then(({paymentIntent}) => {
                 switch (paymentIntent?.status) {
                     case 'succeeded':
-                        console.log("Succeeded")
                         setMessage("Vous avez bien souscrit à la cotisation pour l'association. Vous recevrez un email de confirmation dès que la transaction sera effectuée.");
 
                         if (!userSession?.userId){
@@ -132,7 +130,6 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
             })
 
             .catch((error) => {
-                console.error(error);
                 setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer putain?');
             });
 

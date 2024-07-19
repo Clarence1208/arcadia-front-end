@@ -95,7 +95,6 @@ export function Register(){
             return;
         }
         sendEmail(userData)
-        console.log(userSession?.roles)
         if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin")) {
             navigate('/adminDashboard?successMessage=true')
         }else{

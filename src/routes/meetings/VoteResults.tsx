@@ -115,7 +115,6 @@ export function VoteResults() {
         } else {
             if (vote?.eliminationPerRound) {
                 getRemainingVoteChoices(vote, voteChoices);
-                console.log(winners);
             } else {
                 if (vote) {
                     getWinners(vote, voteChoices);
@@ -181,14 +180,12 @@ export function VoteResults() {
         setIsLastVote(true);
         const updatedWinners: VoteChoice[] = [];
         for (let i = 0; i < voteChoices.length; i++) {
-            console.log(voteChoices[i].users.length);
             if (i < vote.nbWinners) {
                 if (voteChoices[i]) {
                     updatedWinners.push(voteChoices[i]);
                 }
             } else {
                 if (voteChoices[i].users.length == voteChoices[i-1].users.length) {
-                    console.log(voteChoices[i].users.length + " " + voteChoices[i-1].users.length);
                     updatedWinners.push(voteChoices[i]);
                 } else {
                     setWinners(updatedWinners);

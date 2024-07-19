@@ -51,7 +51,6 @@ export function Chatbot() {
             });
             if (!response.ok) {
                 const error = await response.json()
-                console.log(error)
                 setErrorMessage("Erreur : " + await error.message);
                 setOpen(true)
                 return []
@@ -93,7 +92,6 @@ export function Chatbot() {
                 model: "gpt-3.5-turbo"
             }));
         }catch (error){
-            console.error(error);
             setErrorMessage("Erreur de l'API OpenAI");
             setOpen(true)
         }
@@ -102,7 +100,6 @@ export function Chatbot() {
         try {
             setThread(await openai.beta.threads.create());
         }catch (error){
-            console.error(error);
             setErrorMessage("Erreur de l'API OpenAI");
             setOpen(true)
         }
@@ -149,7 +146,6 @@ export function Chatbot() {
             }
 
         }catch (error){
-            console.error(error);
             setErrorMessage("Erreur de l'API OpenAI");
             setOpen(true)
         }

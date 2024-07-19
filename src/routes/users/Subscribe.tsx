@@ -61,7 +61,6 @@ export function Subscribe(){
     const [connectedAccountId, setConnectedAccountId] = useState<string>("");
     const navigate = useNavigate() ;
 
-    console.log(userSession)
     const selectItem = (item: MembershipDTO) => {
         if (selectedMembership?.id === item.id) {
             setSelectedMembership(null);
@@ -105,13 +104,11 @@ export function Subscribe(){
         });
 
         if (!response.ok) {
-            const error: CustomError = await response.json()
-            console.log(error)
-            return
+            const error: CustomError = await response.json();
+            return;
         }
 
         const data: StripeData = await response.json();
-        console.log(data)
         navigate("/users/subscribe/"+ data.subscriptionId +"/"+ data.clientSecret +"?priceId="+ data.priceId + "&accountId=" + connectedAccountId)
     }
 
