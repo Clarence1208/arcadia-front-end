@@ -139,7 +139,7 @@ export function Dashboard() {
                         <Button href="/createPremise" variant="contained" color="primary" endIcon={ <AddBoxIcon></AddBoxIcon>}>Créer une nouvelle salle</Button>
                             <PremisesList />
                     </TabPanel>
-                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin")) &&
                     <TabPanel value={tabsValue} index={4}>
                         <WebsiteSettings/>
                     </TabPanel>
@@ -151,7 +151,7 @@ export function Dashboard() {
                             </div>
                         </TabPanel>
                     }
-                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin")) &&
                     
                         <TabPanel value={tabsValue} index={6}>
                             <div className="board-chatbot">
