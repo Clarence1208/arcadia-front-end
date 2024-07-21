@@ -97,6 +97,13 @@ export function PaymentStatus({clientSecret}: any) {
                         break;
 
                     default:
+                        const status = new URLSearchParams(window.location.search).get(
+                            'redirect_status'
+                        );
+                        if (status === "succeeded"){
+                            setMessage("Merci de votre don ! La transaction a été effectuée avec succès ! Vous allez recevoir un reçu par mail.");
+                            setFetched(true);
+                        }
                         setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer. ' + paymentIntent?.status);
                         break;
                 }
