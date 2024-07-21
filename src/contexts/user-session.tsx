@@ -37,8 +37,6 @@ export const UserSessionProvider: FC<IProps> = ({ children }) => {
         const storedUserSession = localStorage.getItem("userSession");
         if (storedUserSession) {
             setUserSession(JSON.parse(storedUserSession));
-        }else{
-            console.warn("no user session exists")
         }
     }, []);
 

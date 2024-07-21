@@ -37,13 +37,9 @@ export default function StripeSettings() {
     });
 
     async function getStripeAccount() {
-        try {
-            const response = await fetch(`${config.apiURL}/websiteSettings`);
-            const data: WebSetting[] = await response.json();
-            return data.find(item => item.name === 'stripe_account_id')?.value || null;
-        } catch (e) {
-            console.warn(e)
-        }
+        const response = await fetch(`${config.apiURL}/websiteSettings`);
+        const data: WebSetting[] = await response.json();
+        return data.find(item => item.name === 'stripe_account_id')?.value || null;
     }
 
     async function createStripeAccount() {
@@ -101,9 +97,7 @@ export default function StripeSettings() {
             getStripeAccount().then(data => {
                 //@ts-ignore
                 setConnectedAccountId(data)
-            }).catch((e) => {
-                console.warn(e)
-            })
+            });
         }, []
     )
     return (

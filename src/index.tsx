@@ -17,8 +17,6 @@ const RootComponent = () => {
     useEffect(() => {
         fetchConfig().then(data => {
             setConfig(data);
-        }).catch(error => {
-            console.error("Error fetching Arcadia configuration:", error);
         });
     }, []);
 

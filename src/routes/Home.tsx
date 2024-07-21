@@ -67,7 +67,6 @@ export function Home() {
                     showChatbot ? showChatbot.value : "false"
                 ];
             }catch (e) {
-                console.warn(e)
                 return [];
             }
         }

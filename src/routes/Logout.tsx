@@ -1,12 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import {Home} from "./Home";
 
 export function Logout(){
-    try {
-        localStorage.removeItem("userSession")
-    }catch (e){
-        console.error(e)
-    }
+    localStorage.removeItem("userSession")
 
     window.location.href = "/"
     return <Home />

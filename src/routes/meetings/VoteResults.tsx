@@ -65,39 +65,33 @@ export function VoteResults() {
             }
             if (userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager")) {
                 const fetchData = async () => {
-                    try {
-                        const bearer = "Bearer " + userSession?.loginToken;
-                        
-                        // Fetch vote information
-                        const voteResponse = await fetch(`${config.apiURL}/votes/${voteId}`, {
-                            method: "GET",
-                            headers: {
-                                "Authorization": bearer,
-                                "Content-Type": "application/json"
-                            }
-                        });
-                        if (!voteResponse.ok) {
-                            console.error("Error fetching vote data");
-                            return;
+                    const bearer = "Bearer " + userSession?.loginToken;
+                    
+                    // Fetch vote information
+                    const voteResponse = await fetch(`${config.apiURL}/votes/${voteId}`, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": bearer,
+                            "Content-Type": "application/json"
                         }
-                        setVote(await voteResponse.json());
-        
-                        // Fetch vote choices
-                        const voteChoicesResponse = await fetch(`${config.apiURL}/votes/${voteId}/voteChoices?type=Vote`, {
-                            method: "GET",
-                            headers: {
-                                "Authorization": bearer,
-                                "Content-Type": "application/json"
-                            }
-                        });
-                        if (!voteChoicesResponse.ok) {
-                            console.error("Error fetching vote choices");
-                            return;
-                        }
-                        setVoteChoices(await voteChoicesResponse.json());
-                    } catch (error) {
-                        console.error("Error fetching data", error);
+                    });
+                    if (!voteResponse.ok) {
+                        return;
                     }
+                    setVote(await voteResponse.json());
+    
+                    // Fetch vote choices
+                    const voteChoicesResponse = await fetch(`${config.apiURL}/votes/${voteId}/voteChoices?type=Vote`, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": bearer,
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    if (!voteChoicesResponse.ok) {
+                        return;
+                    }
+                    setVoteChoices(await voteChoicesResponse.json());
                 }
                 fetchData();
             }
