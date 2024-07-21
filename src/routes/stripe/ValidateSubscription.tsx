@@ -33,7 +33,7 @@ export function ValidateSubscription(){
         }, []
     )
 
-    const stripePromise = loadStripe(config.stripePublicKey,
+    const stripePromise = loadStripe("pk_live_51PPPaZBvbnM6p69y7vH2KFYTrszO7Mu94ZlkdSl2hJqk4nJszkBoCEM26kytyJLg1Wk4W6YJ33YwjUjcaenutVqj005pVjqnpO",
         {
             stripeAccount: connectedAccountId
         }
