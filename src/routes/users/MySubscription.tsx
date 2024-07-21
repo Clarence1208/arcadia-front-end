@@ -54,7 +54,6 @@ export function MySubscription(){
         return data.find(item => item.name === 'stripe_account_id')?.value || "";
     }
 
-
     const confirmCancel = async (subscriptionID: string | undefined) => {
         if (window.confirm("Voulez-vous vraiment vous désabonner ? Vous n'aurez plus accès aux services de l'association.")){
             // Call the API to cancel the subscription
@@ -149,6 +148,10 @@ export function MySubscription(){
             } catch (e) {
                 setErrorMessage("Erreur de récupération des données.");
                 setOpen(true);
+                return {
+                    invoices: [],
+                    payments: []
+                };
             }
         }
 
@@ -159,8 +162,9 @@ export function MySubscription(){
             setInvoices(data.invoices);
             setPayments(data.payments);
             setPageLoaded(true);
+        }).catch((e) => {
+            setPageLoaded(true);
         });
-
     }, [isDataFetched]);
 
     return (

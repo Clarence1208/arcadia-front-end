@@ -4,7 +4,7 @@ import {Footer} from "../components/Footer";
 import {Elements, useStripe} from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 import {ConfigContext} from "../../index";
-import {Link} from "@mui/material";
+import {Button, Link} from "@mui/material";
 
 type WebSetting = {
     name: string,
@@ -114,6 +114,10 @@ export function PaymentStatus({clientSecret}: any) {
         <div>
             <h1>Statut du paiement</h1>
             <p>{message}</p>
+            <br/><br/>
+            <Link href="/donate">Retour à la page de don</Link>
+            <br/><br/>
+            <Button variant="contained" href="/register">Devenir adhérent ?</Button>
         </div>
     );
 }
