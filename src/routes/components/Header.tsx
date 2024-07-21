@@ -1,6 +1,6 @@
 import '../../styles/Header.css';
 import logo from '../../images/logo.png';
-import {Link} from "@mui/material";
+import {Button, Link} from "@mui/material";
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -30,15 +30,15 @@ function LogInOutButton() {
     const userIsLoggedIn = userSession?.userSession.isLoggedIn;
     if (userIsLoggedIn) {
         return (
-            <a className="icon" href={"/logout"}>
+            <Button className="icon" href={"/logout"}>
                 <PersonRemoveAlt1Icon  fontSize={"large"} />
-            </a>
+            </Button>
         )
     }else{
         return (
-            <a href={"/login"}>
+            <Button href={"/login"}>
                 <PersonOutlineIcon className="icon" fontSize={"large"} />
-            </a>
+            </Button>
         )
     }
 }
