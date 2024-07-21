@@ -33,9 +33,7 @@ export default function StripePayementForm({amount, clientSecret}: FormProps) {
                 setErrorMessage(error.message || "Une erreur indéfinie est survenue");
                 setOpen(true);
             }
-        } else {
-            console.log("Stripe or elements not loaded")
-        }
+        } 
     }
 
     return (

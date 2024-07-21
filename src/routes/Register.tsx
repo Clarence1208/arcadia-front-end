@@ -71,11 +71,6 @@ export function Register(){
             emailTo: userData.email,
             message: "Merci d'avoir créé un compte sur notre site, vous pouvez dès à présent vous connecter et payer votre cotisation pour accéder à votre espace adhérent."
         }, import.meta.env.VITE_MAIL_PUBLIC_KEY)
-            .then((result) => {
-                console.log(result.text);
-            }, (error) => {
-                console.log(error.text);
-            });
     }
 
     async function createUser(userData: FormData): Promise<any> {

@@ -163,11 +163,6 @@ function CreateMeetingForm() {
                     emailTo: user.email,
                     message: `Une nouvelle assemblée générale '${meeting.name}' a été créée, vous êtes invité à y participer. Elle aura lieu le ${date} de ${startHour} à ${endHour}.`
                 }, import.meta.env.VITE_MAIL_PUBLIC_KEY)
-                    .then((result) => {
-                        console.log(result.text);
-                    }, (error) => {
-                        console.log(error.text);
-                    });
             }
         }
     }

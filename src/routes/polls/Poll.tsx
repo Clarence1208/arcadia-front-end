@@ -45,8 +45,6 @@ export function Poll({poll}: PollProps){
     if(poll.users === undefined){
         poll.users = []
     }
-
-    console.log(poll)
     const userInPoll = poll.users.find(user => user.id === userSession?.userId)
 
     async function onSubmit(e: FormEvent, poll: Poll) {
