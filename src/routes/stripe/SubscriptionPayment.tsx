@@ -15,7 +15,7 @@ export function SubscriptionPayment(){
     const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     const stripePromise =
-        loadStripe(config.stripePublicKey,{
+        loadStripe("pk_live_51PPPaZBvbnM6p69y7vH2KFYTrszO7Mu94ZlkdSl2hJqk4nJszkBoCEM26kytyJLg1Wk4W6YJ33YwjUjcaenutVqj005pVjqnpO",{
         stripeAccount: connectedAccountId
         });
 
