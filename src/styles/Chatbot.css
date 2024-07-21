@@ -76,15 +76,14 @@
     padding: 0.5em 1em;
     border-radius: 8px;
     min-width: 50%;
-
 }
+
 .assistant{
     background-color: rgba(152, 148, 148, 0.27);
-    color: #074032;
+    color: var(--dark-grey-text);
 }
 
 .user{
-    background-color: #074032;
     color: #F5F5F5;
 }
 

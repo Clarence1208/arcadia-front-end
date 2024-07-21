@@ -43,7 +43,7 @@ export function ValidateSubscription(){
         return (
             <div>
                 <h1>Erreur</h1>
-                <Link href="/users/subscribe">Retour à la page d'abonnement</Link>
+                <Link href="/users/subscribe">Retour à la page des cotisations</Link>
             </div>
         );
     }else {
@@ -65,6 +65,7 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
     const updateSession = useContext(UserSessionContext)?.updateUserSession;
     const config = useContext(ConfigContext);
     const [updateUser, setUpdateUser] = useState(false);
+    const [fetched, setFetched] = useState(false);
 
     async function changeRole(userId: number, role: string) {
         //UPDATE USER ROLE
@@ -100,6 +101,9 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
         if (!clientSecret) {
             return;
         }
+        if (fetched) {
+            return;
+        }
         // Retrieve the PaymentIntent
         stripe
             .retrievePaymentIntent(clientSecret)
@@ -113,6 +117,7 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
                             break;
                         }
                         setUpdateUser(true);
+                        setFetched(true);
                         break;
 
                     case 'processing':
@@ -130,7 +135,7 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
             })
 
             .catch((error) => {
-                setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer putain?');
+                setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer');
             });
 
     }, [stripe]);
@@ -144,7 +149,6 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
             }else{
                 setMessage("Une erreur est survenue lors de la mise à jour de votre compte. Veuillez contacter un administrateur.")
             }
-
         });
 
     }, [updateUser]);
@@ -156,7 +160,7 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
                 <p>Le paiement n'a pas pu être effectué. Veuillez réessayer.</p><br/>
                 <br/>
                 <br/>
-                <Link href="/users/subscribe">Retour à la page d'abonnement</Link>
+                <Link href="/users/subscribe">Retour à la page des cotisations</Link>
             </div>
         );
     }
@@ -164,7 +168,7 @@ export function SubscriptionStatus({clientSecret}: {clientSecret: string | null}
         <div>
             <Header/>
             <div className="main">
-                <h1>Validation de l'abonnement</h1>
+                <h1>Validation de la cotisation</h1>
                 <p>{message}</p>
                 <br/>
                 <Button variant="contained" color="primary" href="/memberDashboard">Accès au tableau de bord adhérent</Button>

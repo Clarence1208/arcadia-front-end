@@ -59,7 +59,7 @@ export function CreateMembershipModal({accountId, setMemberships, memberships, o
         }
         const setting = await response.json() //new setting
         setMemberships([...memberships, setting]);
-        setErrorMessage("Adhésion créée avec succès");
+        setErrorMessage("Cotisation créée avec succès");
         setOpenError(true);
         handleClose();
         return;
@@ -74,11 +74,11 @@ export function CreateMembershipModal({accountId, setMemberships, memberships, o
             id="modal-create-setting"
         >
             <Paper elevation={1} className={"paper"} >
-                <h1><Settings />  Créer une adhésion </h1>
+                <h1><Settings />  Créer une cotisation </h1>
                 <form id="settings-form" onSubmit={onSubmit} >
                     <TextField
                         id="create-membership-title"
-                        label="Nom de l'adhésion"
+                        label="Nom de la cotisation"
                         variant="outlined"
                         size="small"
                         style={{ width: "30vw"}}

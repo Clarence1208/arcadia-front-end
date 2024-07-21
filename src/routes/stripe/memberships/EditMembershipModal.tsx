@@ -86,7 +86,7 @@ export function EditMembershipModal({settings, setMemberships,setting, open, han
         }
 
         const setting = await response.json()
-        setErrorMessage("Adhésion modifié avec succès");
+        setErrorMessage("Cotisation modifié avec succès");
         setOpenError(true);
         handleClose();
         setMemberships(settings.map((s : MembershipDTO) => s.id === setting.id ? setting : s))
@@ -102,7 +102,7 @@ export function EditMembershipModal({settings, setMemberships,setting, open, han
             id="modal-edit-setting"
         >
             <Paper elevation={1} className={"paper"} >
-                <h1><Settings />  Editer l'adhésion </h1>
+                <h1><Settings />  Editer la cotisation </h1>
                 <form id="settings-form" onSubmit={onSubmit} >
                     <TextField
                         id="create-setting-title"

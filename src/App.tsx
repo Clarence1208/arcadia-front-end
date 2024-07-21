@@ -64,7 +64,6 @@ function App() {
             const secondaryColor = data.find( item => item.name === 'secondaryColor');
             return [(primaryColor ? primaryColor.value : DEFAULT_PRIMARY_COLOR) , (secondaryColor ? secondaryColor.value : '#f5f5f5')];
         }catch (e) {
-            console.warn(e)
             return [DEFAULT_PRIMARY_COLOR, DEFAULT_PRIMARY_COLOR];
         }
     }
@@ -74,14 +73,12 @@ function App() {
         const theme = createTheme({
             palette: {
                 primary: {
-                    main: DEFAULT_PRIMARY_COLOR, // DEFAULT COLOR
+                    main: DEFAULT_PRIMARY_COLOR,
                     dark: DEFAULT_PRIMARY_COLOR,
                 },
                 secondary: {
                     main: '#f5f5f5',
                 },
-
-                // Add more customizations as needed
             },
         });
         getConfiguration().then(data => {
@@ -116,8 +113,8 @@ function App() {
                             <Route path="/articles/:articleId" element={<ShowArticle/>}/>
                             <Route path="/articles/:articleId/edit" element={<EditArticle/>}/>
                             <Route path='/createMeeting' element={<CreateMeeting/>}/>
-                            <Route path='/meetings' element={<MeetingsListUser/>}/><Route path='/createPremise'
-                                                                                          element={<CreatePremise/>}/>
+                            <Route path='/meetings' element={<MeetingsListUser/>}/>
+                            <Route path='/createPremise' element={<CreatePremise/>}/>
                             <Route path='/meeting/:id/votes' element={<MeetingVotesList/>}/>
                             <Route path='/meeting/:id/createVote' element={<CreateMeetingVote/>}/>
                             <Route path='/meeting/:id/vote/:voteId' element={<MeetingVoteApply/>}/>
@@ -126,13 +123,11 @@ function App() {
                             <Route path='/poll/:id/results' element={<PollResults/>}/>
 
                             {/*STRIPE*/}
-
                             <Route path='/users/subscribe' element={<Subscribe />}/>
                             <Route path='/users/subscribe/:subscriptionId/:clientSecret' element={<SubscriptionPayment />}/>
                             <Route path='/stripe/validateSubscription' element={<ValidateSubscription />}/>
                             <Route path='/stripe/return' element={<ReturnStripeAccountPage />}/>
                             <Route path='/refresh/:id' element={<RefreshStripe />}/>
-
 
                             <Route path='*' element={<NotFound/>}/>
                         </Routes>
