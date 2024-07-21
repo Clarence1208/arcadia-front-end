@@ -215,6 +215,7 @@ export function MySubscription(){
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Date du paiement</TableCell>
+                                            <TableCell>Type</TableCell>
                                             <TableCell>Montant</TableCell>
                                             <TableCell>Status</TableCell>
                                             <TableCell>Facture</TableCell>
@@ -222,13 +223,14 @@ export function MySubscription(){
                                     </TableHead>
                                     <TableBody>
                                         {
-                                            invoices && invoices.map((invoice: any) => {
+                                            invoices && invoices.map((payment: any) => {
                                                 return (
-                                                    <TableRow key={invoice.id}>
-                                                        <TableCell>{new Date(invoice.created * 1000).toLocaleDateString()}</TableCell>
-                                                        <TableCell>{invoice.amount_paid/100} {invoice.currency}</TableCell>
-                                                        <TableCell>{invoice.status === "paid" ? "Finalisé": "Non-finalisé"}</TableCell>
-                                                        <TableCell><a href={invoice.invoice_pdf} target="_blank" rel="noreferrer"><Download color="primary"/></a></TableCell>
+                                                    <TableRow key={payment.id}>
+                                                        <TableCell>{new Date(payment.created * 1000).toLocaleDateString()}</TableCell>
+                                                        <TableCell>{payment.description.toUpperCase().includes("SUBSCRIPTION") ? "Cotisation" : "Don"}</TableCell>
+                                                        <TableCell>{payment.amount/100} {payment.currency}</TableCell>
+                                                        <TableCell>{payment.status === "paid" ? "Finalisé": "Non-finalisé"}</TableCell>
+                                                        <TableCell><a href={payment.invoice.invoice_pdf} target="_blank" rel="noreferrer"><Download color="primary"/></a></TableCell>
                                                     </TableRow>
                                                 )
                                             })
