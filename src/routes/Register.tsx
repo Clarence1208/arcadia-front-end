@@ -69,7 +69,7 @@ export function Register(){
             associationName: config.associationName,
             emailFrom: config.associationName + "@gmail.com",
             emailTo: userData.email,
-            message: "Merci d'avoir créé un compte sur notre site, vous pouvez dès à présent vous connecter et payer votre abonnement pour accéder à votre espace adhérent."
+            message: "Merci d'avoir créé un compte sur notre site, vous pouvez dès à présent vous connecter et payer votre cotisation pour accéder à votre espace adhérent."
         }, import.meta.env.VITE_MAIL_PUBLIC_KEY)
             .then((result) => {
                 console.log(result.text);

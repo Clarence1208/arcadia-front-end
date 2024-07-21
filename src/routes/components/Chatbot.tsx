@@ -4,7 +4,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import SendIcon from '@mui/icons-material/Send';
 import {ConfigContext} from "../../index";
-import { Alert, Button, CircularProgress, IconButton, TextField, Tooltip } from "@mui/material";
+import {Alert, Button, CircularProgress, IconButton, TextField, Tooltip, useTheme} from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import OpenAI from "openai";
 import { SyntheticEvent, useEffect, useState, useContext } from "react";
@@ -271,6 +271,7 @@ export function Chatbot() {
 
     function MessageBox({message, role, key}: {message: string, role: string, key: number}) {
 
+    const theme = useTheme();
     const config = useContext(ConfigContext);
 
     const APP_NAME = config.associationName;
@@ -284,7 +285,7 @@ export function Chatbot() {
     return (
             <div key={key} className={`message-box-${role}`}>
                 <p>{sender}</p>
-                <div className={`message ${role}`}>
+                <div className={`message ${role}`}  style={role !== "assistant" ? {backgroundColor: theme.palette.secondary.main} :{}}>
                     <p>{message}</p>
                 </div>
             </div>

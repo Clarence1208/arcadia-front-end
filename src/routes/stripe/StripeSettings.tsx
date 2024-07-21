@@ -247,7 +247,7 @@ export function ListMemberships({
             }
 
             const setting = await response.json()
-            setErrorMessage(`Adhésion rendu ${membership.active ? "inactive" : "active"} avec succès`);
+            setErrorMessage(`Cotisation rendue ${membership.active ? "inactive" : "active"} avec succès`);
             setOpenError(true);
             setMemberships(memberships.map((s : MembershipDTO) => s.id === setting.id ? setting : s))
             return;

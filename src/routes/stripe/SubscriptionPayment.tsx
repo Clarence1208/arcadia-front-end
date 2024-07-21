@@ -35,8 +35,7 @@ export function SubscriptionPayment(){
             <Header />
             {!isPageLoaded ? <div className="loading">Chargement...</div> :
             <div className="main">
-                <h1>Procéder au paiement de votre abonnement</h1>
-                {/*{DISPLAY SUBSCRIPTION INFO AGAIN}*/}
+                <h1>Procéder au paiement de votre cotisation</h1>
                 <Elements stripe={stripePromise} options={options}>
                     <PaymentForm />
                 </Elements>

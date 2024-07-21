@@ -72,10 +72,10 @@ export function MySubscription(){
                     },
                 });
                 if (!response.ok) {
-                    setErrorMessage("Erreur lors de la suppression de l'abonnement. Veuillez réessayer.");
+                    setErrorMessage("Erreur lors de la suppression de la cotisation. Veuillez réessayer.");
                     return;
                 }
-                setErrorMessage("Abonnement annulé avec succès.");
+                setErrorMessage("Cotisation annulé avec succès.");
             }catch (e){
                 setErrorMessage("Erreur" + e)
             }finally {
@@ -202,7 +202,7 @@ export function MySubscription(){
                                     </div>
 
                                     <p>Rappel: Chaque cotisation octroie les mêmes droits pour les adhérents.</p>
-                                    <Link href="/users/subscribe" style={{marginRight: "3em"}}>Changer de type d'abonnement</Link>
+                                    <Link href="/users/subscribe" style={{marginRight: "3em"}}>Changer le prix de ma cotisation</Link>
                                     <Button variant="contained" color="primary" onClick={() => confirmCancel(subscription.id)}>Se désabonner</Button>
 
                                 </div>
