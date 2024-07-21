@@ -54,7 +54,7 @@ function CreateMeetingVoteForm() {
         navigate('/login')
     }
 
-    if((!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))){
+    if((!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin") && !userSession?.roles.includes("manager"))){
         navigate('/')
     }
 

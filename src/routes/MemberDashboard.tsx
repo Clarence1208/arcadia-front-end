@@ -52,7 +52,7 @@ export function MemberDashboard(){
     if (!userSession?.isLoggedIn) {
         navigate("/login")
     }
-    else if (!userSession?.roles.includes("adherent") && ( !userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))){
+    else if (!userSession?.roles.includes("adherent") && !userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin") && !userSession?.roles.includes("manager") && !userSession?.roles.includes("tres") && !userSession?.roles.includes("contentmanager")){
         navigate("/users/subscribe")
     }
     const handleChange = (event: SyntheticEvent, newValue: number) => {
