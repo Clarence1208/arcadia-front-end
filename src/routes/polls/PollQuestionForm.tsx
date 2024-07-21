@@ -1,5 +1,5 @@
 import {Checkbox, FormControlLabel, TextField} from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type VoteChoice = {
     id: number,
@@ -32,18 +32,19 @@ export function PollQuestionForm(props : PollQuestionFormProps) {
 
     const [name, setName] = useState("")
 
+    useEffect(() => {
+        setName("")
+    } , [props.question])
+
     const isVoteChoiceChecked = (voteChoice: VoteChoice) => {
         return props.responses.some(response => response.id === voteChoice.id);
     };
 
-    const handleChangeName = (e: any) => {
-        if(name !== "") {
-            props.updateFields({id: 0, name: name, isAlive: false, step: props.question.step, type: "Poll", pollQuestion: props.question}, props.question.nbPossibleVotes)
+    const handleChangeName = (value: string) => {
+        if (value !== "") {
+            props.updateFields({id: 0, name: value, isAlive: false, step: props.question.step, type: "Poll", pollQuestion: props.question}, props.question.nbPossibleVotes)
         }
-        if (e.target.value !== "") {
-            props.updateFields({id: 0, name: e.target.value, isAlive: false, step: props.question.step, type: "Poll", pollQuestion: props.question}, props.question.nbPossibleVotes)
-        }
-        setName(e.target.value)
+        setName(value)
     }
 
     return (
@@ -65,7 +66,7 @@ export function PollQuestionForm(props : PollQuestionFormProps) {
                     <div>
                         <h4>Choix libre (faculatatif):</h4>
                             <label style={{marginRight: "1em"}}>Autre choix</label>
-                            <input type="text" onChange={e => handleChangeName(e)} />
+                            <input type="text" value={name} onChange={e => handleChangeName(e.target.value)} />
                     </div>
 
                 )}

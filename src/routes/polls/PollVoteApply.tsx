@@ -74,10 +74,14 @@ export function PollVoteApply() {
         setData(prev => {
             let responses = [...prev.responses];
             let stepResponses = 0;
-    
-            const existingIndex = responses.findIndex(voteChoice => voteChoice.id === voteChoiceData.id);
+
+            const existingIndex = responses.findIndex(voteChoice => (voteChoice.id === voteChoiceData.id && voteChoice.step === voteChoiceData.step));
             if (existingIndex !== -1) {
-                responses = responses.filter(voteChoice => voteChoice.id !== voteChoiceData.id);
+                const isSameName = responses[existingIndex].name === voteChoiceData.name;
+                responses = responses.filter((_, index) => index !== existingIndex);
+                if (!isSameName) {
+                    responses.push(voteChoiceData);
+                }
                 return { ...prev, responses };
             }
     
@@ -92,7 +96,7 @@ export function PollVoteApply() {
                 setOpen(true);
                 return prev;
             }
-    
+
             responses.push(voteChoiceData);
             return { ...prev, responses };
         });
@@ -164,7 +168,7 @@ export function PollVoteApply() {
         setOpen(false);
     };
 
-    async function onSubmit(e: FormEvent) {
+    async function onSubmit(e: FormEvent) { 
         e.preventDefault()
         if (userSession?.loginToken) {
             const bearer = "Bearer " + userSession?.loginToken;
