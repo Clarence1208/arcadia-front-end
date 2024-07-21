@@ -82,7 +82,6 @@ export function MySubscription(){
                 setOpen(true);
             }
         }else{
-
             return;
         }
     }
@@ -161,7 +160,6 @@ export function MySubscription(){
             setPayments(data.payments);
             setPageLoaded(true);
         });
-
 
     }, [isDataFetched]);
 
@@ -244,7 +242,7 @@ export function MySubscription(){
                                                         <TableCell>{new Date(payment.created * 1000).toLocaleDateString()}</TableCell>
                                                         <TableCell>Don</TableCell>
                                                         <TableCell>{payment.amount/100} {payment.currency}</TableCell>
-                                                        <TableCell>{payment.status === "paid" ? "Finalisé": "Non-finalisé"}</TableCell>
+                                                        <TableCell>{payment.status === "paid" || payment.status === "succeeded"? "Finalisé": "Non-finalisé"}</TableCell>
                                                         <TableCell>Envoyé par email</TableCell>
                                                     </TableRow>
                                                 )
