@@ -46,7 +46,7 @@ export default function ReturnStripeAccountPage() {
                     <Link href="/donate">Retour à la page de don</Link>
                     <br/>
                     <br/>
-                    <Link href="/users/subscribe">Retour à la page d'abonnement</Link>
+                    <Link href="/users/subscribe">Retour à la page des cotisations</Link>
                 </div>
                 <Footer/>
             </div>
@@ -69,9 +69,13 @@ export default function ReturnStripeAccountPage() {
 export function PaymentStatus({clientSecret}: any) {
     const stripe = useStripe();
     const [message, setMessage] = useState("");
+    const [fetched, setFetched] = useState(false);
 
     useEffect(() => {
         if (!stripe) {
+            return;
+        }
+        if (fetched){
             return;
         }
         // Retrieve the PaymentIntent
@@ -81,6 +85,7 @@ export function PaymentStatus({clientSecret}: any) {
                 switch (paymentIntent?.status) {
                     case 'succeeded':
                         setMessage("Merci de votre don ! La transaction a été effectuée avec succès ! Vous allez recevoir un reçu par mail.");
+                        setFetched(true);
                         break;
 
                     case 'processing':
@@ -92,7 +97,14 @@ export function PaymentStatus({clientSecret}: any) {
                         break;
 
                     default:
-                        setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer.');
+                        const status = new URLSearchParams(window.location.search).get(
+                            'redirect_status'
+                        );
+                        if (status === "succeeded"){
+                            setMessage("Merci de votre don ! La transaction a été effectuée avec succès ! Vous allez recevoir un reçu par mail.");
+                            setFetched(true);
+                        }
+                        setMessage('Une erreur est survenue lors du traitement de votre paiement. Veuillez réessayer. ' + paymentIntent?.status);
                         break;
                 }
             });

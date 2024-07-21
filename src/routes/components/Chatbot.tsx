@@ -285,7 +285,7 @@ export function Chatbot() {
     return (
             <div key={key} className={`message-box-${role}`}>
                 <p>{sender}</p>
-                <div className={`message ${role}`}  style={role !== "assistant" ? {backgroundColor: theme.palette.secondary.main} :{}}>
+                <div className={`message ${role}`}  style={role !== "assistant" ? {backgroundColor: theme.palette.primary.dark} :{}}>
                     <p>{message}</p>
                 </div>
             </div>
