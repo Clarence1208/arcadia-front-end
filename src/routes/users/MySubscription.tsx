@@ -245,7 +245,7 @@ export function MySubscription(){
                                                         <TableCell>Don</TableCell>
                                                         <TableCell>{payment.amount/100} {payment.currency}</TableCell>
                                                         <TableCell>{payment.status === "paid" ? "Finalisé": "Non-finalisé"}</TableCell>
-                                                        <TableCell><a href={payment.invoice.invoice_pdf} target="_blank" rel="noreferrer"><Download color="primary"/></a></TableCell>
+                                                        <TableCell>Envoyé par email</TableCell>
                                                     </TableRow>
                                                 )
                                             })
