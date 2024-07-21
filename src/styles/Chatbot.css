@@ -8,7 +8,7 @@
     width: 30vw;
     overflow-y:scroll;
     background-color: #F5F5F5 ;
-    border: #074032 solid 0.15em;
+    border: var(--dark-grey-text) solid 0.15em;
     color: #252120;
     display: flex;
     flex-direction: column;

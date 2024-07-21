@@ -113,7 +113,7 @@ export function Home() {
                             </section>
                             <section className="cta-section">
                                 <h2>{data[1]}</h2>
-                                <Button variant="contained" style={{minWidth: "20vw", minHeight: "5vh"}} href="/donate">Je fais un don !</Button>
+                                <Button variant="contained" style={{minWidth: "20vw", minHeight: "5vh"}} href="/donate"><b>Je fais un don !</b></Button>
                             </section>
                             <section id="about-home">
                                 <img src={image ? image : mainPic} alt="main-pic"  />
