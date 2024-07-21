@@ -1,0 +1,11 @@
+.contact-form-fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.contact-form-field {
+  width: 25vw !important;
+  margin-bottom: 2vh !important;
+}
