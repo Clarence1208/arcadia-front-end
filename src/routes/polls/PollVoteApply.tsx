@@ -198,7 +198,7 @@ export function PollVoteApply() {
             <Header />
             {isPageLoaded && 
             <div>
-                <div id={"create-website-page"} className={"main"}>
+                <div id={"create-website-page"} className={"main"} style={{height: "100vh"}}>
                     <div>
                         <h1>{poll?.name} :</h1>
                     </div>
