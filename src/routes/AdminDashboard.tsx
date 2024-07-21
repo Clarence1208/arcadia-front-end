@@ -106,13 +106,13 @@ export function Dashboard() {
                     { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("manager")) &&
                         <Tab label="Gestions des salles" {...a11yProps(3)}/>
                     }
-                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin")) &&
                         <Tab label="Gestions des paramètres globaux du site" {...a11yProps(4)}/>
                     }
                     { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("treasurer")) &&
                     <Tab label="Gestions des documents" {...a11yProps(5)}/>
                     }
-                    { userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") &&
+                    { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin")) &&
                     <Tab label="Gestion du ChatBot" {...a11yProps(6)}/>
                     }
                     { (userSession?.roles.includes("superadmin") || userSession?.roles.includes("admin") || userSession?.roles.includes("treasurer")) &&
