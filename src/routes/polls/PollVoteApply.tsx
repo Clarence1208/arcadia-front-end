@@ -28,8 +28,10 @@ interface Poll {
 type VoteChoice = {
     id: number,
     name: string,
+    isAlive: boolean,
     step: number,
     type: string,
+    pollQuestion : PollQuestion,
 }
 
 type PollQuestion = {
@@ -37,6 +39,7 @@ type PollQuestion = {
     name: string,
     step: number,
     nbPossibleVotes: number,
+    canFreeVote: boolean,
     voteChoices: VoteChoice[],
 }
 

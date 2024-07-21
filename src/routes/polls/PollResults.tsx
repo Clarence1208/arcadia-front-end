@@ -22,6 +22,7 @@ type VoteChoice = {
     id: number,
     name: string,
     step: number,
+    isAlive: boolean,
     type: string,
     users: User[],
 }
@@ -31,6 +32,7 @@ type PollQuestion = {
     name: string,
     step: number,
     nbPossibleVotes: number,
+    canFreeVote: boolean,
     voteChoices: VoteChoice[],
 }
 

@@ -28,6 +28,7 @@ type PollQuestion = {
     name: string,
     step: number,
     nbPossibleVotes: number,
+    canFreeVote: boolean,
     voteChoices: VoteChoice[],
 }
 
@@ -95,7 +96,7 @@ function CreatePollForm() {
         if (duplicateFound) {
             return;
         }
-        const newPollQuestions = [...pollQuestions, { name: name, nbPossibleVotes: 1, step:pollQuestions.length, voteChoices: [] }];
+        const newPollQuestions = [...pollQuestions, { name: name, nbPossibleVotes: 1, canFreeVote: false, step:pollQuestions.length, voteChoices: [] }];
         setPollQuestions(newPollQuestions);
         setName("");
     }
@@ -331,6 +332,10 @@ function CreatePollForm() {
                                             <HelpIcon />
                                         </IconButton>
                                     </Tooltip>
+                                </div>
+                                <div>
+                                    <InputLabel>Réponse Ouverte</InputLabel>
+                                    <Switch checked={pollQuestions[key].canFreeVote}  onChange={e => updatePollQuestionFields({ canFreeVote: !pollQuestions[key].canFreeVote }, key)} color="primary" />
                                 </div>
                             </div>
                             <div className={"choices-list"}>
