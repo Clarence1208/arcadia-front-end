@@ -140,7 +140,7 @@ export function Blog() {
                         </div>
 
                         {articles.length === 0 ? (
-                            <div>No articles available. Please check back later.</div>
+                            <div>Pas d'articles disponibles. Veuillez revenir plus tard.</div>
                         ) : (
                             <ArticleList articles={articles} deleteItem={deleteItem}/>
                         )}
