@@ -56,8 +56,8 @@ function CreateArticleForm() {
         navigate('/login')
     }
 
-    if(!(!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))){
-        navigate('/blog')
+    if((!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))){
+        navigate('/')
     }
 
     function updateFields(fields: Partial<CreateArticleData>) {

@@ -55,8 +55,8 @@ function CreatePollForm() {
         navigate('/login')
     }
 
-    if(!(!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))){
-        navigate('/meetings')
+    if((!userSession?.roles.includes("admin") && !userSession?.roles.includes("superadmin"))){
+        navigate('/')
     }
 
     function updateFields(fields: Partial<CreatePollData>) {
