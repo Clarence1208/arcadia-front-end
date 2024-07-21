@@ -89,7 +89,7 @@ export function MeetingsList() {
                 sx={{ width: '100%' }}
             >{ErrorMessage}</Alert>
         </Snackbar>
-            {!meetings ? <div>Chargement ou pas d'assemblée générale...</div> :
+            {!meetings || meetings.length === 0 ? <div>Chargement ou pas d'assemblée générale...</div> :
                 <div>
                     {meetings.map((meeting) => (
                         <Meeting meeting={meeting} />

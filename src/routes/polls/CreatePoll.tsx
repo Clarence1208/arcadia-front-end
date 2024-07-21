@@ -176,6 +176,9 @@ function CreatePollForm() {
             const pollResponse = await response.json()
             pollQuestions.forEach(async pollQuestion => {
                 const bearer = "Bearer " + userSession?.loginToken;
+                if (pollQuestion.nbPossibleVotes === -1 || !pollQuestion.nbPossibleVotes) {
+                    pollQuestion.nbPossibleVotes = pollQuestion.voteChoices.length
+                }
                 const response: Response = await fetch( config.apiURL + "/polls/" + pollResponse.id + "/pollQuestions", {method: "POST", body: JSON.stringify(pollQuestion),                     headers: {
                         "Authorization": bearer,
                         "Content-Type": "application/json"
