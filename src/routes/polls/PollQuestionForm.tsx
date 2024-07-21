@@ -64,7 +64,7 @@ export function PollQuestionForm(props : PollQuestionFormProps) {
                 {props.question.canFreeVote && (
                     <div>
                         <h4>Choix libre (faculatatif):</h4>
-                            <label>Autre choix</label>
+                            <label style={{marginRight: "1em"}}>Autre choix</label>
                             <input type="text" onChange={e => handleChangeName(e)} />
                     </div>
 

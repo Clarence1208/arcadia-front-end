@@ -219,7 +219,7 @@ export function PollVoteApply() {
                             <span>{poll?.description}</span>
                         </div>
                     <div style={{ display: "flex", justifyContent: "center"}}>
-                       <Paper className={"paper"} style={{ minWidth: "40vw", minHeight:"30vh"}}>
+                       <Paper className={"paper"} style={{ minWidth: "40vw", minHeight:"30vh", marginTop: "10vh"}}>
                             <form onSubmit={onSubmit}>
                                 <div style={{ position: "absolute", top: ".5rem", right: ".5rem" }}>
                                     Etape {currentStepIndex + 1} / {steps.length}
