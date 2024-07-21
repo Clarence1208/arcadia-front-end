@@ -58,11 +58,13 @@ function LogInForm() {
                     fullName: res.firstName + " " + res.surname, isLoggedIn: true,
                     roles: roles, email: res.email, customerId: res.customerId
                 })
-            } if (res.roles.includes("admin") || res.roles.includes("superadmin")) {
+            } if (res.roles.includes("admin") || res.roles.includes("superadmin") || res.roles.includes("manager") || res.roles.includes("treasurer")) {
                 navigate('/adminDashboard')
             } else if (res.roles.includes("adherent")){
                 navigate('/memberDashboard')
-            }else {
+            } else if (res.roles.includes("contentmanager")){
+                navigate('/blog')
+            } else {
                 navigate('/users/subscribe')
             }
         } catch (e) {

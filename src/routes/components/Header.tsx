@@ -113,7 +113,7 @@ export default function Header() {
                 <CustomNavItem link="/blog" text="Actualités" />
                 <CustomNavItem link="/donate" text="Nous soutenir" />
                 
-                {userSession?.roles.includes("adherent") && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
+                {(userSession?.roles.includes("adherent") || userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager") || userSession?.roles.includes("treasurer") || userSession?.roles.includes("contentmanager") ) && <CustomNavItem link="/memberdashboard" text="Espace adhérent" /> }
                 {(userSession?.roles.includes("admin") || userSession?.roles.includes("superadmin") || userSession?.roles.includes("manager") || userSession?.roles.includes("treasurer")) && <CustomNavItem link="/adminDashboard" text="Espace admin" /> }
             </div>
 
