@@ -16,6 +16,7 @@ import {UserSessionContext} from "../../contexts/user-session";
 import Snackbar from "@mui/material/Snackbar";
 import {Download} from "@mui/icons-material";
 import LoadingSpinner from "../components/LoadingSpinner";
+import "../../styles/Stripe.css";
 
 type WebSetting = {
     name: string,
@@ -189,14 +190,14 @@ export function MySubscription(){
                         <div>
                             {(subscription && subscription.price && subscription.id) ?
                                 <div>
-                                    <div className="article-div">
+                                    <div className="cotisation-div">
 
                                         <h2>{subscription.product.name}</h2>
                                         <div>
                                             <p>Description: {subscription.product.description}</p>
                                             <p>Coût: {subscription.price.unit_amount /100} €</p>
-                                            <p>Depuis le {new Date(subscription.created_at || 0).toLocaleDateString()}</p>
-                                            <p>Prochaine facturation le {new Date(subscription.current_period_end || 0).toLocaleDateString()}</p>
+                                            <p>Depuis le {new Date((subscription.created_at || 0) * 1000 ).toLocaleDateString()}</p>
+                                            <p>Prochaine facturation le {new Date((subscription.current_period_end || 0 )* 1000).toLocaleDateString()}</p>
                                         </div>
                                     </div>
 
@@ -224,7 +225,7 @@ export function MySubscription(){
                                             invoices && invoices.map((invoice: any) => {
                                                 return (
                                                     <TableRow key={invoice.id}>
-                                                        <TableCell>{new Date(invoice.created).toLocaleDateString()}</TableCell>
+                                                        <TableCell>{new Date(invoice.created * 1000).toLocaleDateString()}</TableCell>
                                                         <TableCell>{invoice.amount_paid/100} {invoice.currency}</TableCell>
                                                         <TableCell>{invoice.status === "paid" ? "Finalisé": "Non-finalisé"}</TableCell>
                                                         <TableCell><a href={invoice.invoice_pdf} target="_blank" rel="noreferrer"><Download color="primary"/></a></TableCell>
